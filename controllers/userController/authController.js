@@ -1,14 +1,21 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import collecion from "../connection/collecion.mjs";
-import connectToDatabase from "../connection/db.mjs";
+import collecion from "../../config/collection.js";
+import connectToDatabase from "../../config/db.js";
 import { v7 as uuidv7 } from "uuid";
-import { z } from "zod";
-import { signupSchema } from "../schema/authSchema.mjs";
 
 export const signup = async (req, res) => {
+  console.log("signup>>>>>>>>>");
+  console.log(req.body);
   try {
-    const { name, email, password } = signupSchema.parse(req.body);
+    const { name, email, password } = req.body;
+
+    // Simple validation instead of Zod
+    if (!name || !email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Name, email and password are required." });
+    }
 
     const db = await connectToDatabase(process.env.DATABASE);
     const user = await db
@@ -28,55 +35,30 @@ export const signup = async (req, res) => {
       name,
       email,
       password: passwordHash,
-      gender: "",
-      dob: "",
-      bio: "",
-      photos: [],
-      maritalStatus: "",
-      occupation: "",
-      location: {
-        city: "",
-        District: "",
-        State: "",
-        country: "",
-      },
-      caste: "",
-      Religion: "",
-      demands: "",
-      description: "",
-      contacts: {},
-      socialMediaLinks: {},
-      preferences: {
-        ageRange: [],
-        location: [],
-        interests: [],
-      },
-      likes: [],
-      proposal: [],
-      isLookingForMatch: false,
-      reportStatus: {
-        isReported: false,
-        reportCount: 0,
-        reports: [],
-      },
+      phone: "",
+      avatar: "",
+      role: "customer",
+      addresses: [],
+      orders: [],
+      wishlist: [],
+      cart: [],
       createdAt: Date.now(),
+      updatedAt: Date.now(),
+      isActive: true,
     });
 
     res.status(201).json({ message: "User created successfully" });
   } catch (err) {
-    if (err instanceof z.ZodError) {
-      return res.status(400).json({ errors: err.formErrors });
-    }
     console.error("Signup Error:", err.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
 export const login = async (req, res) => {
-  console.log(req.body);
   try {
     const { email, password } = req.body;
 
+    // Simple validation instead of Zod
     if (!email || !password) {
       return res
         .status(400)
