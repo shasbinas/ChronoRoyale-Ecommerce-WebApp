@@ -3,22 +3,77 @@ import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import bodyParser from "body-parser";
+import path from "path";
+import { fileURLToPath } from "url";
+import multer from "multer";
+import { engine } from "express-handlebars";
+import userRoutes from "./routes/userRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+
+
+/* CONFIGURATIONS */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}));
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 app.use(cors());
 
-app.use(bodyParser.json({limit:"30mb",extended:true}));
-app.use(bodyParser.urlencoded({limit:"30mb",extended:true}));
+app.use(bodyParser.json({ limit: "30mb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
+/* FILE STORAGE */
 
-app.listen(PORT,()=>{console.log(`process ID ${process.pid}:server running on PORT ${PORT} in dev mode`);})
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+/* ROUTES WITH FILES */
+// app.post("/auth/register",upload.single("picture"),register);
+// app.post("/post",upload.single("picture"),createPost);
+
+/* ROUTES */
+ app.use("/user",userRoutes);
+ app.use("/admin",adminRoutes);
+app.use("/products",(req,res)=>{
+    res.send("Hello from server.js");
+})
+ 
+// app.use("/users,userRoutes");
+// app.get("/",(req,res)=>{
+//     res.send("Hello from server.js");
+// })
+
+app.listen(PORT, () => {
+  console.log(
+    `process ID ${process.pid}:server running on PORT ${PORT} in dev mode`
+  );
+});
+
+/* VIEW ENGINE SETUP */
+app.engine(
+  "hbs",
+  engine({
+    extname: ".hbs", //use.hbs extension
+    defaultLayout: "main", //default layout file (main.hbs)
+    layoutsDir: path.join(__dirname, "view/layouts"), //layout folder
+    partialsDir: path.join(__dirname, "views/partials"),
+    helpers: {
+      //custom helpers for prosuctions scaling
+      upper: (str) => str.toUppercase(),
+      json: (context) => JSON.stringify(context),
+    },
+  })
+);
+// set view engine
+app.set("view engine", "hbs");
+//set views folder
+app.set("views", path.join(__dirname, "views"));
