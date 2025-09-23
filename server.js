@@ -10,7 +10,6 @@ import { engine } from "express-handlebars";
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 
-
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,12 +40,12 @@ const upload = multer({ storage: storage });
 // app.post("/post",upload.single("picture"),createPost);
 
 /* ROUTES */
- app.use("/user",userRoutes);
- app.use("/admin",adminRoutes);
-app.use("/products",(req,res)=>{
-    res.send("Hello from server.js");
-})
- 
+app.use("/user", userRoutes);
+app.use("/admin", adminRoutes);
+app.use("/products", (req, res) => {
+  res.send("Hello from server.js");
+});
+
 // app.use("/users,userRoutes");
 // app.get("/",(req,res)=>{
 //     res.send("Hello from server.js");

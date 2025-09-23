@@ -1,8 +1,6 @@
 import express from "express";
 import { login, signup } from "../controllers/userController/authController.js";
 
-
-
 const userRoutes = express.Router({ mergeParams: true });
 
 userRoutes.post("/signup", signup);

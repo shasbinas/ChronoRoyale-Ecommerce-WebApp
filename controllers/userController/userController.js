@@ -55,19 +55,46 @@ export const getUsersData = async (req, res) => {
   }
 };
 
-export const updateUserblockStatus = async (req, res) => {
+export const updateUserBlockStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { block } = req.query;
+    const { block } = req.query; // query parameter ?block=true / ?block=false
+
     if (block !== "true" && block !== "false") {
       return res.status(400).json({
         success: false,
-        message: "Invalid query parameter. Use ?block=true or ?block=false",
+        message: "Invalid query parameter.",
       });
     }
+
     const db = await connectToDatabase(process.env.DATABASE);
+
     const result = await db
       .collection(collection.USERS_COLLECTION)
-      .updateOne({ _id: new ObjectId(String(id)) });
-  } catch (error) {}
+      .updateOne(
+        { _id: new ObjectId(String(id)) },
+        { $set: { isBlocked: block === "true" } }
+      );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: `User ${
+        block === "true" ? "blocked" : "unblocked"
+      } successfully`,
+    });
+  } catch (error) {
+    console.error("Error updating user block status:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update user block status",
+      error: error.message,
+    });
+  }
 };
