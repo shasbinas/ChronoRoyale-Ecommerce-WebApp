@@ -7,7 +7,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
 import { engine } from "express-handlebars";
-import authRoutes from "./routes/users/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import { blockUser } from "./controllers/userController/userController.js";
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -39,7 +41,12 @@ const upload = multer({ storage: storage });
 // app.post("/post",upload.single("picture"),createPost);
 
 /* ROUTES */
- app.use("/api/auth",authRoutes);
+ app.use("/user",userRoutes);
+ app.use("/admin",adminRoutes);
+app.use("/products",(req,res)=>{
+    res.send("Hello from server.js");
+})
+ 
 // app.use("/users,userRoutes");
 // app.get("/",(req,res)=>{
 //     res.send("Hello from server.js");
