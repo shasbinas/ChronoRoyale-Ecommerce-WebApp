@@ -75,7 +75,7 @@ app.engine(
   "hbs",
   engine({
     extname: ".hbs", //use.hbs extension
-    defaultLayout: "main", //default layout file (main.hbs)
+    defaultLayout: "user", // default layout file (user.hbs)
     layoutsDir: path.join(__dirname, "view/layouts"), //layout folder
     partialsDir: path.join(__dirname, "views/partials"),
     helpers: {

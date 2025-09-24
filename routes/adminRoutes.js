@@ -5,10 +5,22 @@ import {
   getUsersData,
   updateUserBlockStatus,
 } from "../controllers/userController.js";
-import { getAllOrders, getOrderById, updateOrderStatus } from "../controllers/orderController.js";
-import { deleteProduct, getAllProducts, getProductById, updateProduct } from "../controllers/productController.js";
+import {
+  getAllOrders,
+  getOrderById,
+  updateOrderStatus,
+} from "../controllers/orderController.js";
+import {
+  deleteProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct,
+} from "../controllers/productController.js";
+import { adminLoginPage } from "../controllers/adminController.js";
 
 const adminRoutes = express.Router({ mergeParams: true });
+
+adminRoutes.get("/", adminLoginPage);
 
 adminRoutes.post("/login", adminLogin);
 
@@ -31,16 +43,6 @@ adminRoutes.get("/orders", getAllOrders);
 adminRoutes.get("/orders/:id", getOrderById);
 
 adminRoutes.patch("/orders/:id/status", updateOrderStatus);
-
-
-
-
-
-
-
-
-
-
 
 // adminRoutes.get("/test",(req,res)=>{
 //     res.status(200).json({ message:"Admin login rotes working"});
