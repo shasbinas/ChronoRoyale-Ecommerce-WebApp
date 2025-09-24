@@ -9,6 +9,7 @@ import multer from "multer";
 import { engine } from "express-handlebars";
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -29,9 +30,19 @@ app.use(cors());
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
+//Add for admin assets
+app.use(
+  "/adminAssets",
+  express.static(path.join(__dirname, "public/adminAssets"))
+);
+
+// Add for user assets
+app.use(
+  "/userAssets",
+  express.static(path.join(__dirname, "public/userAssets"))
+);
 
 /* FILE STORAGE */
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -40,11 +51,13 @@ const upload = multer({ storage: storage });
 // app.post("/post",upload.single("picture"),createPost);
 
 /* ROUTES */
-app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
-app.use("/products", (req, res) => {
-  res.send("Hello from server.js");
-});
+app.use("/", userRoutes);
+app.use("/products", productRoutes);
+
+// app.use("/products", (req, res) => {
+//   res.send("Hello from server.js");
+// });
 
 // app.use("/users,userRoutes");
 // app.get("/",(req,res)=>{
