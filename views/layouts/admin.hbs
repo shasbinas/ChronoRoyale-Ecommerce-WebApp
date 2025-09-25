@@ -13,6 +13,10 @@
   <link href="/adminAssets/css/main.css" rel="stylesheet" type="text/css" />
 </head>
 <body class="dark">
+  <div class="screen-overlay"></div>
+  {{#unless (eq title "Admin Login")}}
+  {{> adminSidebar}}
+  {{/unless}}
   <main>
     {{#unless (eq title "Admin Login")}}
     {{> adminHeader}} <!-- Header partial -->

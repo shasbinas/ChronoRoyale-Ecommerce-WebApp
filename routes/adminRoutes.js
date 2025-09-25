@@ -19,6 +19,7 @@ import {
 import {
   adminDashboardPage,
   adminLoginPage,
+  adminUsersListPage,
 } from "../controllers/adminController.js";
 
 const adminRoutes = express.Router({ mergeParams: true });
@@ -28,6 +29,10 @@ adminRoutes.get("/", adminLoginPage);
 adminRoutes.post("/login", adminLogin);
 
 adminRoutes.get("/dashboard", adminDashboardPage);
+
+adminRoutes.get("/users-list", adminUsersListPage);
+
+
 
 adminRoutes.get("/users", getAllUsersData);
 
