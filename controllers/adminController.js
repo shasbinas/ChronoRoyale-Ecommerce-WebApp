@@ -21,3 +21,21 @@ export const adminUsersListPage = async (req, res) => {
 };
 
 
+// Admin logout 
+export const adminLogout = (req, res) => {
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        console.log("Error destroying session:", err);
+        return res.redirect("/admin/dashboard"); // fallback
+      }
+      res.clearCookie("connect.sid"); // optional: clear session cookie
+      res.redirect("/admin");          // redirect to login page
+    });
+  } else {
+    res.redirect("/admin"); // if no session exists
+  }
+};
+
+
+
