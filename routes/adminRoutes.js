@@ -16,13 +16,18 @@ import {
   getProductById,
   updateProduct,
 } from "../controllers/productController.js";
-import { adminLoginPage } from "../controllers/adminController.js";
+import {
+  adminDashboardPage,
+  adminLoginPage,
+} from "../controllers/adminController.js";
 
 const adminRoutes = express.Router({ mergeParams: true });
 
 adminRoutes.get("/", adminLoginPage);
 
 adminRoutes.post("/login", adminLogin);
+
+adminRoutes.get("/dashboard", adminDashboardPage);
 
 adminRoutes.get("/users", getAllUsersData);
 

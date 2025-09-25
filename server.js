@@ -52,8 +52,8 @@ const upload = multer({ storage: storage });
 
 /* ROUTES */
 app.use("/admin", adminRoutes);
-app.use("/", userRoutes);
-app.use("/products", productRoutes);
+// app.use("/", userRoutes);
+// app.use("/products", productRoutes);
 
 // app.use("/products", (req, res) => {
 //   res.send("Hello from server.js");
@@ -74,18 +74,20 @@ app.listen(PORT, () => {
 app.engine(
   "hbs",
   engine({
-    extname: ".hbs", //use.hbs extension
+    extname: ".hbs", // use .hbs extension
     defaultLayout: "user", // default layout file (user.hbs)
-    layoutsDir: path.join(__dirname, "view/layouts"), //layout folder
-    partialsDir: path.join(__dirname, "views/partials"),
+    layoutsDir: path.join(__dirname, "views/layouts"), // layouts folder
+    partialsDir: path.join(__dirname, "views/partials"), // partials folder
     helpers: {
-      //custom helpers for prosuctions scaling
-      upper: (str) => str.toUppercase(),
+      // custom helpers for production scaling
+      upper: (str) => str.toUpperCase(),
       json: (context) => JSON.stringify(context),
+      eq: (a, b) => a === b,
     },
   })
 );
+
 // set view engine
 app.set("view engine", "hbs");
-//set views folder
+// set views folder
 app.set("views", path.join(__dirname, "views"));
