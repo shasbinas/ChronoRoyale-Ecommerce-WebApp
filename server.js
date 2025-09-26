@@ -52,7 +52,17 @@ const upload = multer({ storage: storage });
 
 /* ROUTES */
 app.use("/admin", adminRoutes);
-// app.use("/", userRoutes);
+app.use("/", userRoutes);
+
+app.get("/", (req, res) => {
+  res.render("user/userLogin", { title: "User Login" });
+});
+
+app.listen(PORT, () => {
+  console.log(
+    `process ID ${process.pid}:server running on PORT ${PORT} in dev mode`
+  );
+});
 // app.use("/products", productRoutes);
 
 // app.use("/products", (req, res) => {
@@ -91,3 +101,10 @@ app.engine(
 app.set("view engine", "hbs");
 // set views folder
 app.set("views", path.join(__dirname, "views"));
+
+
+
+
+
+
+

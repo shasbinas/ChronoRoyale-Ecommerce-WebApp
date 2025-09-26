@@ -98,3 +98,12 @@ export const updateUserBlockStatus = async (req, res) => {
     });
   }
 };
+
+export const productsPage = async (req, res) => {
+  console.log("productsPage page route working 🚀");
+
+  res.render("user/products", { title: "Product's List - ChronoRoyale" });
+};
+
+
+

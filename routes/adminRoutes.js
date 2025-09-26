@@ -19,7 +19,6 @@ import {
 import {
   adminDashboardPage,
   adminLoginPage,
-  adminLogout,
   adminUsersListPage,
 } from "../controllers/adminController.js";
 
@@ -31,10 +30,9 @@ adminRoutes.post("/login", adminLogin);
 
 adminRoutes.get("/dashboard", adminDashboardPage);
 
-adminRoutes.get("/logout", adminLogout);
+// adminRoutes.get("/logout", adminLogout);
 
-
-adminRoutes.get("/users-list", adminUsersListPage);
+adminRoutes.get("/users-list", adminUsersListPage);///modified
 
 adminRoutes.get("/users", getAllUsersData);
 
