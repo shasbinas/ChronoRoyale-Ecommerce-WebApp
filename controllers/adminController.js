@@ -58,5 +58,34 @@ export const adminUsersListPage = async (req, res) => {
 //   }
 // };
 
+export const productsList = async (req, res) => {
+  try {
+    // Connect to your database
+    const db = await connectToDatabase(process.env.DATABASE);
+
+    // Fetch all products from your products collection
+    const products = await db
+      .collection(collection.PRODUCTS_COLLECTION) // make sure this is defined in collection.js
+      .find({})
+      .toArray();
+
+    // Render productsList.hbs with fetched data
+    res.render("admin/productsList", {
+      layout: "admin",
+      title: "Admin - Products List",
+      products,
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    // fallback render in case of error
+    res.render("admin/productsList", {
+      layout: "admin",
+      title: "Admin - Products List",
+      products: [],
+    });
+  }
+};
+
+
 
 
