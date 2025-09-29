@@ -17,12 +17,15 @@ import {
   updateProduct,
 } from "../controllers/productController.js";
 import {
+  adminAddProductPage,
   adminDashboardPage,
   adminLoginPage,
+  adminLogout,
+  adminOrdersListPage,
+  adminOrderViewPage,
+  adminProductsListPage,
   adminUsersListPage,
-  productsList,
-  
-  
+  blockUnblockUser,
 } from "../controllers/adminController.js";
 
 const adminRoutes = express.Router({ mergeParams: true });
@@ -31,13 +34,21 @@ adminRoutes.get("/", adminLoginPage);
 
 adminRoutes.post("/login", adminLogin);
 
+adminRoutes.get("/logout", adminLogout);
+
 adminRoutes.get("/dashboard", adminDashboardPage);
 
-// adminRoutes.get("/logout", adminLogout);
+adminRoutes.get("/users-list", adminUsersListPage); ///modified
 
-adminRoutes.get("/users-list", adminUsersListPage);///modified
+adminRoutes.get("/products-list", adminProductsListPage);
 
-adminRoutes.get("/productsList",productsList)// today modified
+adminRoutes.post("/block-user/:id", blockUnblockUser);
+
+adminRoutes.get("/add-product", adminAddProductPage);
+
+adminRoutes.get("/orders-list", adminOrdersListPage);
+
+adminRoutes.get("/order-view", adminOrderViewPage);
 
 adminRoutes.get("/users", getAllUsersData);
 

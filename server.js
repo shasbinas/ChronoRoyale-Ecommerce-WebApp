@@ -9,7 +9,7 @@ import multer from "multer";
 import { engine } from "express-handlebars";
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
-import productRoutes from "./routes/productRoutes.js";
+
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);

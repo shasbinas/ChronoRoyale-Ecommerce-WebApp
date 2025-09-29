@@ -1,15 +1,22 @@
 <aside class="navbar-aside" id="offcanvas_aside">
   <div class="aside-top">
-    <a href="/admin/dashboard" class="brand-wrap">
+    {{! <a href="index.html" class="brand-wrap">
+      <img
+        src="/adminAssets/imgs/theme/logo.svg"
+        class="logo"
+        alt="Evara Dashboard"
+      />
+    </a> }}
+    <a href="/admin" class="brand-wrap">
       <h2
         class="m-0"
         style="
-          background: linear-gradient(to right, #dbd52d, #feb47b);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          margin:0;"
+    background: linear-gradient(to right, #e5ff00, #feb47b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin:0;"
       >
-        ChronoRoyale Admin Panel
+        ChronoRoyale
       </h2>
     </a>
     <div>
@@ -18,7 +25,6 @@
       </button>
     </div>
   </div>
-
   <nav>
     <ul class="menu-aside">
       <li class="menu-item">
@@ -28,13 +34,20 @@
         </a>
       </li>
       <li class="menu-item">
-        <a class="menu-link" href="/admin/productsList">
+        <a class="menu-link" href="/admin/add-product">
+          <i class="icon material-icons md-add_box"></i>
+          <span class="text">Add product</span>
+        </a>
+
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="/admin/products-list">
           <i class="icon material-icons md-shopping_bag"></i>
           <span class="text">Products</span>
         </a>
       </li>
       <li class="menu-item">
-        <a class="menu-link" href="/admin/orders">
+        <a class="menu-link" href="/admin/orders-list">
           <i class="icon material-icons md-shopping_cart"></i>
           <span class="text">Orders</span>
         </a>
@@ -45,31 +58,32 @@
           <span class="text">Users</span>
         </a>
       </li>
-      <li class="menu-item">
-        <a class="menu-link disabled" href="#">
+      {{! <li class="menu-item">
+        <a class="menu-link" disabled href="#">
           <i class="icon material-icons md-pie_chart"></i>
           <span class="text">Statistics</span>
         </a>
-      </li>
+      </li> }}
     </ul>
-
     <hr />
-
     <ul class="menu-aside">
       <li class="menu-item">
-        <a class="menu-link" href="/admin/settings">
+        <a class="menu-link" href="#">
           <i class="icon material-icons md-settings"></i>
           <span class="text">Settings</span>
         </a>
+
       </li>
+
       <li class="menu-item">
-        <a class="menu-link" href="/logout">
+        <a class="menu-link" href="/admin/logout">
           <i class="icon material-icons md-exit_to_app"></i>
           <span class="text">Logout</span>
         </a>
+
       </li>
     </ul>
-
-    <br /><br />
+    <br />
+    <br />
   </nav>
 </aside>
