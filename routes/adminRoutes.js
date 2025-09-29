@@ -1,6 +1,7 @@
 import express from "express";
 import { adminLogin } from "../controllers/adminAuth.js";
 import {
+  blockUnblockUser,
   getAllUsersData,
   getUsersData,
   updateUserBlockStatus,
@@ -25,7 +26,7 @@ import {
   adminOrderViewPage,
   adminProductsListPage,
   adminUsersListPage,
-  blockUnblockUser,
+
 } from "../controllers/adminController.js";
 
 const adminRoutes = express.Router({ mergeParams: true });
@@ -42,6 +43,10 @@ adminRoutes.get("/users-list", adminUsersListPage); ///modified
 
 adminRoutes.get("/products-list", adminProductsListPage);
 
+
+
+
+
 adminRoutes.post("/block-user/:id", blockUnblockUser);
 
 adminRoutes.get("/add-product", adminAddProductPage);
@@ -55,6 +60,9 @@ adminRoutes.get("/users", getAllUsersData);
 adminRoutes.get("/users/:id", getUsersData);
 
 adminRoutes.patch("/users/:id", updateUserBlockStatus);
+
+
+
 
 adminRoutes.get("/products", getAllProducts);
 
