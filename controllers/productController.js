@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import collection from "../config/collection.js";
 import connectToDatabase from "../config/db.js";
-
+import { v7 as uuidv7 } from "uuid";
 /* Get all products */
 export const getAllProducts = async (req, res) => {
   try {
@@ -55,35 +55,42 @@ export const getProductById = async (req, res) => {
 
 /* Create a new product */
 export const createProduct = async (req, res) => {
+  console.log("crete produt route working>>>>>>>>");
   try {
-    const { name, description = "", price, stock = 0 } = req.body;
+    console.log(req.body);
 
-    if (!name?.trim() || isNaN(price)) {
-      return res.status(400).json({
-        success: false,
-        message: "Valid product name and price are required.",
-      });
-    }
+    const data = req.body;
 
-    const db = await connectToDatabase(process.env.DATABASE);
-    const newProduct = {
-      name: name.trim(),
-      description: description.trim(),
-      price: Number(price),
-      stock: Number(stock),
+    const productId = uuidv7();
+
+    const productData = {
+      productId,
+      name: data.name,
+      shortDesc: data.shortDesc,
+      description: data.description,
+      category: data.category,
+      brand: data.brand,
+      price: data.price,
+      discountPrice: data.discountPrice,
+      stock: data.stock,
+      rating: "",
+      picturePath: "/adminAssets/imgs/ROLEX.webp",
+      thumbnail: "/adminAssets/imgs/ROLEX.webp",
+      status: data.status,
       createdAt: new Date(),
       updatedAt: new Date(),
+      isDelete: false,
     };
 
-    const { insertedId } = await db
-      .collection(collection.PRODUCT_COLLECTION)
-      .insertOne(newProduct);
+    const db = await connectToDatabase(process.env.DATABASE);
 
-    return res.status(201).json({
-      success: true,
-      message: "Product created successfully",
-      data: { _id: insertedId, ...newProduct },
-    });
+    const result = await db
+      .collection(collection.PRODUCTS_COLLECTION)
+      .insertOne(productData);
+
+      console.log("result>>>>",result);
+
+    return res.redirect("/admin");
   } catch (error) {
     console.error("Error creating product:", error);
     return res.status(500).json({

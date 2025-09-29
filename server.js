@@ -9,6 +9,7 @@ import multer from "multer";
 import { engine } from "express-handlebars";
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
 
 
 /* CONFIGURATIONS */
@@ -53,17 +54,13 @@ const upload = multer({ storage: storage });
 /* ROUTES */
 app.use("/admin", adminRoutes);
 app.use("/", userRoutes);
-
-app.get("/", (req, res) => {
-  res.render("user/userLogin", { title: "User Login" });
-});
+app.use("/products", productRoutes);
 
 app.listen(PORT, () => {
   console.log(
     `process ID ${process.pid}:server running on PORT ${PORT} in dev mode`
   );
 });
-// app.use("/products", productRoutes);
 
 // app.use("/products", (req, res) => {
 //   res.send("Hello from server.js");
