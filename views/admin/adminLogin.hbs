@@ -3,17 +3,29 @@
     <div class="card-body">
       <h4 class="card-title mb-4 text-center">Admin Login</h4>
 
-      {{!-- Error alert (if login fails) --}}
+      {{! Error alert (if login fails) }}
       {{#if error}}
-      <div class="alert alert-danger text-center mb-3">{{error}}</div>
+        <div class="alert alert-danger text-center mb-3">{{error}}</div>
       {{/if}}
 
       <form action="/admin/login" method="POST">
         <div class="mb-3">
-          <input class="form-control" placeholder="Email" type="text" name="email" required>
+          <input
+            class="form-control"
+            placeholder="Email"
+            type="text"
+            name="email"
+            required
+          />
         </div>
         <div class="mb-3">
-          <input class="form-control" placeholder="Password" type="password" name="password" required>
+          <input
+            class="form-control"
+            placeholder="Password"
+            type="password"
+            name="password"
+            required
+          />
         </div>
 
         <div class="mb-4">

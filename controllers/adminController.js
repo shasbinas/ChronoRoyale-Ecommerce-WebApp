@@ -68,30 +68,7 @@ export const adminUsersListPage = async (req, res) => {
 //   }
 // };
 
-export const adminProductsListPage = async (req, res) => {
-  console.log("Admin ProductsList route working 🚀");
 
-  try {
-    // connect to database
-    const db = await connectToDatabase(process.env.DATABASE);
-
-    // fetch all products
-    const products = await db
-      .collection(collection.PRODUCTS_COLLECTION)
-      .find({})
-      .toArray();
-
-    // render products page with fetched data
-    res.render("admin/products-list", {
-      layout: "admin",
-      title: "Admin - Products List",
-      products, // passing products to template
-    });
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    res.status(500).send("Internal Server Error");
-  }
-};
 
 
     // res.status(200).json({
@@ -184,5 +161,25 @@ export const blockUnblockUser = async (req, res) => {
   } catch (error) {
     console.error("Block/Unblock User Error:", error.message);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+/**** */
+export const adminProductsListPage = async (req, res) => {
+  try {
+    const db = await connectToDatabase(process.env.DATABASE);
+    const products = await db
+      .collection(collection.PRODUCTS_COLLECTION)
+      .find({ isDeleted: { $ne: true } }) // show only active products
+      .toArray();
+
+    res.render("admin/products-list", {
+      layout: "admin",
+      title: "Admin - Products List",
+      products,
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).send("Internal Server Error");
   }
 };

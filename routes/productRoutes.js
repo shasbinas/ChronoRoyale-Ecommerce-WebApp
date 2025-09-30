@@ -19,5 +19,4 @@ productRoutes.patch("/:id", updateProduct);
 
 productRoutes.delete("/:id", deleteProduct);
 
-
 export default productRoutes;

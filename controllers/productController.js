@@ -198,3 +198,27 @@ export const deleteProduct = async (req, res) => {
     });
   }
 };
+/**** */
+
+/* Get last 8 products for home page */
+export const getHomeProducts = async (req, res) => {
+  try {
+    const db = await connectToDatabase(process.env.DATABASE);
+
+    const products = await db
+      .collection(collection.PRODUCT_COLLECTION)
+      .find({})
+      .sort({ createdAt: -1 }) // newest products first
+      .limit(8)                 // only 8 products
+      .toArray();
+
+    return res.status(200).json({ success: true, data: products });
+  } catch (error) {
+    console.error("Error fetching home products:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch home products",
+      error: error.message,
+    });
+  }
+};

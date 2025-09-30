@@ -26,8 +26,8 @@ import {
   adminOrderViewPage,
   adminProductsListPage,
   adminUsersListPage,
-
 } from "../controllers/adminController.js";
+import connectToDatabase from "../config/db.js";
 
 const adminRoutes = express.Router({ mergeParams: true });
 
@@ -43,10 +43,6 @@ adminRoutes.get("/users-list", adminUsersListPage); ///modified
 
 adminRoutes.get("/products-list", adminProductsListPage);
 
-
-
-
-
 adminRoutes.post("/block-user/:id", blockUnblockUser);
 
 adminRoutes.get("/add-product", adminAddProductPage);
@@ -60,9 +56,6 @@ adminRoutes.get("/users", getAllUsersData);
 adminRoutes.get("/users/:id", getUsersData);
 
 adminRoutes.patch("/users/:id", updateUserBlockStatus);
-
-
-
 
 adminRoutes.get("/products", getAllProducts);
 
@@ -80,6 +73,10 @@ adminRoutes.patch("/orders/:id/status", updateOrderStatus);
 
 // adminRoutes.get("/test",(req,res)=>{
 //     res.status(200).json({ message:"Admin login rotes working"});
+
+
 // })
+
+
 
 export default adminRoutes;
