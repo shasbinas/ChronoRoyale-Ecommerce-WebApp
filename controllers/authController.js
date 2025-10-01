@@ -19,7 +19,7 @@ export const signup = async (req, res) => {
 
     const db = await connectToDatabase(process.env.DATABASE);
     const user = await db
-      .collection(collecion.USERS_COLLECTION)
+      .collection(collection.USERS_COLLECTION)
       .findOne({ email });
 
     if (user) {
@@ -29,25 +29,28 @@ export const signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
     const userId = uuidv7();
-
-    await db.collection(collection.USERS_COLLECTION).insertOne({
+    const userData = {
       userId,
       name,
       email,
       password: passwordHash,
       phone: "",
       avatar: "",
-      role: "customer",
       addresses: [],
       orders: [],
       wishlist: [],
       cart: [],
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
       isActive: true,
-    });
+      isBlocked: false,
+    };
+    const result = await db
+      .collection(collection.USERS_COLLECTION)
+      .insertOne(userData);
+      console.log(result);
 
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({ message: "User created successfully",result });
   } catch (err) {
     console.error("Signup Error:", err.message);
     res.status(500).json({ error: "Internal server error" });
