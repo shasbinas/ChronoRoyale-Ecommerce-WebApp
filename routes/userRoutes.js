@@ -1,6 +1,6 @@
 import express from "express";
 import { login, signup } from "../controllers/authController.js";
-import { productsPage } from "../controllers/userController.js";
+import { landingPage, productsPage } from "../controllers/userController.js";
 import { getHomeProducts } from "../controllers/productController.js";
 
 const userRoutes = express.Router({ mergeParams: true });
@@ -11,6 +11,7 @@ userRoutes.post("/login", login);
 
 userRoutes.get("/products", productsPage);
 
+userRoutes.get("/", landingPage);
 
 userRoutes.get("/home-products", getHomeProducts);
 

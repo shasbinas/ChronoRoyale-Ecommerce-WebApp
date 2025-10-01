@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import collection from "../config/collection.js";
 import connectToDatabase from "../config/db.js";
+import { bannerData, brandData } from "../data/index.js";
 /* get all user data */
 export const getAllUsersData = async (req, res) => {
   console.log("this api called>>>>>>");
@@ -149,6 +150,14 @@ export const blockUnblockUser = async (req, res) => {
   }
 };
 
+export const landingPage = async (req, res) => {
+  console.log("User Landing route working 🚀");
 
+  res.render("user/home", {
+    title: "Home - ChronoRoyale",
+    banners: bannerData,
+    brands: brandData
+  });
+};
 
 
