@@ -26,12 +26,27 @@ const storage = (folder) =>
  * @param {string} type - 'single' or 'multiple'
  * @param {number} maxCount - for multiple files max count
  */
-export const uploadFiles = (folder, type = "single", maxCount = 1) => {
+
+export const uploadFiles = (
+  folder,
+  type = "single",
+  fieldName = "file",
+  maxCount = 1,
+  fields = []
+) => {
   const multerStorage = storage(folder);
   const upload = multer({ storage: multerStorage });
 
-  if (type === "single") return upload.single("picture"); // req.file
-  if (type === "multiple") return upload.array("pictures", maxCount); // req.files
-
-  throw new Error("Invalid upload type, must be 'single' or 'multiple'");
+  switch (type) {
+    case "single":
+      return upload.single(fieldName); // req.file
+    case "multiple":
+      return upload.array(fieldName, maxCount); // req.files
+    case "fields":
+      return upload.fields(fields); // req.files.<fieldName>
+    default:
+      throw new Error(
+        "Invalid upload type: choose 'single', 'multiple' or 'fields'"
+      );
+  }
 };

@@ -98,3 +98,6 @@ export const brandData = [
     link: "/shop-grid-right.html",
   },
 ];
+
+
+

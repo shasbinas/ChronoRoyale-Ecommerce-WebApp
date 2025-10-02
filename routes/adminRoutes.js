@@ -12,6 +12,7 @@ import {
   updateOrderStatus,
 } from "../controllers/orderController.js";
 import {
+  createProduct,
   deleteProduct,
   getAllProducts,
   getProductById,
@@ -28,6 +29,7 @@ import {
   adminUsersListPage,
 } from "../controllers/adminController.js";
 import connectToDatabase from "../config/db.js";
+import { uploadFiles } from "../middleware/uploadMiddleware.js";
 
 const adminRoutes = express.Router({ mergeParams: true });
 
@@ -42,6 +44,12 @@ adminRoutes.get("/dashboard", adminDashboardPage);
 adminRoutes.get("/users-list", adminUsersListPage); ///modified
 
 adminRoutes.get("/products-list", adminProductsListPage);
+
+adminRoutes.post(
+  "/add-product",
+  uploadFiles("userAssets/pictures", "multiple", "productImages", 4),
+  createProduct
+);
 
 adminRoutes.post("/block-user/:id", blockUnblockUser);
 
@@ -74,9 +82,6 @@ adminRoutes.patch("/orders/:id/status", updateOrderStatus);
 // adminRoutes.get("/test",(req,res)=>{
 //     res.status(200).json({ message:"Admin login rotes working"});
 
-
 // })
-
-
 
 export default adminRoutes;

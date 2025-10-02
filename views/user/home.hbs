@@ -114,7 +114,7 @@
               aria-controls="tab-two"
               aria-selected="false"
             >
-              Popular
+              Mens
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -128,7 +128,21 @@
               aria-controls="tab-three"
               aria-selected="false"
             >
-              New added
+              Women
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="nav-tab-three"
+              data-bs-toggle="tab"
+              data-bs-target="#tab-three"
+              type="button"
+              role="tab"
+              aria-controls="tab-three"
+              aria-selected="false"
+            >
+              Kids
             </button>
           </li>
         </ul>
@@ -137,6 +151,7 @@
           ></i></a>
       </div>
       <!--End nav-tabs-->
+
       <div class="tab-content wow fadeIn animated" id="myTabContent">
         <div
           class="tab-pane fade show active"
@@ -145,74 +160,80 @@
           aria-labelledby="tab-one"
         >
           <div class="row product-grid-4">
-            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-              <div class="product-cart-wrap mb-30">
-                <div class="product-img-action-wrap">
-                  <div class="product-img product-img-zoom">
-                    <a href="shop-product-right.html">
-                      <img
-                        class="default-img"
-                        src="/userAssets/imgs/shop/product-1-1.jpg"
-                        alt=""
-                      />
-                      <img
-                        class="hover-img"
-                        src="/userAssets/imgs/shop/product-1-2.jpg"
-                        alt=""
-                      />
-                    </a>
+
+            {{#each products}}
+
+              <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                <div class="product-cart-wrap mb-30">
+                  <div class="product-img-action-wrap">
+                    <div class="product-img product-img-zoom">
+                      <a href="shop-product-right.html">
+                        <img
+                          class="default-img"
+                          src="{{this.picturePath.[0]}}"
+                          alt="product Image 1"
+                        />
+                        <img
+                          class="hover-img"
+                          src="{{this.picturePath.[2]}}"
+                          alt="product Image 2"
+                        />
+                      </a>
+                    </div>
+                    <div class="product-action-1">
+                      <a
+                        aria-label="Quick view"
+                        class="action-btn hover-up"
+                        data-bs-toggle="modal"
+                        data-bs-target="#quickViewModal"
+                      ><i class="fi-rs-eye"></i></a>
+                      <a
+                        aria-label="Add To Wishlist"
+                        class="action-btn hover-up"
+                        href="shop-wishlist.html"
+                      ><i class="fi-rs-heart"></i></a>
+                      <a
+                        aria-label="Compare"
+                        class="action-btn hover-up"
+                        href="shop-compare.html"
+                      ><i class="fi-rs-shuffle"></i></a>
+                    </div>
+                    <div
+                      class="product-badges product-badges-position product-badges-mrg"
+                    >
+                      <span class="hot">Hot</span>
+                    </div>
                   </div>
-                  <div class="product-action-1">
-                    <a
-                      aria-label="Quick view"
-                      class="action-btn hover-up"
-                      data-bs-toggle="modal"
-                      data-bs-target="#quickViewModal"
-                    ><i class="fi-rs-eye"></i></a>
-                    <a
-                      aria-label="Add To Wishlist"
-                      class="action-btn hover-up"
-                      href="shop-wishlist.html"
-                    ><i class="fi-rs-heart"></i></a>
-                    <a
-                      aria-label="Compare"
-                      class="action-btn hover-up"
-                      href="shop-compare.html"
-                    ><i class="fi-rs-shuffle"></i></a>
-                  </div>
-                  <div
-                    class="product-badges product-badges-position product-badges-mrg"
-                  >
-                    <span class="hot">Hot</span>
-                  </div>
-                </div>
-                <div class="product-content-wrap">
-                  <div class="product-category">
-                    <a href="shop-grid-right.html">Clothing</a>
-                  </div>
-                  <h2>
-                    <a href="shop-product-right.html">Colorful Pattern Shirts</a>
-                  </h2>
-                  <div class="rating-result" title="90%">
-                    <span>
-                      <span>90%</span>
-                    </span>
-                  </div>
-                  <div class="product-price">
-                    <span>$238.85 </span>
-                    <span class="old-price">$245.8</span>
-                  </div>
-                  <div class="product-action-1 show">
-                    <a
-                      aria-label="Add To Cart"
-                      class="action-btn hover-up"
-                      href="shop-cart.html"
-                    ><i class="fi-rs-shopping-bag-add"></i></a>
+                  <div class="product-content-wrap">
+                    <div class="product-category">
+                      <a href="shop-grid-right.html">{{this.brand}}</a>
+                    </div>
+                    <h2>
+                      <a href="shop-product-right.html">{{this.name}}</a>
+                    </h2>
+                    <div class="rating-result" title="90%">
+                      <span>
+                        <span>Only {{this.stock}} left</span>
+                      </span>
+                    </div>
+                    <div class="product-price">
+                      <span>₹ {{this.discountPrice}}</span>
+                      <span class="old-price">₹ {{this.price}}</span>
+                    </div>
+                    <div class="product-action-1 show">
+                      <a
+                        aria-label="Add To Cart"
+                        class="action-btn hover-up"
+                        href="shop-cart.html"
+                      ><i class="fi-rs-shopping-bag-add"></i></a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+
+            {{/each}}
+
+            {{! <div class="col-lg-3 col-md-4 col-12 col-sm-6">
               <div class="product-cart-wrap mb-30">
                 <div class="product-img-action-wrap">
                   <div class="product-img product-img-zoom">
@@ -675,7 +696,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> }}
           </div>
           <!--End product-grid-4-->
         </div>
@@ -1802,10 +1823,7 @@
               <div class="card-1">
                 <figure class="img-hover-scale overflow-hidden">
                   <a href="{{this.link}}">
-                    <img
-                      src="{{this.image}}"
-                      alt="{{this.name}}"
-                    />
+                    <img src="{{this.image}}" alt="{{this.name}}" />
                   </a>
                 </figure>
                 <h5 class="text-center mt-2">

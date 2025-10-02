@@ -1,5 +1,5 @@
 <section class="content-main">
-  <form action="/products/create" method="POST" >
+  <form action="/admin/add-product" method="POST" enctype="multipart/form-data" >
     <div class="row">
       <!-- Left side -->
       <div class="col-9">
@@ -15,9 +15,7 @@
             <button
               type="submit"
               class="btn btn-md rounded font-sm hover-up"
-            >
-              Publish
-            </button>
+            >Publish</button>
           </div>
         </div>
 
@@ -36,7 +34,6 @@
                 id="name"
                 placeholder="Type here"
                 class="form-control"
-                required
               />
             </div>
 
@@ -45,18 +42,21 @@
               <div class="col-lg-4">
                 <div class="mb-4">
                   <label for="brand" class="form-label">Brand</label>
-                  <select name="brand" id="brand" class="form-control" required>
+                  <select name="brand" id="brand" class="form-control">
                     <option value="">Select brand</option>
                     <option value="Rolex">Rolex</option>
-                    <option value="Casio">Casio</option>
                     <option value="Fossil">Fossil</option>
+                    <option value="Casio">Casio</option>
+                    <option value="Titan">Titan</option>
+                    <option value="Timex">Timex</option>
+                    <option value="Diesel">Diesel</option>
                   </select>
                 </div>
               </div>
               <div class="col-lg-4">
                 <div class="mb-4">
                   <label for="category" class="form-label">Category</label>
-                  <select name="category" id="category" class="form-control" required>
+                  <select name="category" id="category" class="form-control">
                     <option value="">Select category</option>
                     <option value="Men">Men</option>
                     <option value="Women">Women</option>
@@ -67,25 +67,23 @@
               <div class="col-lg-4">
                 <div class="mb-4">
                   <label for="status" class="form-label">Status</label>
-                  <select name="status" id="status" class="form-control" required>
+                  <select name="status" id="status" class="form-control">
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                   </select>
                 </div>
               </div>
             </div>
-
-            <!-- Prices & Stock -->
+            <!-- Brand, Category, Status end -->
             <div class="row">
               <div class="col-lg-4">
                 <div class="mb-4">
                   <label class="form-label">Regular price</label>
                   <input
                     name="price"
-                    placeholder="$"
-                    type="number"
+                    placeholder="₹"
+                    type="text"
                     class="form-control"
-                    required
                   />
                 </div>
               </div>
@@ -94,8 +92,8 @@
                   <label class="form-label">Promotional price</label>
                   <input
                     name="discountPrice"
-                    placeholder="$"
-                    type="number"
+                    placeholder="₹"
+                    type="text"
                     class="form-control"
                   />
                 </div>
@@ -105,14 +103,11 @@
                 <input
                   name="stock"
                   placeholder="Qty"
-                  type="number"
+                  type="text"
                   class="form-control"
-                  required
                 />
               </div>
             </div>
-
-            <!-- Descriptions -->
             <div class="mb-4">
               <label for="shortDesc" class="form-label">Short Description</label>
               <input
@@ -134,18 +129,29 @@
               ></textarea>
             </div>
 
-            {{!-- <!-- Images -->
-            <div class="mb-4">
-              <label class="form-label">Thumbnail</label>
-              <input class="form-control" type="file" name="thumbnail" />
-            </div>
-            <div class="mb-4">
-              <label class="form-label">Product Images</label>
-              <input class="form-control" type="file" name="images" multiple />
-            </div> --}}
           </div>
         </div>
+        <!-- card end// -->
+
+        <!-- Media -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Media</h4>
+          </div>
+          <div class="card-body">
+            {{!-- <div class="mb-4">
+              <label class="form-label">Thumbnail</label>
+              <input class="form-control" type="file" name="thumbnail" />
+            </div> --}}
+            <div class="mb-4">
+              <label class="form-label">Product Images</label>
+              <input class="form-control" type="file" name="productImages" multiple />
+            </div>
+          </div>
+        </div>
+        <!-- card end// -->
       </div>
     </div>
   </form>
 </section>
+<!-- content-main end// -->

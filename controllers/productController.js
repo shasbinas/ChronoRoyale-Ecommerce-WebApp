@@ -4,10 +4,11 @@ import connectToDatabase from "../config/db.js";
 import { v7 as uuidv7 } from "uuid";
 /* Get all products */
 export const getAllProducts = async (req, res) => {
+  console.log(">>>>> get all prodcuts funciuon worked>>>>>");
   try {
     const db = await connectToDatabase(process.env.DATABASE);
     const products = await db
-      .collection(collection.PRODUCT_COLLECTION)
+      .collection(collection.PRODUCTS_COLLECTION)
       .find({})
       .toArray();
 
@@ -22,6 +23,14 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
+export const fetchAllProducts = async () => {
+  const db = await connectToDatabase(process.env.DATABASE);
+  return await db
+    .collection(collection.PRODUCTS_COLLECTION)
+    .find({})
+    .toArray();
+};
+
 /* Get single product by ID */
 export const getProductById = async (req, res) => {
   try {
@@ -34,7 +43,7 @@ export const getProductById = async (req, res) => {
 
     const db = await connectToDatabase(process.env.DATABASE);
     const product = await db
-      .collection(collection.PRODUCT_COLLECTION)
+      .collection(collection.PRODUCTS_COLLECTION)
       .findOne({ _id: new ObjectId(id) });
 
     if (!product)
@@ -56,15 +65,15 @@ export const getProductById = async (req, res) => {
 /* Create a new product */
 export const createProduct = async (req, res) => {
   console.log("crete produt route working>>>>>>>>");
-  try {
-    console.log(req.body);
-
+   try {
     const data = req.body;
+    console.log(data);
 
-    const productId = uuidv7();
+    console.log(req.files); // array of files
+    const pictures = req.files.map((file) => `/userAssets/pictures/${file.filename}`);
+    console.log(pictures)
 
     const productData = {
-      productId,
       name: data.name,
       shortDesc: data.shortDesc,
       description: data.description,
@@ -74,30 +83,25 @@ export const createProduct = async (req, res) => {
       discountPrice: data.discountPrice,
       stock: data.stock,
       rating: "",
-      picturePath: "/adminAssets/imgs/ROLEX.webp",
-      thumbnail: "/adminAssets/imgs/ROLEX.webp",
+      picturePath: pictures,
+      thumbnail: "",
       status: data.status,
       createdAt: new Date(),
       updatedAt: new Date(),
       isDelete: false,
     };
 
-    const db = await connectToDatabase(process.env.DATABASE);
+    console.log(productData);
 
+    const db = await connectToDatabase(process.env.DATABASE);
     const result = await db
       .collection(collection.PRODUCTS_COLLECTION)
       .insertOne(productData);
+    console.log(result);
 
-      console.log("result>>>>",result);
-
-    return res.redirect("/admin");
+    return res.redirect("/admin/products-list");
   } catch (error) {
-    console.error("Error creating product:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to create product",
-      error: error.message,
-    });
+    console.log(error);
   }
 };
 
@@ -209,7 +213,7 @@ export const getHomeProducts = async (req, res) => {
       .collection(collection.PRODUCT_COLLECTION)
       .find({})
       .sort({ createdAt: -1 }) // newest products first
-      .limit(8)                 // only 8 products
+      .limit(8)                 
       .toArray();
 
     return res.status(200).json({ success: true, data: products });
@@ -222,3 +226,6 @@ export const getHomeProducts = async (req, res) => {
     });
   }
 };
+
+
+
