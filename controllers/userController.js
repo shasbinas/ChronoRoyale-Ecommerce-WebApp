@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import collection from "../config/collection.js";
 import connectToDatabase from "../config/db.js";
 import { bannerData, brandData } from "../data/index.js";
-import { fetchAllProducts, getAllProducts } from "./productController.js";
+import { fetchAllProducts, getAllProducts, getProductsData } from "./productController.js";
 /* get all user data */
 export const getAllUsersData = async (req, res) => {
   console.log("this api called>>>>>>");
@@ -154,15 +154,62 @@ export const blockUnblockUser = async (req, res) => {
 export const landingPage = async (req, res) => {
   console.log("User Landing route working 🚀");
 
-  const allProductsData = await fetchAllProducts()
-  // console.log(allProductsData);
+  try {
+    // Fetch all products
+    const allProductsData = await fetchAllProducts();
 
-  res.render("user/home", {
-    title: "Home - ChronoRoyale",
-    banners: bannerData,
-    brands: brandData,
-    products:allProductsData
-  });
+    // Featured random products (12)
+    const featuredProducts = await getProductsData({
+      sort: "random",
+      limit: 12,
+    });
+
+    // Latest men’s watches (10)
+    const latestMen = await getProductsData({
+      category: "men",
+      sort: "latest",
+      limit: 10,
+    });
+
+    // Latest women’s watches (10)
+    const latestWomen = await getProductsData({
+      category: "women",
+      sort: "latest",
+      limit: 10,
+    });
+
+    // New arrivals (15)
+    const newArrivals = await getProductsData({
+      sort: "latest",
+      limit: 15,
+    });
+
+    // Render homepage with all sections
+    res.render("user/home", {
+      title: "Home - ChronoRoyale",
+      banners: bannerData,
+      brands: brandData,
+      products: allProductsData,   // all products
+      featured: featuredProducts,
+      men: latestMen,
+      women: latestWomen,
+      newProducts: newArrivals,
+    });
+  } catch (error) {
+    console.error("❌ Landing page error:", error);
+    res.status(500).send("Error loading home page");
+  }
 };
+
+export const loginPage = async (req, res) => {
+  console.log("Login page route working 🚀");
+  res.render("user/login", { title: "Login - ChronoRoyale" });
+};
+
+export const signupPage = async (req, res) => {
+  console.log("Signup page route working 🚀");
+  res.render("user/signup", { title: "Signup - ChronoRoyale" });
+};
+
 
 
