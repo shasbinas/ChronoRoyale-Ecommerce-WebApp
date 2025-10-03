@@ -150,13 +150,16 @@ export const blockUnblockUser = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 export const landingPage = async (req, res) => {
   console.log("User Landing route working 🚀");
 
   try {
     // Fetch all products
     const allProductsData = await fetchAllProducts();
+
+    // Filter men and women products for tabs
+    const menProducts = allProductsData.filter(p => p.category === "men");
+    const womenProducts = allProductsData.filter(p => p.category === "women");
 
     // Featured random products (12)
     const featuredProducts = await getProductsData({
@@ -189,10 +192,12 @@ export const landingPage = async (req, res) => {
       title: "Home - ChronoRoyale",
       banners: bannerData,
       brands: brandData,
-      products: allProductsData,   // all products
+      products: allProductsData,  // all products
       featured: featuredProducts,
-      men: latestMen,
-      women: latestWomen,
+      men: menProducts,           // filtered for Men tab
+      women: womenProducts,       // filtered for Women tab
+      latestMen,                  // optional: for section
+      latestWomen,                // optional: for section
       newProducts: newArrivals,
     });
   } catch (error) {
@@ -200,6 +205,8 @@ export const landingPage = async (req, res) => {
     res.status(500).send("Error loading home page");
   }
 };
+
+
 
 export const loginPage = async (req, res) => {
   console.log("Login page route working 🚀");
