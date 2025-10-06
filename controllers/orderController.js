@@ -42,68 +42,47 @@ export const createOrder = async (req, res) => {
 
 
 // Get order by ID
-export const getOrderById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const db = await connectToDatabase(process.env.DATABASE);
-    const order = await db
-      .collection(collection.ORDER_COLLECTION)
-      .findOne({ _id: new ObjectId(String(id)) });
 
-    if (!order) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Order not found" });
-    }
-
-    return res.status(200).json({ success: true, data: order });
-  } catch (error) {
-    console.error(error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Failed to fetch order" });
-  }
-};
 
 // Updateorderstatus
-export const updateOrderStatus = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
+// export const updateOrderStatus = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const { status } = req.body;
 
-    const allowedStatus = [
-      "pending",
-      "cancelled",
-      "shipped",
-      "delivered",
-      "Confirmed",
-    ];
+//     const allowedStatus = [
+//       "pending",
+//       "cancelled",
+//       "shipped",
+//       "delivered",
+//       "Confirmed",
+//     ];
 
-    if (!allowedStatus.includes(status)) {
-      return res.status(400).json({
-        success: false,
-        message: `Invalid status. Allowed values: ${allowedStatus.join(", ")}`,
-      });
-    }
+//     if (!allowedStatus.includes(status)) {
+//       return res.status(400).json({
+//         success: false,
+//         message: `Invalid status. Allowed values: ${allowedStatus.join(", ")}`,
+//       });
+//     }
 
-    const db = await connectToDatabase(process.env.DATABASE);
-    const result = await db
-      .collection(collection.ORDER_COLLECTION)
-      .updateOne({ _id: new ObjectId(String(id)) }, { $set: { status } });
+//     const db = await connectToDatabase(process.env.DATABASE);
+//     const result = await db
+//       .collection(collection.ORDER_COLLECTION)
+//       .updateOne({ _id: new ObjectId(String(id)) }, { $set: { status } });
 
-    if (result.matchedCount === 0) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Order not found" });
-    }
+//     if (result.matchedCount === 0) {
+//       return res
+//         .status(404)
+//         .json({ success: false, message: "Order not found" });
+//     }
 
-    return res
-      .status(200)
-      .json({ success: true, message: "Order status updated", status });
-  } catch (error) {
-    console.error(error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Failed to update order status" });
-  }
-};
+//     return res
+//       .status(200)
+//       .json({ success: true, message: "Order status updated", status });
+//   } catch (error) {
+//     console.error(error);
+//     return res
+//       .status(500)
+//       .json({ success: false, message: "Failed to update order status" });
+//   }
+// };

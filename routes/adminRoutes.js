@@ -2,21 +2,19 @@ import express from "express";
 import { adminLogin } from "../controllers/adminAuth.js";
 import {
   blockUnblockUser,
-  getAllUsersData,
-  getUsersData,
-  updateUserBlockStatus,
+
+  
+
 } from "../controllers/userController.js";
 import {
 
-  getOrderById,
-  updateOrderStatus,
+  
+ 
 } from "../controllers/orderController.js";
 import {
   createProduct,
-  deleteProduct,
-  getAllProducts,
-  getProductById,
-  updateProduct,
+  
+
 } from "../controllers/productController.js";
 import {
   adminAddProductPage,
@@ -24,7 +22,7 @@ import {
   adminLoginPage,
   adminLogout,
   adminOrdersListPage,
-  adminOrderViewPage,
+
   adminProductsListPage,
   adminUsersListPage,
 } from "../controllers/adminController.js";
@@ -57,26 +55,22 @@ adminRoutes.get("/add-product", adminAddProductPage);
 
 adminRoutes.get("/orders-list", adminOrdersListPage);
 
-adminRoutes.get("/order-view", adminOrderViewPage);
-
-adminRoutes.get("/users", getAllUsersData);
-
-adminRoutes.get("/users/:id", getUsersData);
-
-adminRoutes.patch("/users/:id", updateUserBlockStatus);
-
-adminRoutes.get("/products", getAllProducts);
-
-adminRoutes.get("/:id", getProductById);
-
-adminRoutes.delete("/:id", deleteProduct);
-
-adminRoutes.patch("/:id", updateProduct);
+// adminRoutes.get("/order-view", adminOrderViewPage);
 
 
-adminRoutes.get("/orders/:id", getOrderById);
 
-adminRoutes.patch("/orders/:id/status", updateOrderStatus);
+// adminRoutes.get("/users/:id", getUsersData);
+
+
+
+
+
+
+
+
+
+
+
 
 // adminRoutes.get("/test",(req,res)=>{
 //     res.status(200).json({ message:"Admin login rotes working"});

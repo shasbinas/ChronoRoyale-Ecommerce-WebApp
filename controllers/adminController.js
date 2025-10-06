@@ -93,13 +93,13 @@ export const adminOrdersListPage = async (req, res) => {
   });
 };
 
-export const adminOrderViewPage = async (req, res) => {
-  console.log("Admin OrderView route working 🚀");
-  res.render("admin/order-view", {
-    layout: "admin",
-    title: "Admin - Order View",
-  });
-};
+// export const adminOrderViewPage = async (req, res) => {
+//   console.log("Admin OrderView route working 🚀");
+//   res.render("admin/order-view", {
+//     layout: "admin",
+//     title: "Admin - Order View",
+//   });
+// };
 
 export const adminLogout = (req, res) => {
   try {
