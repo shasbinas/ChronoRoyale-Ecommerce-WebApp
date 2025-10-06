@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import collection from "../config/collection.js";
 import connectToDatabase from "../config/db.js";
 import { bannerData, brandData } from "../data/index.js";
-import { fetchAllProducts, getAllProducts, getProductsData } from "./productController.js";
+import {  getProductsData } from "./productController.js";
 /* get all user data */
 export const getAllUsersData = async (req, res) => {
   console.log("this api called>>>>>>");
@@ -32,7 +32,7 @@ export const getUsersData = async (req, res) => {
   try {
     const db = await connectToDatabase(process.env.DATABASE);
     const userData = await db
-      .collection(collecion.USERS_COLLECTION)
+      .collection(collection.USERS_COLLECTION)
       .find({ _id: new ObjectId(String(id)) })
       .toArray();
 
@@ -154,50 +154,41 @@ export const landingPage = async (req, res) => {
   console.log("User Landing route working 🚀");
 
   try {
-    // Fetch all products
-    const allProductsData = await fetchAllProducts();
-
-    // Filter men and women products for tabs
-    const menProducts = allProductsData.filter(p => p.category === "men");
-    const womenProducts = allProductsData.filter(p => p.category === "women");
-
-    // Featured random products (12)
+    // Featured random products (6)
     const featuredProducts = await getProductsData({
       sort: "random",
       limit: 12,
     });
 
-    // Latest men’s watches (10)
+    console.log(featuredProducts[0])
+
+    // Latest men’s watches (4)
     const latestMen = await getProductsData({
       category: "men",
       sort: "latest",
       limit: 10,
     });
 
-    // Latest women’s watches (10)
+    // Latest women’s watches (4)
     const latestWomen = await getProductsData({
       category: "women",
       sort: "latest",
       limit: 10,
     });
 
-    // New arrivals (15)
     const newArrivals = await getProductsData({
       sort: "latest",
       limit: 15,
     });
 
-    // Render homepage with all sections
+    // Render homepage with dynamic products
     res.render("user/home", {
       title: "Home - ChronoRoyale",
       banners: bannerData,
       brands: brandData,
-      products: allProductsData,  // all products
       featured: featuredProducts,
-      men: menProducts,           // filtered for Men tab
-      women: womenProducts,       // filtered for Women tab
-      latestMen,                  // optional: for section
-      latestWomen,                // optional: for section
+      men: latestMen,
+      women: latestWomen,
       newProducts: newArrivals,
     });
   } catch (error) {

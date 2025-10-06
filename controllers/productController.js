@@ -25,10 +25,7 @@ export const getAllProducts = async (req, res) => {
 
 export const fetchAllProducts = async () => {
   const db = await connectToDatabase(process.env.DATABASE);
-  return await db
-    .collection(collection.PRODUCTS_COLLECTION)
-    .find({})
-    .toArray();
+  return await db.collection(collection.PRODUCTS_COLLECTION).find({}).toArray();
 };
 
 /* Get single product by ID */
@@ -65,13 +62,15 @@ export const getProductById = async (req, res) => {
 /* Create a new product */
 export const createProduct = async (req, res) => {
   console.log("crete produt route working>>>>>>>>");
-   try {
+  try {
     const data = req.body;
     console.log(data);
 
     console.log(req.files); // array of files
-    const pictures = req.files.map((file) => `/userAssets/pictures/${file.filename}`);
-    console.log(pictures)
+    const pictures = req.files.map(
+      (file) => `/userAssets/pictures/${file.filename}`
+    );
+    console.log(pictures);
 
     const productData = {
       name: data.name,
@@ -143,7 +142,7 @@ export const updateProduct = async (req, res) => {
 
     const db = await connectToDatabase(process.env.DATABASE);
     const result = await db
-      .collection(collection.PRODUCT_COLLECTION)
+      .collection(collection.PRODUCTS_COLLECTION)
       .updateOne({ _id: new ObjectId(String(id)) }, { $set: updateData });
 
     if (result.matchedCount === 0) {
@@ -180,7 +179,7 @@ export const deleteProduct = async (req, res) => {
 
     const db = await connectToDatabase(process.env.DATABASE);
     const result = await db
-      .collection(collection.PRODUCT_COLLECTION)
+      .collection(collection.PRODUCTS_COLLECTION)
       .deleteOne({ _id: new ObjectId(String(id)) });
 
     if (result.deletedCount === 0) {
@@ -204,44 +203,28 @@ export const deleteProduct = async (req, res) => {
 };
 /**** */
 
-/* Get last 8 products for home page */
-export const getHomeProducts = async (req, res) => {
-  try {
-    const db = await connectToDatabase(process.env.DATABASE);
+// /* Get last 8 products for home page */
+// export const getHomeProducts = async (req, res) => {
+//   try {
+//     const db = await connectToDatabase(process.env.DATABASE);
 
-    const products = await db
-      .collection(collection.PRODUCT_COLLECTION)
-      .find({})
-      .sort({ createdAt: -1 }) // newest products first
-      .limit(8)                 
-      .toArray();
+//     const products = await db
+//       .collection(collection.PRODUCTS_COLLECTION)
+//       .find({})
+//       .sort({ createdAt: -1 }) // newest products first
+//       .limit(8)
+//       .toArray();
 
-    return res.status(200).json({ success: true, data: products });
-  } catch (error) {
-    console.error("Error fetching home products:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to fetch home products",
-      error: error.message,
-    });
-  }
-};
-
-
-
-export const productViewPage = async (req, res) => {
-  console.log("Product view page route working 🚀");
- try {
-
-  res.render("user/product-View", { title: "Product View - ChronoRoyale" });
-  
- } catch (error) {
-  console.log(error);
-  
- }
-}
-
-
+//     return res.status(200).json({ success: true, data: products });
+//   } catch (error) {
+//     console.error("Error fetching home products:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Failed to fetch home products",
+//       error: error.message,
+//     });
+//   }
+// };
 
 /**
  * Fetch products from the database with optional filters, sorting, and limit
@@ -293,5 +276,98 @@ export const getProductsData = async (options = {}) => {
   } catch (error) {
     console.error("❌ Error in getProducts:", error);
     throw error;
+  }
+};
+
+export const productViewPage = async (req, res) => {
+  console.log("✅ Product view route hit");
+
+  try {
+    const db = await connectToDatabase(process.env.DATABASE);
+
+    // Step 1: Check if ID is received in URL
+    const productId = req.query.id;
+    console.log("🆔 Product ID from URL:", productId);
+
+    if (!productId) {
+      console.log("❌ No product ID provided in URL");
+      return res.status(400).send("Product ID is required");
+    }
+
+    // Step 2: Validate ObjectId
+    if (!ObjectId.isValid(productId)) {
+      console.log("❌ Invalid ObjectId:", productId);
+      return res.status(400).send("Invalid product ID");
+    }
+
+    // Step 3: Fetch product from DB
+    const product = await db
+      .collection(collection.PRODUCTS_COLLECTION)
+      .findOne({ _id: new ObjectId(String(productId)) });
+
+    // console.log(">>>>>>>>Product Data",product);
+
+    if (!product) {
+      console.log("❌ Product not found in database");
+      return res.status(404).send("Product not found");
+    }
+
+    // Step 5: Render product view
+    res.redierect("user/home", {
+      title: `Product`,
+    });
+  } catch (error) {
+    console.error("❌ Error in productViewPage:", error);
+    res.status(500).send("Server error");
+  }
+};
+
+export const productDeatilsPage = async (req, res) => {
+  console.log("product Deatils fuction called");
+  try {
+    const db = await connectToDatabase(process.env.DATABASE);
+
+    // Step 1: Check if ID is received in URL
+    const productId = req.query.id;
+    console.log("🆔 Product ID from URL:", productId);
+
+    if (!productId) {
+      console.log("❌ No product ID provided in URL");
+      return res.status(400).send("Product ID is required");
+    }
+
+    // Step 2: Validate ObjectId
+    if (!ObjectId.isValid(productId)) {
+      console.log("❌ Invalid ObjectId:", productId);
+      return res.status(400).send("Invalid product ID");
+    }
+
+    // Step 3: Fetch product from DB
+    const product = await db
+      .collection(collection.PRODUCTS_COLLECTION)
+      .findOne({ _id: new ObjectId(String(productId)) });
+
+    // console.log(">>>>>>>>Product Data",product);
+
+    if (!product) {
+      console.log("❌ Product not found in database");
+      return res.status(404).send("Product not found");
+    }
+    console.log(product);
+
+    const relatedProducts = await getProductsData({
+      category: product.category,
+      limit: 4,
+    });
+
+    console.log("relatedProducts>>>", relatedProducts);
+
+    res.render("user/productDetails", {
+      title: `Product -${product.name}`,
+      product,
+      relatedProducts,
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

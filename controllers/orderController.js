@@ -39,22 +39,7 @@ export const createOrder = async (req, res) => {
   }
 };
 
-// Get all orders
-export const getAllOrders = async (req, res) => {
-  try {
-    const db = await connectToDatabase(process.env.DATABASE);
-    const orders = await db
-      .collection(collection.ORDER_COLLECTION)
-      .find({})
-      .toArray();
-    return res.status(200).json({ success: true, data: orders });
-  } catch (error) {
-    console.error(error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Failed to fetch orders" });
-  }
-};
+
 
 // Get order by ID
 export const getOrderById = async (req, res) => {

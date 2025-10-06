@@ -7,7 +7,7 @@ import {
   updateUserBlockStatus,
 } from "../controllers/userController.js";
 import {
-  getAllOrders,
+
   getOrderById,
   updateOrderStatus,
 } from "../controllers/orderController.js";
@@ -73,7 +73,6 @@ adminRoutes.delete("/:id", deleteProduct);
 
 adminRoutes.patch("/:id", updateProduct);
 
-adminRoutes.get("/orders", getAllOrders);
 
 adminRoutes.get("/orders/:id", getOrderById);
 
