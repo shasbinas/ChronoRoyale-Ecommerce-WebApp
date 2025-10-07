@@ -21,11 +21,19 @@
   </head>
 
   <body>
-    {{> header}} <!-- Header partial -->
+{{#unless (eq title "Signup - ChronoRoyale")}}
+  {{#unless (eq title "Login - ChronoRoyale")}}
+    {{> header}}
+  {{/unless}}
+{{/unless}}
 
-    {{{body}}}          <!-- Page content -->
+{{{body}}}
 
-    {{> footer}}     <!-- Footer partial -->
+{{#unless (eq title "Signup - ChronoRoyale")}}
+  {{#unless (eq title "Login - ChronoRoyale")}}
+    {{> footer}}
+  {{/unless}}
+{{/unless}}
 
     <!-- Vendor JS-->
     <script src="/userAssets/js/vendor/modernizr-3.6.0.min.js"></script>

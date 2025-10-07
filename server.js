@@ -11,7 +11,6 @@ import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 
-
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,33 +40,10 @@ app.use(
   express.static(path.join(__dirname, "public/userAssets"))
 );
 
-/* FILE STORAGE */
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage: storage });
-
-/* ROUTES WITH FILES */
-// app.post("/auth/register",upload.single("picture"),register);
-// app.post("/post",upload.single("picture"),createPost);
-
 /* ROUTES */
 app.use("/admin", adminRoutes);
 app.use("/", userRoutes);
 app.use("/products", productRoutes);
-
-app.listen(PORT, () => {
-  console.log(
-    `process ID ${process.pid}:server running on PORT ${PORT} in dev mode`
-  );
-});
-
-// app.use("/products", (req, res) => {
-//   res.send("Hello from server.js");
-// });
-
-// app.use("/users,userRoutes");
-// app.get("/",(req,res)=>{
-//     res.send("Hello from server.js");
-// })
 
 app.listen(PORT, () => {
   console.log(
@@ -88,6 +64,9 @@ app.engine(
       upper: (str) => str.toUpperCase(),
       json: (context) => JSON.stringify(context),
       eq: (a, b) => a === b,
+      formatDate: (timestamp) => {
+        return new Date(timestamp).toLocaleDateString("en-GB"); // dd/mm/yyyy
+      },
     },
   })
 );
@@ -96,10 +75,3 @@ app.engine(
 app.set("view engine", "hbs");
 // set views folder
 app.set("views", path.join(__dirname, "views"));
-
-
-
-
-
-
-

@@ -55,11 +55,6 @@ adminRoutes.get("/add-product", adminAddProductPage);
 
 adminRoutes.get("/orders-list", adminOrdersListPage);
 
-// adminRoutes.get("/order-view", adminOrderViewPage);
-
-
-
-// adminRoutes.get("/users/:id", getUsersData);
 
 
 

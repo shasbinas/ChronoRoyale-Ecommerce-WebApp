@@ -4,34 +4,33 @@ import collection from "../config/collection.js";
 import connectToDatabase from "../config/db.js";
 import { v7 as uuidv7 } from "uuid";
 
-export const signup = async (req, res) => {
-  console.log("signup>>>>>>>>>");
-  console.log(req.body);
+/* user signup */
+export const createUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { username, email, password, checkbox } = req.body;
 
-    // Simple validation instead of Zod
-    if (!name || !email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Name, email and password are required." });
+    if (!username || !email || !password) {
+      return res.status(400).send("Name, email and password are required.");
+    }
+
+    if (!checkbox) {
+      return res.status(400).send("You must agree to terms & policy.");
     }
 
     const db = await connectToDatabase(process.env.DATABASE);
-    const user = await db
-      .collection(collection.USERS_COLLECTION)
-      .findOne({ email });
+    const existingUser = await db.collection(collection.USERS_COLLECTION).findOne({ email });
 
-    if (user) {
-      return res.status(400).json({ message: "User already exists." });
+    if (existingUser) {
+      return res.status(400).send("User already exists.");
     }
 
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
     const userId = uuidv7();
+
     const userData = {
       userId,
-      name,
+      name: username,
       email,
       password: passwordHash,
       phone: "",
@@ -45,27 +44,26 @@ export const signup = async (req, res) => {
       isActive: true,
       isBlocked: false,
     };
-    const result = await db
-      .collection(collection.USERS_COLLECTION)
-      .insertOne(userData);
-      console.log(result);
 
-    res.status(201).json({ message: "User created successfully",result });
+    await db.collection(collection.USERS_COLLECTION).insertOne(userData);
+
+    res.redirect("/login"); // Redirect after signup
   } catch (err) {
-    console.error("Signup Error:", err.message);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("Signup Error:", err);
+    res.status(500).send("Internal server error");
   }
 };
 
-export const login = async (req, res) => {
+
+export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Simple validation instead of Zod
+    // Simple validation
     if (!email || !password) {
       return res
         .status(400)
-        .json({ message: "Email and password are required." });
+        .render("login", { error: "Email and password are required." });
     }
 
     const db = await connectToDatabase(process.env.DATABASE);
@@ -74,23 +72,30 @@ export const login = async (req, res) => {
       .findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ message: "User does not exist." });
+      return res
+        .status(400)
+        .render("login", { error: "User does not exist." });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials." });
+      return res
+        .status(400)
+        .render("login", { error: "Invalid credentials." });
     }
 
+    // Generate token
     const token = jwt.sign({ id: user.userId }, process.env.JWT_SECRET, {
-      expiresIn: "2h", // Token expiration time
+      expiresIn: "2h",
     });
 
-    const { password: _, ...userWithoutPassword } = user;
+    // Optional: store token in a cookie for session
+    res.cookie("token", token, { httpOnly: true });
 
-    res.status(200).json({ token, user: userWithoutPassword });
+    // Redirect to landing page
+    res.redirect("/"); // change "/" to your landing page route
   } catch (err) {
     console.error("Login Error:", err.message);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).render("login", { error: "Internal server error" });
   }
 };

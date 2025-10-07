@@ -2,68 +2,14 @@ import { ObjectId } from "mongodb";
 import collection from "../config/collection.js";
 import connectToDatabase from "../config/db.js";
 import { bannerData, brandData } from "../data/index.js";
-import {  getProductsData } from "./productController.js";
-/* get all user data */
-
-//   console.log("this api called>>>>>>");
-//   try {
-//     const db = await connectToDatabase(process.env.DATABASE);
-//     const allUsersData = await db
-//       .collection(collection.USERS_COLLECTION)
-//       .find({})
-//       .toArray();
-//     console.log(allUsersData);
-//     return res.status(200).json({
-//       success: true,
-//       data: allUsersData,
-//     });
-//   } catch (error) {
-//     console.error("Error fetching users:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Failed to fetch users",
-//       error: error.message,
-//     });
-//   }
-// };
-
-// export const getUsersData = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const db = await connectToDatabase(process.env.DATABASE);
-//     const userData = await db
-//       .collection(collection.USERS_COLLECTION)
-//       .find({ _id: new ObjectId(String(id)) })
-//       .toArray();
-
-//     if (!userData) {
-//       return res.status(400).json({ message: "User does not exist." });
-//     }
-//     console.log(userData);
-
-//     const { password: _, ...userDataWithoutPassword } = userData;
-
-//     return res.status(200).json({
-//       success: true,
-//       data: userDataWithoutPassword,
-//     });
-//   } catch (error) {
-//     console.error("Error fetching user:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Failed to fetch user Details",
-//       error: error.message,
-//     });
-//   }
-// };
-
-
+import { getProductsData } from "./productController.js";
 
 export const productsPage = async (req, res) => {
   console.log("productsPage page route working 🚀");
 
   res.render("user/products", { title: "Product's List - ChronoRoyale" });
 };
+
 /****** */
 
 export const blockUnblockUser = async (req, res) => {
@@ -89,10 +35,9 @@ export const blockUnblockUser = async (req, res) => {
       updatedAt: new Date(),
     };
 
-    const result = await db.collection(collection.USERS_COLLECTION).updateOne(
-      { _id: new ObjectId(userId) },
-      { $set: updateData }
-    );
+    const result = await db
+      .collection(collection.USERS_COLLECTION)
+      .updateOne({ _id: new ObjectId(userId) }, { $set: updateData });
 
     if (result.modifiedCount === 0) {
       return res.status(404).json({ message: "User not found" });
@@ -108,6 +53,7 @@ export const blockUnblockUser = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 export const landingPage = async (req, res) => {
   console.log("User Landing route working 🚀");
 
@@ -118,7 +64,7 @@ export const landingPage = async (req, res) => {
       limit: 12,
     });
 
-    console.log(featuredProducts[0])
+    console.log(featuredProducts[0]);
 
     // Latest men’s watches (4)
     const latestMen = await getProductsData({
@@ -155,8 +101,6 @@ export const landingPage = async (req, res) => {
   }
 };
 
-
-
 export const loginPage = async (req, res) => {
   console.log("Login page route working 🚀");
   res.render("user/login", { title: "Login - ChronoRoyale" });
@@ -166,6 +110,3 @@ export const signupPage = async (req, res) => {
   console.log("Signup page route working 🚀");
   res.render("user/signup", { title: "Signup - ChronoRoyale" });
 };
-
-
-
