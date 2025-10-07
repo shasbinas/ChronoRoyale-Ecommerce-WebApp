@@ -36,11 +36,20 @@
         <div class="col-xl-3 col-lg-4">
           <div class="header-info header-info-right">
             <ul>
-              <li>
-                <i class="fi-rs-user"></i>
-                <a href="/login">Log In /</a>
-                <a href="/signup">  Sign Up</a>
-              </li>
+              {{#if user}}
+                <li>
+                  <i class="fi-rs-user"></i>
+                  <a href="/profile">Hello, {{user.name}}</a>
+                  /
+                  <a href="/logout">Logout</a>
+                </li>
+              {{else}}
+                <li>
+                  <i class="fi-rs-user"></i>
+                  <a href="/login">Log In /</a>
+                  <a href="/signup">Sign Up</a>
+                </li>
+              {{/if}}
             </ul>
           </div>
         </div>
@@ -66,10 +75,13 @@
         <div class="header-nav d-none d-lg-flex">
           <div class="main-categori-wrap d-none d-lg-block">
             <a class="categori-button-active" href="#">
-              <span class="fi-rs-apps"></span> ChronoRoyale
+              <span class="fi-rs-apps"></span>
+              ChronoRoyale
             </a>
           </div>
-          <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
+          <div
+            class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block"
+          >
             <nav>
               <ul>
                 <li><a class="active" href="/">Home</a></li>
@@ -86,7 +98,10 @@
             <!-- Wishlist -->
             <div class="header-action-icon-2">
               <a href="shop-wishlist.html">
-                <img alt="wishlist" src="/userAssets/imgs/theme/icons/icon-heart.svg" />
+                <img
+                  alt="wishlist"
+                  src="/userAssets/imgs/theme/icons/icon-heart.svg"
+                />
                 <span class="pro-count">4</span>
               </a>
             </div>
@@ -94,7 +109,10 @@
             <!-- Cart -->
             <div class="header-action-icon-2">
               <a class="mini-cart-icon" href="/cart">
-                <img alt="cart" src="/userAssets/imgs/theme/icons/icon-cart.svg" />
+                <img
+                  alt="cart"
+                  src="/userAssets/imgs/theme/icons/icon-cart.svg"
+                />
                 <span class="pro-count">2</span>
               </a>
               <!-- Dropdown Cart -->
@@ -103,7 +121,10 @@
                   <li>
                     <div class="shopping-cart-img">
                       <a href="shop-product-right.html">
-                        <img alt="Daisy Bag" src="/userAssets/imgs/shop/thumbnail-3.jpg" />
+                        <img
+                          alt="Daisy Bag"
+                          src="/userAssets/imgs/shop/thumbnail-3.jpg"
+                        />
                       </a>
                     </div>
                     <div class="shopping-cart-title">
@@ -117,7 +138,10 @@
                   <li>
                     <div class="shopping-cart-img">
                       <a href="shop-product-right.html">
-                        <img alt="Shirt" src="/userAssets/imgs/shop/thumbnail-2.jpg" />
+                        <img
+                          alt="Shirt"
+                          src="/userAssets/imgs/shop/thumbnail-2.jpg"
+                        />
                       </a>
                     </div>
                     <div class="shopping-cart-title">
@@ -164,7 +188,6 @@
   HEADER END
 ================================ -->
 
-
 <!-- ================================
   MOBILE HEADER WRAPPER
 ================================ -->
@@ -178,7 +201,9 @@
           <img src="/userAssets/imgs/theme/logo.svg" alt="logo" />
         </a>
       </div>
-      <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
+      <div
+        class="mobile-menu-close close-style-wrap close-style-position-inherit"
+      >
         <button class="close-style search-close">
           <i class="icon-top"></i>
           <i class="icon-bottom"></i>
@@ -192,7 +217,9 @@
         <nav>
           <ul class="mobile-menu">
             <li class="menu-item"><a href="index.html">Home</a></li>
-            <li class="menu-item"><a href="shop-grid-right.html">Products</a></li>
+            <li class="menu-item"><a
+                href="shop-grid-right.html"
+              >Products</a></li>
           </ul>
         </nav>
       </div>
@@ -207,11 +234,26 @@
       <!-- Mobile Social Icons -->
       <div class="mobile-social-icon">
         <h5 class="mb-15 text-grey-4">Follow Us</h5>
-        <a href="#"><img src="/userAssets/imgs/theme/icons/icon-facebook.svg" alt="facebook" /></a>
-        <a href="#"><img src="/userAssets/imgs/theme/icons/icon-twitter.svg" alt="twitter" /></a>
-        <a href="#"><img src="/userAssets/imgs/theme/icons/icon-instagram.svg" alt="instagram" /></a>
-        <a href="#"><img src="/userAssets/imgs/theme/icons/icon-pinterest.svg" alt="pinterest" /></a>
-        <a href="#"><img src="/userAssets/imgs/theme/icons/icon-youtube.svg" alt="youtube" /></a>
+        <a href="#"><img
+            src="/userAssets/imgs/theme/icons/icon-facebook.svg"
+            alt="facebook"
+          /></a>
+        <a href="#"><img
+            src="/userAssets/imgs/theme/icons/icon-twitter.svg"
+            alt="twitter"
+          /></a>
+        <a href="#"><img
+            src="/userAssets/imgs/theme/icons/icon-instagram.svg"
+            alt="instagram"
+          /></a>
+        <a href="#"><img
+            src="/userAssets/imgs/theme/icons/icon-pinterest.svg"
+            alt="pinterest"
+          /></a>
+        <a href="#"><img
+            src="/userAssets/imgs/theme/icons/icon-youtube.svg"
+            alt="youtube"
+          /></a>
       </div>
     </div>
 

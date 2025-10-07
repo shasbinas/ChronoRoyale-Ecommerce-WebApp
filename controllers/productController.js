@@ -3,57 +3,6 @@ import collection from "../config/collection.js";
 import connectToDatabase from "../config/db.js";
 import { v7 as uuidv7 } from "uuid";
 
-//   console.log(">>>>> get all prodcuts funciuon worked>>>>>");
-//   try {
-//     const db = await connectToDatabase(process.env.DATABASE);
-//     const products = await db
-//       .collection(collection.PRODUCTS_COLLECTION)
-//       .find({})
-//       .toArray();
-
-//     return res.status(200).json({ success: true, data: products });
-//   } catch (error) {
-//     console.error("Error fetching products:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Failed to fetch products",
-//       error: error.message,
-//     });
-//   }
-// };
-
-
-
-
-//   try {
-//     const { id } = req.params;
-//     if (!ObjectId.isValid(id)) {
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "Invalid product ID format." });
-//     }
-
-//     const db = await connectToDatabase(process.env.DATABASE);
-//     const product = await db
-//       .collection(collection.PRODUCTS_COLLECTION)
-//       .findOne({ _id: new ObjectId(id) });
-
-//     if (!product)
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "Product not found." });
-
-//     return res.status(200).json({ success: true, data: product });
-//   } catch (error) {
-//     console.error("Error fetching product:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Failed to fetch product details",
-//       error: error.message,
-//     });
-//   }
-
-
 /* Create a new product */
 export const createProduct = async (req, res) => {
   console.log("crete produt route working>>>>>>>>");
@@ -98,8 +47,6 @@ export const createProduct = async (req, res) => {
     console.log(error);
   }
 };
-
-
 
 /**
  * Fetch products from the database with optional filters, sorting, and limit

@@ -1,28 +1,14 @@
 import express from "express";
 import { adminLogin } from "../controllers/adminAuth.js";
-import {
-  blockUnblockUser,
-
-  
-
-} from "../controllers/userController.js";
-import {
-
-  
- 
-} from "../controllers/orderController.js";
-import {
-  createProduct,
-  
-
-} from "../controllers/productController.js";
+import { blockUnblockUser } from "../controllers/userController.js";
+import {} from "../controllers/orderController.js";
+import { createProduct } from "../controllers/productController.js";
 import {
   adminAddProductPage,
   adminDashboardPage,
   adminLoginPage,
   adminLogout,
   adminOrdersListPage,
-
   adminProductsListPage,
   adminUsersListPage,
 } from "../controllers/adminController.js";
@@ -39,7 +25,7 @@ adminRoutes.get("/logout", adminLogout);
 
 adminRoutes.get("/dashboard", adminDashboardPage);
 
-adminRoutes.get("/users-list", adminUsersListPage); ///modified
+adminRoutes.get("/users-list", adminUsersListPage);
 
 adminRoutes.get("/products-list", adminProductsListPage);
 
@@ -54,22 +40,5 @@ adminRoutes.post("/block-user/:id", blockUnblockUser);
 adminRoutes.get("/add-product", adminAddProductPage);
 
 adminRoutes.get("/orders-list", adminOrdersListPage);
-
-
-
-
-
-
-
-
-
-
-
-
-
-// adminRoutes.get("/test",(req,res)=>{
-//     res.status(200).json({ message:"Admin login rotes working"});
-
-// })
 
 export default adminRoutes;

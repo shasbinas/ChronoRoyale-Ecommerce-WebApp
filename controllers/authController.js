@@ -18,7 +18,9 @@ export const createUser = async (req, res) => {
     }
 
     const db = await connectToDatabase(process.env.DATABASE);
-    const existingUser = await db.collection(collection.USERS_COLLECTION).findOne({ email });
+    const existingUser = await db
+      .collection(collection.USERS_COLLECTION)
+      .findOne({ email });
 
     if (existingUser) {
       return res.status(400).send("User already exists.");
@@ -54,7 +56,6 @@ export const createUser = async (req, res) => {
   }
 };
 
-
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -72,25 +73,27 @@ export const loginUser = async (req, res) => {
       .findOne({ email });
 
     if (!user) {
-      return res
-        .status(400)
-        .render("login", { error: "User does not exist." });
+      return res.status(400).render("login", { error: "User does not exist." });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res
-        .status(400)
-        .render("login", { error: "Invalid credentials." });
+      return res.status(400).render("login", { error: "Invalid credentials." });
     }
 
     // Generate token
-    const token = jwt.sign({ id: user.userId }, process.env.JWT_SECRET, {
-      expiresIn: "2h",
-    });
+    const token = jwt.sign(
+      { id: user.userId, name: user.name, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "2d" } // keep user logged in for a week
+    );
 
-    // Optional: store token in a cookie for session
-    res.cookie("token", token, { httpOnly: true });
+    // store token in a cookie for session
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
 
     // Redirect to landing page
     res.redirect("/"); // change "/" to your landing page route

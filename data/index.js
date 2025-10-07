@@ -13,7 +13,8 @@ export const bannerData = [
     titleSmall: "Limited Edition",
     titleMain: "Swiss Craftsmanship",
     highlight: "Heritage Series",
-    description: "Own a masterpiece of precision and luxury. Limited pieces only.",
+    description:
+      "Own a masterpiece of precision and luxury. Limited pieces only.",
     link: "/shop",
     image: "/userAssets/imgs/slider/slider-1.jpg",
   },
@@ -98,6 +99,3 @@ export const brandData = [
     link: "/shop-grid-right.html",
   },
 ];
-
-
-

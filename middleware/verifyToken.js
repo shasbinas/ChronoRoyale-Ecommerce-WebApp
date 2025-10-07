@@ -1,31 +1,38 @@
 import jwt from "jsonwebtoken";
+import connectToDatabase from "../config/db.js";
+import collection from "../config/collection.js";
 
-export const verifyToken = async (req, res, next) => {
+export const attachUser = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
-
+    const token = req.cookies?.token;
+    console.log("aattch user cooke token console>>>>>",token);
     if (!token) {
-      return res.status(403).send("Access Token Denied");
+      res.locals.user = null;
+      return next();
     }
 
-    if (token.startsWith("Bearer ")) {
-      const extractedToken = token.slice(7).trimLeft();
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const db = await connectToDatabase(process.env.DATABASE);
+    const user = await db
+      .collection(collection.USERS_COLLECTION)
+      .findOne({ userId: decoded.id });
 
-      try {
-        const verified = jwt.verify(extractedToken, process.env.JWT_SECRET);
-
-        req.user = verified;
-        next();
-      } catch (err) {
-        if (err.name === "TokenExpiredError") {
-          return res.status(401).json({ error: "Access Token Expired" });
-        }
-        throw err;
-      }
-    } else {
-      return res.status(403).send("Access Token Denied");
+    if (!user || user.isBlocked) {
+      res.locals.user = null;
+      return next();
     }
+
+    res.locals.user = {
+      userId: user.userId,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+    };
+
+    next();
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("attachUser middleware error:", err.message);
+    res.locals.user = null;
+    next();
   }
 };

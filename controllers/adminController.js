@@ -52,31 +52,6 @@ export const adminUsersListPage = async (req, res) => {
   }
 };
 
-// // Admin logout
-// export const adminLogout = (req, res) => {
-//   if (req.session) {
-//     req.session.destroy(err => {
-//       if (err) {
-//         console.log("Error destroying session:", err);
-//         return res.redirect("/admin/dashboard"); // fallback
-//       }
-//       res.clearCookie("connect.sid"); // optional: clear session cookie
-//       res.redirect("/admin");          // redirect to login page
-//     });
-//   } else {
-//     res.redirect("/admin"); // if no session exists
-//   }
-// };
-
-
-
-
-    // res.status(200).json({
-    //   message: isBlock ? "User blocked successfully" : "User unblocked successfully",
-    // });
-
-
-
 export const adminAddProductPage = async (req, res) => {
   console.log("Admin AddProduct route working 🚀");
   res.render("admin/add-product", {
@@ -92,14 +67,6 @@ export const adminOrdersListPage = async (req, res) => {
     title: "Admin - Orders List",
   });
 };
-
-// export const adminOrderViewPage = async (req, res) => {
-//   console.log("Admin OrderView route working 🚀");
-//   res.render("admin/order-view", {
-//     layout: "admin",
-//     title: "Admin - Order View",
-//   });
-// };
 
 export const adminLogout = (req, res) => {
   try {
@@ -117,8 +84,6 @@ export const adminLogout = (req, res) => {
     return res.redirect("/admin");
   }
 };
-
-
 
 /***** */
 export const blockUnblockUser = async (req, res) => {
@@ -144,10 +109,9 @@ export const blockUnblockUser = async (req, res) => {
       updatedAt: new Date(),
     };
 
-    const result = await db.collection(collection.USERS_COLLECTION).updateOne(
-      { _id: new ObjectId(userId) },
-      { $set: updateData }
-    );
+    const result = await db
+      .collection(collection.USERS_COLLECTION)
+      .updateOne({ _id: new ObjectId(userId) }, { $set: updateData });
 
     if (result.modifiedCount === 0) {
       return res.status(404).json({ message: "User not found" });

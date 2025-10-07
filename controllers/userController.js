@@ -10,8 +10,6 @@ export const productsPage = async (req, res) => {
   res.render("user/products", { title: "Product's List - ChronoRoyale" });
 };
 
-/****** */
-
 export const blockUnblockUser = async (req, res) => {
   console.log("Block/Unblock User route working 🚀");
 
@@ -58,13 +56,14 @@ export const landingPage = async (req, res) => {
   console.log("User Landing route working 🚀");
 
   try {
+    console.log("res.locals.user>>>>", res.locals);
     // Featured random products (6)
     const featuredProducts = await getProductsData({
       sort: "random",
       limit: 12,
     });
 
-    console.log(featuredProducts[0]);
+    // console.log(featuredProducts[0]);
 
     // Latest men’s watches (4)
     const latestMen = await getProductsData({
@@ -103,7 +102,11 @@ export const landingPage = async (req, res) => {
 
 export const loginPage = async (req, res) => {
   console.log("Login page route working 🚀");
-  res.render("user/login", { title: "Login - ChronoRoyale" });
+  try {
+    res.render("user/login", { title: "Login - ChronoRoyale" });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const signupPage = async (req, res) => {
