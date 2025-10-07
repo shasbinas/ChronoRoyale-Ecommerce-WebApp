@@ -1,15 +1,5 @@
 <main class="main">
-  <div class="page-header breadcrumb-wrap">
-    <div class="container">
-      <div class="breadcrumb">
-        <a href="index.html" rel="nofollow">Home</a>
-        <span></span>
-        Fashion
-        <span></span>
-        Abstract Print Patchwork Dress
-      </div>
-    </div>
-  </div>
+  
   <section class="mt-50 mb-50">
     <div class="container">
       <div class="row">
@@ -75,9 +65,9 @@
                   <div class="product_sort_info font-xs mb-30">
                     <ul>
                       <li class="mb-10"><i class="fi-rs-crown mr-5"></i>
-                        1 Year AL Jazeera Brand Warranty</li>
-                      <li class="mb-10"><i class="fi-rs-refresh mr-5"></i>
-                        30 Day Return Policy</li>
+                        1 Year {{product.brand}} Brand Warranty</li>
+                      <li class="mb-10"><i class=></i>
+                        {{ stockStatus}}</li>
                       <li><i class="fi-rs-credit-card mr-5"></i>
                         Cash on Delivery available</li>
                     </ul>
@@ -348,12 +338,12 @@
           </a>
         </div>
         <div class="product-action-1">
-          <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
+         
           <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-          <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+     
         </div>
         <div class="product-badges product-badges-position product-badges-mrg">
-          <span class="hot">Hot</span>
+          <span class="hot">{{this.category}}</span>
         </div>
       </div>
       <div class="product-content-wrap">

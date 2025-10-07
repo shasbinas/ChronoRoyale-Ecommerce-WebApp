@@ -144,8 +144,9 @@ export const productViewPage = async (req, res) => {
   }
 };
 
+
 export const productDeatilsPage = async (req, res) => {
-  console.log("product Deatils fuction called");
+  console.log("product Deatils function called");
   try {
     const db = await connectToDatabase(process.env.DATABASE);
 
@@ -169,27 +170,36 @@ export const productDeatilsPage = async (req, res) => {
       .collection(collection.PRODUCTS_COLLECTION)
       .findOne({ _id: new ObjectId(String(productId)) });
 
-    // console.log(">>>>>>>>Product Data",product);
-
     if (!product) {
       console.log("❌ Product not found in database");
       return res.status(404).send("Product not found");
     }
-    console.log(product);
 
+    // Step 4: Add stock status logic
+    let stockStatus = "";
+    if (product.stock > 20) {
+      stockStatus = `🟢 Available only ${product.stock}`;
+    } else if (product.stock > 0 && product.stock <= 20) {
+      stockStatus = `🟠Hurry up! Only ${ product.stock} left`;
+    } else {
+      stockStatus = " 🔴Currently unavailable";
+    }
+
+    // Step 5: Fetch related products
     const relatedProducts = await getProductsData({
       category: product.category,
       limit: 4,
     });
 
-    console.log("relatedProducts>>>", relatedProducts);
-
+    // Step 6: Render view
     res.render("user/productDetails", {
-      title: `Product -${product.name}`,
+      title: `Product - ${product.name}`,
       product,
       relatedProducts,
+      stockStatus, // send to template
     });
   } catch (error) {
-    console.log(error);
+    console.error("❌ Error in productDetailsPage:", error);
+    res.status(500).send("Server Error");
   }
 };
