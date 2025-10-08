@@ -3,6 +3,7 @@ import collection from "../config/collection.js";
 import connectToDatabase from "../config/db.js";
 import { bannerData, brandData } from "../data/index.js";
 import { getProductsData } from "./productController.js";
+import { createUser } from "./authController.js";
 
 export const productsPage = async (req, res) => {
   console.log("productsPage page route working 🚀");
@@ -111,7 +112,17 @@ export const loginPage = async (req, res) => {
 
 export const signupPage = async (req, res) => {
   console.log("Signup page route working 🚀");
-  res.render("user/signup", { title: "Signup - ChronoRoyale" });
+
+  try {
+
+    
+    createUser
+     res.render("user/signup", { title: "Signup - ChronoRoyale" });
+  } catch (error) {
+    console.log(error);
+  }
+
+ 
 };
 
 export const cartPage = async (req, res) => {
