@@ -115,14 +115,29 @@ export const signupPage = async (req, res) => {
 };
 
 export const cartPage = async (req, res) => {
-  console.log("cart page routeworking 🚀");
   try {
-    res.render("user/cart", { title: "cart - ChronoRoyale" });
+    const userId = req.loggedInUser?.id;
+    const db = await connectToDatabase(process.env.DATABASE);
+
+    const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
+
+    const cart = user.cart || [];
+
+    // Calculate cart totals
+    const subtotal = cart.reduce((acc, item) => acc + item.total, 0);
+
+    res.render("user/cart", { 
+      title: "Your Cart",
+      cart,
+      subtotal
+    });
   } catch (error) {
     console.log(error);
+    res.send("Something went wrong");
   }
 };
 
+//add cart
 export const addToCart = async (req, res) => {
   console.log("add to cart funcion called>>>>>>>");
   
@@ -171,5 +186,55 @@ export const addToCart = async (req, res) => {
     }
 
     res.redirect("/cart");
+
   } catch (error) {}
+};
+
+//clear cart
+export const clearCart = async (req, res) => {
+  try {
+    const userId = req.loggedInUser?.id;
+    if (!userId) {
+      return res.redirect("/login");
+    }
+
+    const db = await connectToDatabase(process.env.DATABASE);
+
+    // Clear the cart array
+    await db.collection(collection.USERS_COLLECTION).updateOne(
+      { userId },
+      { $set: { cart: [] } }
+    );
+
+    res.redirect("/"); // redirect back to landing page
+  } catch (error) {
+    console.log("Error clearing cart:", error);
+    res.status(500).send("Something went wrong while clearing the cart");
+  }
+};
+
+//remove selected product from cart
+
+export const removeFromCart = async (req, res) => {
+  try {
+    const userId = req.loggedInUser?.id;
+    const { productId } = req.params;
+
+    if (!userId) {
+      return res.redirect("/login");
+    }
+
+    const db = await connectToDatabase(process.env.DATABASE);
+
+    // Remove the item from the cart array
+    await db.collection(collection.USERS_COLLECTION).updateOne(
+      { userId },
+      { $pull: { cart: { productId: productId } } }
+    );
+
+    res.redirect("/cart"); // Redirect back to landing page
+  } catch (error) {
+    console.log("Error removing item from cart:", error);
+    res.status(500).send("Something went wrong");
+  }
 };
