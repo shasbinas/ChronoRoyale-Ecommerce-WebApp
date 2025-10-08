@@ -125,7 +125,51 @@ export const cartPage = async (req, res) => {
 
 export const addToCart = async (req, res) => {
   console.log("add to cart funcion called>>>>>>>");
+  
+
+  console.log(req.body);
   try {
-    
+    let userId =  req.loggedInUser?.id
+    console.log(">>>>>>user",userId);
+
+   const { productId, name, brand, price, image, shortDescription, quantity } = req.body;
+
+    const db = await connectToDatabase(process.env.DATABASE);
+    const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
+
+    const existingItem = user.cart.find(item => item.productId === productId);
+
+    if (existingItem) {
+      // If item already exists, increase quantity and total
+      await db.collection(collection.USERS_COLLECTION).updateOne(
+        { userId, "cart.productId": productId },
+        {
+          $inc: {
+            "cart.$.quantity": 1,
+            "cart.$.total": parseFloat(price)
+          }
+        }
+      );
+    } else {
+      // Add new item to cart
+      const newItem = {
+        productId,
+        name,
+        brand,
+        price: parseFloat(price),
+        quantity: parseInt(quantity),
+        image,
+        total: parseFloat(price) * parseInt(quantity),
+        shortDescription,
+        addedAt: new Date()
+      };
+
+      await db.collection(collection.USERS_COLLECTION).updateOne(
+        { userId },
+        { $push: { cart: newItem } }
+      );
+    }
+
+    res.redirect("/cart");
   } catch (error) {}
 };

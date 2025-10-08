@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  addToCart,
   cartPage,
   landingPage,
   loginPage,
@@ -9,6 +10,7 @@ import { productDeatilsPage } from "../controllers/productController.js";
 import { createUser, loginUser, logout } from "../controllers/authController.js";
 import { noCache } from "../middleware/noCache.js";
 import { redirectIfLoggedIn } from "../middleware/redirectIfLoggedIn.js";
+import { requireAuth } from "../middleware/requireAuth.js";
 
 
 
@@ -40,6 +42,10 @@ userRoutes.get("/productDetails", productDeatilsPage);
 // cartPage
 
 userRoutes.get("/cart", cartPage)
+
+
+userRoutes.post("/add-to-cart", requireAuth, addToCart)
+
 
 //private page
 
