@@ -21,10 +21,12 @@ const storage = (folder) =>
   });
 
 /**
- * uploadFiles(folder, type, maxCount)
- * @param {string} folder - folder name inside public (adminAssets / userAssets)
- * @param {string} type - 'single' or 'multiple'
- * @param {number} maxCount - for multiple files max count
+ * uploadFiles
+ * @param {string} folder - folder inside public (e.g. "adminAssets/uploads")
+ * @param {string} type - 'single' | 'multiple' | 'fields'
+ * @param {string} fieldName - field name in form (default: "file")
+ * @param {number} maxCount - for multiple files max count (default: 1)
+ * @param {Array} fields - for multiple different field names [{ name: "thumbnail", maxCount: 1 }, { name: "images", maxCount: 4 }]
  */
 
 export const uploadFiles = (

@@ -113,3 +113,19 @@ export const signupPage = async (req, res) => {
   console.log("Signup page route working 🚀");
   res.render("user/signup", { title: "Signup - ChronoRoyale" });
 };
+
+export const cartPage = async (req, res) => {
+  console.log("cart page routeworking 🚀");
+  try {
+    res.render("user/cart", { title: "cart - ChronoRoyale" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addToCart = async (req, res) => {
+  console.log("add to cart funcion called>>>>>>>");
+  try {
+    
+  } catch (error) {}
+};
