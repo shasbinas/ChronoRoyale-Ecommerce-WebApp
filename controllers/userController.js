@@ -384,8 +384,45 @@ export const placeOrder = async (req, res) => {
 };
 
 export const orderSuccess = async (req, res) => {
-  console.log("order success page funcion called>>>>>>>>");
+  console.log("Order success page function called >>>>>>>>>>");
   try {
-    res.render("user/orderSuccess");
-  } catch (error) {}
+    const userId = req.loggedInUser?.id;
+    if (!userId) return res.redirect("/login");
+
+    const db = await connectToDatabase(process.env.DATABASE);
+
+    // Fetch the last order for this user
+    const lastOrder = await db
+      .collection(collection.ORDERS_COLLECTION)
+      .findOne({ userId }, { sort: { createdAt: -1 } });
+
+    if (!lastOrder) {
+      console.log("No order found for this user.");
+      return res.redirect("/");
+    }
+
+    // Ensure each cart item has a total
+    const cartWithTotal = lastOrder.cart.map(item => ({
+      ...item,
+      total: item.total || item.price * item.quantity,
+    }));
+
+    // Calculate total order amount
+    const totalAmount = cartWithTotal.reduce((acc, item) => acc + item.total, 0);
+
+    res.render("user/orderSuccess", {
+      orderId: lastOrder._id,
+      email: req.loggedInUser.email,
+      billingName: lastOrder.address.billingName,
+      address: lastOrder.address.address,
+      landmark: lastOrder.address.landmark,
+      phone: lastOrder.address.phone,
+      cart: cartWithTotal,
+      total: totalAmount,
+    });
+  } catch (error) {
+    console.error("Error rendering order success page:", error);
+    res.status(500).send("Something went wrong while loading the order success page.");
+  }
 };
+
