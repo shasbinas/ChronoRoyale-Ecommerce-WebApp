@@ -1,5 +1,6 @@
 import collection from "../config/collection.js";
 import connectToDatabase from "../config/db.js";
+import { getProductsData } from "./productController.js";
 
 export const adminLoginPage = async (req, res) => {
   console.log("Admin dashboard route working 🚀");
@@ -129,21 +130,20 @@ export const blockUnblockUser = async (req, res) => {
 };
 
 /**** */
+
 export const adminProductsListPage = async (req, res) => {
   try {
-    const db = await connectToDatabase(process.env.DATABASE);
-    const products = await db
-      .collection(collection.PRODUCTS_COLLECTION)
-      .find({ isDeleted: { $ne: true } }) // show only active products
-      .toArray();
+    // ✅ Fetch products using the helper with latest sort
+    const products = await getProductsData({ sort: "latest" });
 
+    // ✅ Render the admin products list page
     res.render("admin/products-list", {
       layout: "admin",
       title: "Admin - Products List",
       products,
     });
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error("❌ Error fetching products:", error);
     res.status(500).send("Internal Server Error");
   }
 };

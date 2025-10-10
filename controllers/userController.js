@@ -249,3 +249,45 @@ export const removeFromCart = async (req, res) => {
     res.status(500).send("Something went wrong");
   }
 };
+
+
+//checkout page
+
+export const checkoutPage = async (req, res) => {
+  try {
+    const userId = req.loggedInUser?.id;
+    if (!userId) {
+      return res.redirect("/login");
+    }
+
+    const db = await connectToDatabase(process.env.DATABASE);
+    const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
+
+    const cart = user.cart || [];
+
+    // Calculate total (subtotal)
+    const total = cart.reduce((acc, item) => acc + item.total, 0);
+
+    res.render("user/checkout", { 
+      title: "Checkout",
+      cart,
+      total
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.send("Something went wrong");
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
