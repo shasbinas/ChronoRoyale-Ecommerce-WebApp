@@ -1,321 +1,65 @@
 <main class="main">
- 
   <section class="mt-50 mb-50">
     <div class="container">
-      <div class="row">
-        <div class="col-lg-6 mb-sm-15">
-          
-          <div class="panel-collapse collapse login_form" id="loginform">
-            <div class="panel-body">
-              <p class="mb-30 font-sm">If you have shopped with us before,
-                please enter your details below. If you are a new customer,
-                please proceed to the Billing &amp; Shipping section.</p>
-              <form method="post">
-                <div class="form-group">
-                  <input
-                    type="text"
-                    name="email"
-                    placeholder="Username Or Email"
-                  />
-                </div>
-                <div class="form-group">
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                  />
-                </div>
-                <div class="login_footer form-group">
-                  <div class="chek-form">
-                    <div class="custome-checkbox">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        name="checkbox"
-                        id="remember"
-                        value=""
-                      />
-                      <label class="form-check-label" for="remember"><span
-                        >Remember me</span></label>
-                    </div>
-                  </div>
-                  <a href="#">Forgot password?</a>
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-md" name="login">Log in</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <div class="divider mt-50 mb-50"></div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="mb-25">
-            <h4>Billing Details</h4>
-          </div>
-          <form method="post">
-            <div class="form-group">
-              <input
-                type="text"
-                required=""
-                name="fname"
-                placeholder="First name *"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                type="text"
-                required=""
-                name="lname"
-                placeholder="Last name *"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                required=""
-                type="text"
-                name="cname"
-                placeholder="Company Name"
-              />
-            </div>
-            <div class="form-group">
-              <div class="custom_select">
-                <select class="form-control select-active">
-                  <option value="">Select an option...</option>
+      <!-- Checkout Form -->
+      <form method="POST" action="/place-order">
+        <div class="row">
 
-                  <option value="IN">India</option>
+          <!-- Billing Section -->
+          <div class="col-md-6">
+            <div class="mb-25">
+              <h4>Billing Details</h4>
+            </div>
 
-                </select>
+            {{#if addresses.length}}
+              <!-- Show Address Card -->
+              <div class="card p-3 border mb-3">
+                <h5>Billing Name: {{addresses.[0].billingName}}</h5>
+                <p>Address: {{addresses.[0].address}}</p>
+                <p>Landmark: {{addresses.[0].landmark}}</p>
+                <p>Phone: {{addresses.[0].phone}}</p>
+                <!-- Hidden input to pass saved address -->
+                <input type="hidden" name="addressIndex" value="0" />
               </div>
-            </div>
-            <div class="form-group">
-              <input
-                type="text"
-                name="billing_address"
-                required=""
-                placeholder="Address *"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                type="text"
-                name="billing_address2"
-                required=""
-                placeholder="Address line2"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                required=""
-                type="text"
-                name="city"
-                placeholder="City / Town *"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                required=""
-                type="text"
-                name="state"
-                placeholder="State / County *"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                required=""
-                type="text"
-                name="zipcode"
-                placeholder="Postcode / ZIP *"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                required=""
-                type="text"
-                name="phone"
-                placeholder="Phone *"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                required=""
-                type="text"
-                name="email"
-                placeholder="Email address *"
-              />
-            </div>
-            <div class="form-group">
-              <div class="checkbox">
-                <div class="custome-checkbox">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    name="checkbox"
-                    id="createaccount"
-                  />
-                  <label
-                    class="form-check-label label_info"
-                    data-bs-toggle="collapse"
-                    href="#collapsePassword"
-                    data-target="#collapsePassword"
-                    aria-controls="collapsePassword"
-                    for="createaccount"
-                  ><span>Create an account?</span></label>
-                </div>
-              </div>
-            </div>
-            <div
-              id="collapsePassword"
-              class="form-group create-account collapse in"
-            >
-              <input
-                required=""
-                type="password"
-                placeholder="Password"
-                name="password"
-              />
-            </div>
-            <div class="ship_detail">
+            {{else}}
+              <!-- No Address → Show Form -->
               <div class="form-group">
-                <div class="chek-form">
-                  <div class="custome-checkbox">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      name="checkbox"
-                      id="differentaddress"
-                    />
-                    <label
-                      class="form-check-label label_info"
-                      data-bs-toggle="collapse"
-                      data-target="#collapseAddress"
-                      href="#collapseAddress"
-                      aria-controls="collapseAddress"
-                      for="differentaddress"
-                    ><span>Ship to a different address?</span></label>
-                  </div>
-                </div>
+                <input type="text" required name="billingName" placeholder="Billing name" />
               </div>
-              <div id="collapseAddress" class="different_address collapse in">
-                <div class="form-group">
-                  <input
-                    type="text"
-                    required=""
-                    name="fname"
-                    placeholder="First name *"
-                  />
-                </div>
-                <div class="form-group">
-                  <input
-                    type="text"
-                    required=""
-                    name="lname"
-                    placeholder="Last name *"
-                  />
-                </div>
-                <div class="form-group">
-                  <input
-                    required=""
-                    type="text"
-                    name="cname"
-                    placeholder="Company Name"
-                  />
-                </div>
-                <div class="form-group">
-                  <div class="custom_select">
-                    <select class="form-control select-active">
-                      <option value="">Select an option...</option>
-
-                      <option value="IN">India</option>
-
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <input
-                    type="text"
-                    name="billing_address"
-                    required=""
-                    placeholder="Address *"
-                  />
-                </div>
-                <div class="form-group">
-                  <input
-                    type="text"
-                    name="billing_address2"
-                    required=""
-                    placeholder="Address line2"
-                  />
-                </div>
-                <div class="form-group">
-                  <input
-                    required=""
-                    type="text"
-                    name="city"
-                    placeholder="City / Town *"
-                  />
-                </div>
-                <div class="form-group">
-                  <input
-                    required=""
-                    type="text"
-                    name="state"
-                    placeholder="State / County *"
-                  />
-                </div>
-                <div class="form-group">
-                  <input
-                    required=""
-                    type="text"
-                    name="zipcode"
-                    placeholder="Postcode / ZIP *"
-                  />
-                </div>
+              <div class="form-group">
+                <input type="text" required name="address" placeholder="Address" />
               </div>
-            </div>
-            <div class="mb-20">
-              <h5>Additional information</h5>
-            </div>
-            <div class="form-group mb-30">
-              <textarea rows="5" placeholder="Order notes"></textarea>
-            </div>
-          </form>
-        </div>
+              <div class="form-group">
+                <input type="text" required name="landmark" placeholder="Landmark" />
+              </div>
+              <div class="form-group">
+                <input type="text" required name="phone" placeholder="Phone number" />
+              </div>
+            {{/if}}
+          </div>
 
-
-
-{{!--   your order --}}  
-
-        <div class="col-md-6">
-          <div class="order_review">
-            <div class="mb-20">
-              <h4>Your Orders</h4>
-            </div>
-            <div class="table-responsive order_table text-center">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th colspan="2">Product</th>
-                    <th>Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {{#each cart}}
+          <!-- Order Review & Payment -->
+          <div class="col-md-6">
+            <div class="order_review">
+              <div class="mb-20">
+                <h4>Your Orders</h4>
+              </div>
+              <div class="table-responsive order_table text-center">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th colspan="2">Product</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each cart}}
                     <tr>
                       <td class="image product-thumbnail">
                         <img src="{{this.image}}" alt="{{this.name}}" />
                       </td>
                       <td>
-                        <h5>
-                          <a href="#">{{this.name}}</a>
-                        </h5>
+                        <h5><a href="#">{{this.name}}</a></h5>
                         <span class="product-qty">x {{this.quantity}}</span>
                       </td>
                       <td>₹{{this.total}}</td>
@@ -326,87 +70,42 @@
                       <td colspan="2"><em>Free shipping</em></td>
                     </tr>
                     <tr>
-  <th>Total</th>
-  <td colspan="2" class="product-subtotal">
-    <span class="font-xl text-brand fw-900">₹{{total}}</span>
-  </td>
-</tr>
-
-              
-                 
-                </tbody>
-
-              </table>
-
-
-
-              {{!-- payament --}}
-            </div>
-            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-            <div class="payment_method">
-              <div class="mb-25">
-                <h5>Payment</h5>
+                      <th>Total</th>
+                      <td colspan="2" class="product-subtotal">
+                        <span class="font-xl text-brand fw-900">₹{{total}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <div class="payment_option">
-                <div class="custome-radio">
-                  <input
-                    class="form-check-input"
-                    required=""
-                    type="radio"
-                    name="payment_option"
-                    id="exampleRadios3"
-                    checked=""
-                  />
-                
-                  
+
+              <!-- Payment Section -->
+              <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+              <div class="payment_method">
+                <div class="mb-25">
+                  <h5>Payment</h5>
                 </div>
-                <div class="custome-radio">
-                  <input
-                    class="form-check-input"
-                    required=""
-                    type="radio"
-                    name="payment_option"
-                    id="exampleRadios4"
-                    checked=""
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadios4"
-                    data-bs-toggle="collapse"
-                    data-target="#CashOnDelivery"
-                    aria-controls="CashOnDelivery"
-                  >Cash on delivery</label>
-                  <div class="form-group collapse in" id="CashOnDelivery">
-                    <p class="text-muted mt-5"> Please prepare the exact amount. Payment will be collected upon delivery at your doorstep.
-                    </p>
+                <div class="payment_option">
+                  <div class="custome-radio">
+                    <input class="form-check-input" required type="radio" name="payment_option" id="cod" value="COD" checked />
+                    <label class="form-check-label" for="cod">Cash on delivery</label>
                   </div>
-                </div>
-                <div class="custome-radio">
-                  <input
-                    class="form-check-input"
-                    required=""
-                    type="radio"
-                    name="payment_option"
-                    id="exampleRadios5"
-                    checked=""
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadios5"
-                    data-bs-toggle="collapse"
-                    data-target="#Razorpay"
-                    aria-controls="Razorpay"
-                  >Razorpay</label>
-                  <div class="form-group collapse in" id="Razorpay">
-                    <p class="text-muted mt-5"> You can pay with your credit/debit card or UPI via Razorpay. No Razorpay account is required.</p>
+                  <div class="custome-radio">
+                    <input class="form-check-input" required type="radio" name="payment_option" id="razorpay" value="Razorpay" />
+                    <label class="form-check-label" for="razorpay">Razorpay</label>
                   </div>
                 </div>
               </div>
+
+              <!-- Place Order Button -->
+              <div class="form-group mt-3">
+                <button type="submit" class="btn btn-fill-out btn-block">Place Order</button>
+              </div>
             </div>
-            <a href="#" class="btn btn-fill-out btn-block mt-30">Place Order</a>
           </div>
         </div>
-      </div>
+      </form>
+
     </div>
   </section>
 </main>

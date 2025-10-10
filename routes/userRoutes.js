@@ -1,13 +1,14 @@
 import express from "express";
 import {
   addToCart,
-  
   cartPage,
   checkoutPage,
   clearCart,
-
+  createAddress,
   landingPage,
   loginPage,
+  orderSuccess,
+  placeOrder,
   removeFromCart,
   signupPage,
 } from "../controllers/userController.js";
@@ -52,17 +53,14 @@ userRoutes.get("/cart/clear", clearCart); //clear cart
 
 userRoutes.get("/cart/remove/:productId", removeFromCart); //remove selected product from cart
 
-//checkout 
-userRoutes.get("/checkout", checkoutPage );
+//checkout
+userRoutes.get("/checkout", checkoutPage);
 
+userRoutes.post("/create-address", createAddress);
 
+userRoutes.post("/place-order", placeOrder);
 
-
-
-
-
-
-
+userRoutes.get("/order-success", orderSuccess);
 
 //private page
 

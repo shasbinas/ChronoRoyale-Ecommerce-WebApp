@@ -114,15 +114,11 @@ export const signupPage = async (req, res) => {
   console.log("Signup page route working 🚀");
 
   try {
-
-    
-    createUser
-     res.render("user/signup", { title: "Signup - ChronoRoyale" });
+    createUser;
+    res.render("user/signup", { title: "Signup - ChronoRoyale" });
   } catch (error) {
     console.log(error);
   }
-
- 
 };
 
 export const cartPage = async (req, res) => {
@@ -130,17 +126,19 @@ export const cartPage = async (req, res) => {
     const userId = req.loggedInUser?.id;
     const db = await connectToDatabase(process.env.DATABASE);
 
-    const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
+    const user = await db
+      .collection(collection.USERS_COLLECTION)
+      .findOne({ userId });
 
     const cart = user.cart || [];
 
     // Calculate cart totals
     const subtotal = cart.reduce((acc, item) => acc + item.total, 0);
 
-    res.render("user/cart", { 
+    res.render("user/cart", {
       title: "Your Cart",
       cart,
-      subtotal
+      subtotal,
     });
   } catch (error) {
     console.log(error);
@@ -151,19 +149,21 @@ export const cartPage = async (req, res) => {
 //add cart
 export const addToCart = async (req, res) => {
   console.log("add to cart funcion called>>>>>>>");
-  
 
   console.log(req.body);
   try {
-    let userId =  req.loggedInUser?.id
-    console.log(">>>>>>user",userId);
+    let userId = req.loggedInUser?.id;
+    console.log(">>>>>>user", userId);
 
-   const { productId, name, brand, price, image, shortDescription, quantity } = req.body;
+    const { productId, name, brand, price, image, shortDescription, quantity } =
+      req.body;
 
     const db = await connectToDatabase(process.env.DATABASE);
-    const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
+    const user = await db
+      .collection(collection.USERS_COLLECTION)
+      .findOne({ userId });
 
-    const existingItem = user.cart.find(item => item.productId === productId);
+    const existingItem = user.cart.find((item) => item.productId === productId);
 
     if (existingItem) {
       // If item already exists, increase quantity and total
@@ -172,8 +172,8 @@ export const addToCart = async (req, res) => {
         {
           $inc: {
             "cart.$.quantity": 1,
-            "cart.$.total": parseFloat(price)
-          }
+            "cart.$.total": parseFloat(price),
+          },
         }
       );
     } else {
@@ -187,17 +187,15 @@ export const addToCart = async (req, res) => {
         image,
         total: parseFloat(price) * parseInt(quantity),
         shortDescription,
-        addedAt: new Date()
+        addedAt: new Date(),
       };
 
-      await db.collection(collection.USERS_COLLECTION).updateOne(
-        { userId },
-        { $push: { cart: newItem } }
-      );
+      await db
+        .collection(collection.USERS_COLLECTION)
+        .updateOne({ userId }, { $push: { cart: newItem } });
     }
 
     res.redirect("/cart");
-
   } catch (error) {}
 };
 
@@ -212,10 +210,9 @@ export const clearCart = async (req, res) => {
     const db = await connectToDatabase(process.env.DATABASE);
 
     // Clear the cart array
-    await db.collection(collection.USERS_COLLECTION).updateOne(
-      { userId },
-      { $set: { cart: [] } }
-    );
+    await db
+      .collection(collection.USERS_COLLECTION)
+      .updateOne({ userId }, { $set: { cart: [] } });
 
     res.redirect("/"); // redirect back to landing page
   } catch (error) {
@@ -238,10 +235,9 @@ export const removeFromCart = async (req, res) => {
     const db = await connectToDatabase(process.env.DATABASE);
 
     // Remove the item from the cart array
-    await db.collection(collection.USERS_COLLECTION).updateOne(
-      { userId },
-      { $pull: { cart: { productId: productId } } }
-    );
+    await db
+      .collection(collection.USERS_COLLECTION)
+      .updateOne({ userId }, { $pull: { cart: { productId: productId } } });
 
     res.redirect("/cart"); // Redirect back to landing page
   } catch (error) {
@@ -249,7 +245,6 @@ export const removeFromCart = async (req, res) => {
     res.status(500).send("Something went wrong");
   }
 };
-
 
 //checkout page
 
@@ -261,33 +256,136 @@ export const checkoutPage = async (req, res) => {
     }
 
     const db = await connectToDatabase(process.env.DATABASE);
-    const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
+    const user = await db
+      .collection(collection.USERS_COLLECTION)
+      .findOne({ userId });
 
     const cart = user.cart || [];
+    const addresses = user.addresses || []; // ✅ Get saved addresses
 
-    // Calculate total (subtotal)
+    // Calculate total
     const total = cart.reduce((acc, item) => acc + item.total, 0);
 
-    res.render("user/checkout", { 
+    res.render("user/checkout", {
       title: "Checkout",
       cart,
-      total
+      total,
+      addresses, // ✅ Pass to HBS
     });
-
   } catch (error) {
     console.error(error);
     res.send("Something went wrong");
   }
 };
 
+/// checkout page addresss
+export const createAddress = async (req, res) => {
+  console.log(">>>>>> createAddress() called");
 
+  try {
+    console.log("Form Data:", req.body);
+    const userId = req.loggedInUser?.id;
+    console.log("Logged In User ID:", userId);
 
+    if (!userId) {
+      console.log("❌ No userId found -> redirecting to /login");
+      return res.redirect("/login");
+    }
 
+    const { billingName, address, landmark, phone } = req.body;
+    console.log("Extracted Fields:", { billingName, address, landmark, phone });
 
+    if (!billingName || !address || !phone) {
+      console.log("❌ Required fields missing");
+      return res.status(400).send("All required fields must be filled");
+    }
 
+    const db = await connectToDatabase(process.env.DATABASE);
+    console.log("✅ Database connected");
 
+    // ✅ IMPORTANT: Match using userId instead of _id
+    const result = await db.collection(collection.USERS_COLLECTION).updateOne(
+      { userId: userId },
+      {
+        $push: {
+          addresses: {
+            billingName,
+            address,
+            landmark: landmark || "",
+            phone,
+            createdAt: new Date(),
+          },
+        },
+      }
+    );
 
+    console.log("Update Result:", {
+      matched: result.matchedCount,
+      modified: result.modifiedCount,
+    });
 
+    if (result.modifiedCount === 0) {
+      console.log("⚠️ Address not added. Possible wrong userId match.");
+      return res.status(500).send("Failed to add address");
+    }
 
+    console.log("✅ Address added successfully. Redirecting...");
+    res.redirect("/checkout");
+  } catch (error) {
+    console.error("🔥 Error creating address:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
+export const placeOrder = async (req, res) => {
+  console.log("place order funcion triggerd>>>>>>>>>>");
+  console.log(req.body);
+  try {
+    const userId = req.loggedInUser?.id;
+    const db = await connectToDatabase(process.env.DATABASE);
 
+    const user = await db
+      .collection(collection.USERS_COLLECTION)
+      .findOne({ userId });
+      
+    const cart = user.cart || [];
+
+    let orderAddress;
+
+    if (user.addresses?.length && req.body.addressIndex !== undefined) {
+      orderAddress = user.addresses[req.body.addressIndex];
+    } else {
+      orderAddress = {
+        billingName: req.body.billingName,
+        address: req.body.address,
+        landmark: req.body.landmark,
+        phone: req.body.phone,
+      };
+    }
+
+    const order = {
+      userId,
+      cart,
+      address: orderAddress,
+      paymentMethod: req.body.payment_option,
+      total: cart.reduce((acc, item) => acc + item.total, 0),
+      status: req.body.payment_option === "COD" ? "Pending" : "Paid",
+      createdAt: new Date(),
+    };
+
+    await db.collection(collection.ORDERS_COLLECTION).insertOne(order);
+    await db.collection(collection.USERS_COLLECTION).updateOne(
+      { userId },
+      { $set: { cart: [] } } // clear cart after order
+    );
+
+    res.redirect("/order-success");
+  } catch (error) {}
+};
+
+export const orderSuccess = async (req, res) => {
+  console.log("order success page funcion called>>>>>>>>");
+  try {
+    res.render("user/orderSuccess");
+  } catch (error) {}
+};
