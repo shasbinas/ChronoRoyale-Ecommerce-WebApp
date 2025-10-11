@@ -6,10 +6,55 @@ import { getProductsData } from "./productController.js";
 import { createUser } from "./authController.js";
 
 export const productsPage = async (req, res) => {
-  console.log("productsPage page route working 🚀");
+  console.log("productsPage route working 🚀");
 
-  res.render("user/products", { title: "Product's List - ChronoRoyale" });
+  try {
+    // Fetch 20 latest products
+    const products = await getProductsData({
+      sort: "latest",
+      limit: 20,
+    });
+
+    // Render the products page
+    res.render("user/products", {
+      title: "Product's List - ChronoRoyale",
+      products, // send the data to HBS template
+    });
+  } catch (error) {
+    console.error("❌ Error loading products page:", error);
+    res.status(500).send("Error loading products page");
+  }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const blockUnblockUser = async (req, res) => {
   console.log("Block/Unblock User route working 🚀");
@@ -517,3 +562,6 @@ export const getOrderHistory = async (req, res) => {
     res.status(500).send("Something went wrong while loading order history.");
   }
 };
+
+
+

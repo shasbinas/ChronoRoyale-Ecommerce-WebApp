@@ -10,6 +10,7 @@ import {
   loginPage,
   orderSuccess,
   placeOrder,
+  productsPage,
   removeFromCart,
   signupPage,
 } from "../controllers/userController.js";
@@ -41,6 +42,8 @@ userRoutes.get("/logout", logout);
 //public pages
 
 userRoutes.get("/", landingPage);
+
+userRoutes.get("/products", productsPage);
 
 userRoutes.get("/productDetails", productDeatilsPage);
 
