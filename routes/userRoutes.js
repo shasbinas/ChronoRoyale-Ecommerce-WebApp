@@ -5,6 +5,7 @@ import {
   checkoutPage,
   clearCart,
   createAddress,
+  getOrderHistory,
   landingPage,
   loginPage,
   orderSuccess,
@@ -61,6 +62,8 @@ userRoutes.post("/create-address", createAddress);
 userRoutes.post("/place-order", placeOrder);
 
 userRoutes.get("/order-success", orderSuccess);
+
+userRoutes.get("/order-history", requireAuth, getOrderHistory);
 
 //private page
 

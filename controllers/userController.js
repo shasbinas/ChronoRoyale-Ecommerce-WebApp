@@ -472,3 +472,48 @@ export const orderSuccess = async (req, res) => {
   }
 };
 
+
+export const getOrderHistory = async (req, res) => {
+  console.log("Order history page function called >>>>>>>>>>");
+  try {
+    const userId = req.loggedInUser?.id;
+    if (!userId) return res.redirect("/login");
+
+    // Connect to database
+    const db = await connectToDatabase(process.env.DATABASE);
+
+    // Fetch all orders for this user, newest first
+    const orders = await db
+      .collection(collection.ORDERS_COLLECTION)
+      .find({ userId })
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    if (!orders || orders.length === 0) {
+      console.log("No orders found for this user.");
+      return res.render("user/order-history", { orders: [] });
+    }
+
+    // Format orders: add cart totals and full totalAmount per order
+    const formattedOrders = orders.map(order => {
+      const cartWithTotal = order.cart.map(item => ({
+        ...item,
+        total: item.total || item.price * item.quantity,
+      }));
+
+      const totalAmount = cartWithTotal.reduce((acc, item) => acc + item.total, 0);
+
+      return {
+        ...order,
+        cart: cartWithTotal,
+        totalAmount,
+      };
+    });
+
+    // ✅ Render the correct view inside "views/user/order-history.hbs"
+    res.render("user/order-history", { orders: formattedOrders });
+  } catch (error) {
+    console.error("Error loading order history page:", error);
+    res.status(500).send("Something went wrong while loading order history.");
+  }
+};
