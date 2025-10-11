@@ -338,31 +338,67 @@ export const createAddress = async (req, res) => {
 };
 
 export const placeOrder = async (req, res) => {
-  console.log("place order funcion triggerd>>>>>>>>>>");
-  console.log(req.body);
+  console.log(">>>>>>>> placeOrder() triggered");
+  console.log("Form Data:", req.body);
+
   try {
     const userId = req.loggedInUser?.id;
+    if (!userId) {
+      console.log("❌ No userId found -> redirecting to /login");
+      return res.redirect("/login");
+    }
+
     const db = await connectToDatabase(process.env.DATABASE);
+    console.log("✅ Database connected");
 
     const user = await db
       .collection(collection.USERS_COLLECTION)
       .findOne({ userId });
-      
+
+    if (!user) {
+      console.log("❌ User not found in database");
+      return res.status(404).send("User not found");
+    }
+
     const cart = user.cart || [];
+    if (cart.length === 0) {
+      console.log("⚠️ Cart is empty");
+      return res.redirect("/cart");
+    }
 
     let orderAddress;
 
-    if (user.addresses?.length && req.body.addressIndex !== undefined) {
-      orderAddress = user.addresses[req.body.addressIndex];
-    } else {
+    // ✅ Use existing address if selected
+    if (user.addresses?.length && req.body.selectedAddress !== undefined) {
+      const index = parseInt(req.body.selectedAddress);
+      orderAddress = user.addresses[index];
+      console.log("📦 Using saved address:", orderAddress);
+    } 
+    // ✅ Otherwise use new address from form
+    else if (req.body.billingName && req.body.address && req.body.phone) {
       orderAddress = {
         billingName: req.body.billingName,
         address: req.body.address,
-        landmark: req.body.landmark,
+        landmark: req.body.landmark || "",
         phone: req.body.phone,
+        createdAt: new Date(),
       };
+      console.log("🆕 Using new address:", orderAddress);
+
+      // ✅ Auto-add new address to user profile
+      await db.collection(collection.USERS_COLLECTION).updateOne(
+        { userId },
+        { $push: { addresses: orderAddress } }
+      );
+      console.log("✅ New address saved to user profile");
+    } 
+    // ❌ No address found
+    else {
+      console.log("❌ No address data provided");
+      return res.status(400).send("Address details missing");
     }
 
+    // ✅ Create order object
     const order = {
       userId,
       cart,
@@ -373,15 +409,25 @@ export const placeOrder = async (req, res) => {
       createdAt: new Date(),
     };
 
+    // ✅ Insert order in DB
     await db.collection(collection.ORDERS_COLLECTION).insertOne(order);
+    console.log("✅ Order inserted into database");
+
+    // ✅ Clear cart after successful order
     await db.collection(collection.USERS_COLLECTION).updateOne(
       { userId },
-      { $set: { cart: [] } } // clear cart after order
+      { $set: { cart: [] } }
     );
+    console.log("🧹 User cart cleared");
 
+    // ✅ Redirect to success page
     res.redirect("/order-success");
-  } catch (error) {}
+  } catch (error) {
+    console.error("🔥 Error placing order:", error);
+    res.status(500).send("Something went wrong while placing the order.");
+  }
 };
+
 
 export const orderSuccess = async (req, res) => {
   console.log("Order success page function called >>>>>>>>>>");
