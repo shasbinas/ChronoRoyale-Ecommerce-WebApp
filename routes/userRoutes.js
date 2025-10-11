@@ -68,6 +68,9 @@ userRoutes.get("/order-success", orderSuccess);
 
 userRoutes.get("/order-history", requireAuth, getOrderHistory);
 
+//whishlist
+
+
 //private page
 
 // userRoutes.get("/profile", requireAuth, (req, res) => {
