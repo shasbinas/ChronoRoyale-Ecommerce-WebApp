@@ -11,6 +11,7 @@ import {
   adminOrdersListPage,
   adminProductsListPage,
   adminUsersListPage,
+  updateOrderStatus,
 } from "../controllers/adminController.js";
 import connectToDatabase from "../config/db.js";
 import { uploadFiles } from "../middleware/uploadMiddleware.js";
@@ -40,5 +41,8 @@ adminRoutes.post("/block-user/:id", blockUnblockUser);
 adminRoutes.get("/add-product", adminAddProductPage);
 
 adminRoutes.get("/orders-list", adminOrdersListPage);
+
+adminRoutes.get("/update-order-status/:id/:status", updateOrderStatus);
+
 
 export default adminRoutes;

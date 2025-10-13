@@ -49,7 +49,7 @@ userRoutes.get("/productDetails", productDeatilsPage);
 
 // cartPage
 
-userRoutes.get("/cart", cartPage);
+userRoutes.get("/cart", requireAuth, cartPage);
 
 userRoutes.post("/add-to-cart", requireAuth, addToCart);
 
@@ -61,6 +61,8 @@ userRoutes.get("/cart/remove/:productId", removeFromCart); //remove selected pro
 userRoutes.get("/checkout", checkoutPage);
 
 userRoutes.post("/create-address", createAddress);
+
+//order
 
 userRoutes.post("/place-order", placeOrder);
 

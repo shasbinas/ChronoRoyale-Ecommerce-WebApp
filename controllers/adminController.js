@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import collection from "../config/collection.js";
 import connectToDatabase from "../config/db.js";
 import { getProductsData } from "./productController.js";
@@ -213,5 +214,33 @@ export const adminProductsListPage = async (req, res) => {
   } catch (error) {
     console.error("❌ Error fetching products:", error);
     res.status(500).send("Internal Server Error");
+  }
+};
+
+
+
+
+
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const db = await connectToDatabase(process.env.DATABASE);
+    const ordersCollection = db.collection(collection.ORDERS_COLLECTION);
+
+    const orderId = req.params.id;
+    const newStatus = req.params.status;
+
+    console.log("🆕 Updating order:", orderId, "➡️", newStatus);
+
+    // Update order status
+    await ordersCollection.updateOne(
+      { _id: new ObjectId(orderId) },
+      { $set: { status: newStatus, updatedAt: new Date() } }
+    );
+
+    // Redirect back to orders list
+    res.redirect("/admin/orders-list");
+  } catch (error) {
+    console.error("❌ Error updating order status:", error);
+    res.status(500).send("Failed to update order status.");
   }
 };

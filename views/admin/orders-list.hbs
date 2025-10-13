@@ -2,7 +2,7 @@
   <div class="content-header">
     <div>
       <h2 class="content-title card-title">Order List</h2>
-      <p>Lorem ipsum dolor sit amet.</p>
+      <p>Manage all customer orders here.</p>
     </div>
     <div>
       <input type="text" placeholder="Search order ID" class="form-control bg-green" />
@@ -19,8 +19,11 @@
           <select class="form-select">
             <option>Status</option>
             <option>Pending</option>
-            <option>Received</option>
-            <option>Canceled</option>
+            <option>Processing</option>
+            <option>Shipped</option>
+            <option>Out for Delivery</option>
+            <option>Delivered</option>
+            <option>Cancelled</option>
             <option>Show all</option>
           </select>
         </div>
@@ -36,16 +39,16 @@
 
     <div class="card-body">
       <div class="table-responsive">
-        <table class="table table-hover">
+        <table class="table table-hover align-middle">
           <thead>
             <tr>
               <th>#ID</th>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Total</th>
-              <th scope="col">Status</th>
-              <th scope="col">Date</th>
-              <th scope="col" class="text-end">Action</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th class="text-end">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -53,30 +56,46 @@
               <tr>
                 <td>{{this._id}}</td>
                 <td><b>{{this.address.billingName}}</b></td>
-                <td>{{this.userEmail}}</td> <!-- Ensure this comes from route -->
+                <td>{{this.userEmail}}</td>
                 <td>${{this.totalAmount}}</td>
+
+                <!-- Status Badge -->
                 <td>
                   {{#if (eq this.status "Pending")}}
-                    <span class="badge rounded-pill alert-warning">Pending</span>
-                  {{else if (eq this.status "Received")}}
-                    <span class="badge rounded-pill alert-success">Received</span>
-                  {{else if (eq this.status "Canceled")}}
-                    <span class="badge rounded-pill alert-danger">Canceled</span>
+                    <span style="background-color:#fff4e5; color:#c27a00; border:1px solid #ffd48a; padding:6px 14px; border-radius:20px; font-weight:600; font-size:0.85rem;">Pending</span>
+                  {{else if (eq this.status "Processing")}}
+                    <span style="background-color:#e3e7ff; color:#3b4cc0; border:1px solid #c5d0ff; padding:6px 14px; border-radius:20px; font-weight:600; font-size:0.85rem;">Processing</span>
+                  {{else if (eq this.status "Shipped")}}
+                    <span style="background-color:#e0f2ff; color:#0066cc; border:1px solid #9ed1ff; padding:6px 14px; border-radius:20px; font-weight:600; font-size:0.85rem;">Shipped</span>
+                  {{else if (eq this.status "Out for Delivery")}}
+                    <span style="background-color:#f3e6ff; color:#8b3dff; border:1px solid #d1aaff; padding:6px 14px; border-radius:20px; font-weight:600; font-size:0.85rem;">Out for Delivery</span>
+                  {{else if (eq this.status "Delivered")}}
+                    <span style="background-color:#e9f8ed; color:#198754; border:1px solid #b7e0c3; padding:6px 14px; border-radius:20px; font-weight:600; font-size:0.85rem;">Delivered</span>
+                  {{else if (eq this.status "Cancelled")}}
+                    <span style="background-color:#ffe6e6; color:#cc0000; border:1px solid #ff9999; padding:6px 14px; border-radius:20px; font-weight:600; font-size:0.85rem;">Cancelled</span>
                   {{else}}
-                    <span class="badge rounded-pill alert-secondary">{{this.status}}</span>
+                    <span style="background-color:#f1f1f1; color:#666; border:1px solid #ddd; padding:6px 14px; border-radius:20px; font-weight:600; font-size:0.85rem;">{{this.status}}</span>
                   {{/if}}
                 </td>
+
                 <td>{{formatDate this.createdAt}}</td>
+
+                <!-- Actions -->
                 <td class="text-end">
-                  <a href="/admin/orders/{{this._id}}" class="btn btn-md rounded font-sm">Detail</a>
-                  <div class="dropdown">
+                  <a href="/admin/orders/{{this._id}}" class="btn btn-md rounded font-sm btn-outline-primary">
+                    Details
+                  </a>
+
+                  <div class="dropdown d-inline-block">
                     <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm">
                       <i class="material-icons md-more_horiz"></i>
                     </a>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="/admin/orders/{{this._id}}">View detail</a>
-                      <a class="dropdown-item" href="#">Edit info</a>
-                      <a class="dropdown-item text-danger" href="#">Delete</a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a class="dropdown-item" href="/admin/update-order-status/{{this._id}}/Processing">Processing</a>
+                      <a class="dropdown-item" href="/admin/update-order-status/{{this._id}}/Shipped">Shipped</a>
+                      <a class="dropdown-item" href="/admin/update-order-status/{{this._id}}/Out for Delivery">Out for Delivery</a>
+                      <a class="dropdown-item" href="/admin/update-order-status/{{this._id}}/Delivered">Delivered</a>
+                      <a class="dropdown-item text-danger" href="/admin/update-order-status/{{this._id}}/Cancelled">Cancelled</a>
                     </div>
                   </div>
                 </td>
@@ -88,6 +107,7 @@
     </div>
   </div>
 
+  <!-- Pagination -->
   <div class="pagination-area mt-15 mb-50">
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-start">
@@ -96,7 +116,9 @@
         <li class="page-item"><a class="page-link" href="#">03</a></li>
         <li class="page-item"><a class="page-link dot" href="#">...</a></li>
         <li class="page-item"><a class="page-link" href="#">16</a></li>
-        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+        <li class="page-item">
+          <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+        </li>
       </ul>
     </nav>
   </div>
