@@ -103,22 +103,19 @@ export const landingPage = async (req, res) => {
 
   try {
     console.log("res.locals.user>>>>", res.locals);
-    // Featured random products (6)
+
+    // Fetch different product sets
     const featuredProducts = await getProductsData({
       sort: "random",
       limit: 12,
     });
 
-    // console.log(featuredProducts[0]);
-
-    // Latest men’s watches (4)
     const latestMen = await getProductsData({
       category: "men",
       sort: "latest",
       limit: 10,
     });
 
-    // Latest women’s watches (4)
     const latestWomen = await getProductsData({
       category: "women",
       sort: "latest",
@@ -130,21 +127,45 @@ export const landingPage = async (req, res) => {
       limit: 15,
     });
 
-    // Render homepage with dynamic products
+    // Function to generate stock status
+    const getStockStatus = (product) => {
+      if (product.stock > 20) {
+        return `🟢 Available (${product.stock})`;
+      } else if (product.stock > 0 && product.stock <= 20) {
+        return `🟠 Hurry up! Only ${product.stock} left`;
+      } else {
+        return `🔴 Currently unavailable`;
+      }
+    };
+
+    // Add stock status to all product lists
+    const addStockStatus = (products) =>
+      products.map((product) => ({
+        ...product,
+        stockStatus: getStockStatus(product),
+      }));
+
+    const featuredWithStock = addStockStatus(featuredProducts);
+    const menWithStock = addStockStatus(latestMen);
+    const womenWithStock = addStockStatus(latestWomen);
+    const newArrivalsWithStock = addStockStatus(newArrivals);
+
+    // Render homepage with dynamic products + stock info
     res.render("user/home", {
       title: "Home - ChronoRoyale",
       banners: bannerData,
       brands: brandData,
-      featured: featuredProducts,
-      men: latestMen,
-      women: latestWomen,
-      newProducts: newArrivals,
+      featured: featuredWithStock,
+      men: menWithStock,
+      women: womenWithStock,
+      newProducts: newArrivalsWithStock,
     });
   } catch (error) {
     console.error("❌ Landing page error:", error);
     res.status(500).send("Error loading home page");
   }
 };
+
 
 export const loginPage = async (req, res) => {
   console.log("Login page route working 🚀");
