@@ -1,0 +1,79 @@
+<section class="content-main" style="font-family: var(--bs-font-sans-serif); background-color: var(--bs-gray-dark); padding: 20px; color: var(--bs-white);">
+
+  <!-- Header -->
+  <div class="content-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="content-title card-title" style="color: var(--bs-white);">Order Details</h2>
+      <p style="color: var(--bs-white);">Order ID: <strong>{{order._id}}</strong></p>
+    </div>
+   
+  </div>
+
+  <!-- Customer Info -->
+  <div class="card mb-4" style="border-radius: 8px; border: 1px solid var(--bs-white); background-color: var(--bs-gray-dark);">
+    <header class="card-header" style="background-color: #1a1a3a; color: var(--bs-white); padding: 12px; border-radius: 8px 8px 0 0;">
+      <h4>Customer Information</h4>
+    </header>
+    <div class="card-body" style="padding: 15px; color: var(--bs-white);">
+      <p><strong>Name:</strong> <span style="color: var(--bs-white);">{{order.address.billingName}}</span></p>
+      <p><strong>Email:</strong> <span style="color: var(--bs-white);">{{order.email}}</span></p>
+      <p><strong>Address:</strong> <span style="color: var(--bs-white);">{{order.address.address}}, {{order.address.city}}, {{order.address.state}}</span></p>
+      <p><strong>Status:</strong> 
+        {{#if order.status}}
+          <span style="background-color: var(--bs-success); color: var(--bs-white); font-weight: bold; padding: 2px 6px; border-radius: 4px;">{{order.status}}</span>
+        {{else}}
+          <span style="background-color: var(--bs-danger); color: var(--bs-white); font-weight: bold; padding: 2px 6px; border-radius: 4px;">Pending</span>
+        {{/if}}
+      </p>
+      <p><strong>Date:</strong> <span style="color: var(--bs-white);">{{order.createdAt}}</span></p>
+    </div>
+  </div>
+
+  <!-- Ordered Products -->
+  <div class="card mb-4" style="border-radius: 8px; border: 1px solid var(--bs-white); background-color: var(--bs-gray-dark);">
+    <header class="card-header" style="background-color: #1a1a3a; color: var(--bs-white); padding: 12px; border-radius: 8px 8px 0 0;">
+      <h4>Ordered Products</h4>
+    </header>
+
+    <div class="card-body table-responsive" style="padding: 15px;">
+      <table class="table align-middle table-striped" style="background-color: var(--bs-gray-dark); color: var(--bs-white); border: 1px solid var(--bs-white);">
+        <thead style="background-color: #1a1a3a; color: var(--bs-white);">
+          <tr>
+            <th style="color: var(--bs-white);">Product</th>
+            <th style="color: var(--bs-white);">Brand</th>
+            <th style="color: var(--bs-white);">Stock</th>
+            <th style="color: var(--bs-white);">Price</th>
+            <th style="color: var(--bs-white);">Qty</th>
+            <th style="color: var(--bs-white);">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each cart}}
+            <tr style="border-bottom: 1px solid var(--bs-white); color: var(--bs-white);">
+              <td style="color: var(--bs-white);">{{this.name}}</td>
+              <td style="color: var(--bs-white);">{{this.brand}}</td>
+              <td>
+                {{#if this.stock}}
+                  <span style="background-color: var(--bs-success); color: var(--bs-white); padding: 2px 6px; border-radius: 4px;">
+                    In Stock ({{this.stock}})
+                  </span>
+                {{else}}
+                  <span style="background-color: var(--bs-danger); color: var(--bs-white); padding: 2px 6px; border-radius: 4px;">
+                    Out of Stock
+                  </span>
+                {{/if}}
+              </td>
+              <td style="color: var(--bs-white);">${{this.price}}</td>
+              <td style="color: var(--bs-white);">{{this.quantity}}</td>
+              <td style="color: var(--bs-white);">${{this.total}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-footer text-end" style="padding: 12px; background-color: #1a1a3a; border-radius: 0 0 8px 8px;">
+      <h4 style="color: var(--bs-white);">Total: ${{totalAmount}}</h4>
+    </div>
+  </div>
+</section>

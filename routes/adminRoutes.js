@@ -8,6 +8,7 @@ import {
   adminDashboardPage,
   adminLoginPage,
   adminLogout,
+  adminOrderDetailsPage,
   adminOrdersListPage,
   adminProductsListPage,
   adminUsersListPage,
@@ -43,6 +44,8 @@ adminRoutes.get("/add-product", adminAddProductPage);
 adminRoutes.get("/orders-list", adminOrdersListPage);
 
 adminRoutes.get("/update-order-status/:id/:status", updateOrderStatus);
+
+adminRoutes.get("/orders/:id", adminOrderDetailsPage);
 
 
 export default adminRoutes;

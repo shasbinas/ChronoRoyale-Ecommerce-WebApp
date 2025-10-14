@@ -439,7 +439,7 @@ export const placeOrder = async (req, res) => {
       const index = parseInt(req.body.selectedAddress);
       orderAddress = user.addresses[index];
       console.log("📦 Using saved address:", orderAddress);
-    } 
+    }
     // ✅ Otherwise use new address from form
     else if (req.body.billingName && req.body.address && req.body.phone) {
       orderAddress = {
@@ -457,7 +457,7 @@ export const placeOrder = async (req, res) => {
         { $push: { addresses: orderAddress } }
       );
       console.log("✅ New address saved to user profile");
-    } 
+    }
     // ❌ No address found
     else {
       console.log("❌ No address data provided");
@@ -476,8 +476,19 @@ export const placeOrder = async (req, res) => {
     };
 
     // ✅ Insert order in DB
-    await db.collection(collection.ORDERS_COLLECTION).insertOne(order);
+    const result = await db.collection(collection.ORDERS_COLLECTION).insertOne(order);
     console.log("✅ Order inserted into database");
+
+    // ✅ Get inserted order ID
+    const orderId = result.insertedId;
+    console.log("🆔 New Order ID:", orderId);
+
+    // ✅ Add orderId to user's orders array
+    await db.collection(collection.USERS_COLLECTION).updateOne(
+      { userId },
+      { $push: { orders: orderId } }
+    );
+    console.log("✅ Order ID added to user's orders array");
 
     // ✅ Clear cart after successful order
     await db.collection(collection.USERS_COLLECTION).updateOne(
@@ -493,6 +504,7 @@ export const placeOrder = async (req, res) => {
     res.status(500).send("Something went wrong while placing the order.");
   }
 };
+
 
 
 export const orderSuccess = async (req, res) => {

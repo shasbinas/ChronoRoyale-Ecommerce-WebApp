@@ -244,3 +244,51 @@ export const updateOrderStatus = async (req, res) => {
     res.status(500).send("Failed to update order status.");
   }
 };
+
+
+export const adminOrderDetailsPage = async (req, res) => {
+  console.log("Admin Order Details route working 🚀");
+  try {
+    const db = await connectToDatabase(process.env.DATABASE);
+
+    const orderId = req.params.id;
+    const ordersCollection = db.collection(collection.ORDERS_COLLECTION);
+    const productsCollection = db.collection(collection.PRODUCTS_COLLECTION); // ✅ corrected key
+
+    // Fetch the order by ID
+    const order = await ordersCollection.findOne({ _id: new ObjectId(orderId) });
+    if (!order) return res.status(404).send("Order not found");
+
+    // Attach product details for each cart item
+    const cartWithProductDetails = await Promise.all(
+      order.cart.map(async (item) => {
+        const product = await productsCollection.findOne({ _id: new ObjectId(item.productId) });
+        return {
+          ...item,
+          name: product?.name || "Unknown Product",
+          brand: product?.brand || "Unknown Brand",
+          stock: product?.stock ?? "N/A",
+          image: product?.image || "/assets/imgs/shop/default.jpg",
+        };
+      })
+    );
+
+    // Calculate total amount
+    const totalAmount = cartWithProductDetails.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+
+    // Render the order details page
+    res.render("admin/order-details", {
+      layout: "admin",
+      title: `Order Details - ${order._id}`,
+      order,
+      cart: cartWithProductDetails,
+      totalAmount,
+    });
+  } catch (error) {
+    console.error("Error loading admin order details:", error);
+    res.status(500).send("Something went wrong loading order details.");
+  }
+};
