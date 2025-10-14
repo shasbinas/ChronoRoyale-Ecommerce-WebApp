@@ -380,38 +380,24 @@ export const placeOrder = async (req, res) => {
 
   try {
     const userId = req.loggedInUser?.id;
-    if (!userId) {
-      console.log("❌ No userId found -> redirecting to /login");
-      return res.redirect("/login");
-    }
+    if (!userId) return res.redirect("/login");
 
     const db = await connectToDatabase(process.env.DATABASE);
 
     const user = await db
       .collection(collection.USERS_COLLECTION)
       .findOne({ userId });
-
-    if (!user) {
-      console.log("❌ User not found in database");
-      return res.status(404).send("User not found");
-    }
+    if (!user) return res.status(404).send("User not found");
 
     const cart = user.cart || [];
-    if (cart.length === 0) {
-      console.log("⚠️ Cart is empty");
-      return res.redirect("/cart");
-    }
+    if (cart.length === 0) return res.redirect("/cart");
 
+    // Handle address
     let orderAddress;
-
-    // ✅ Use existing address if selected
     if (user.addresses?.length && req.body.selectedAddress !== undefined) {
       const index = parseInt(req.body.selectedAddress);
       orderAddress = user.addresses[index];
-      console.log("📦 Using saved address:", orderAddress);
-    }
-    // ✅ Otherwise use new address from form
-    else if (req.body.billingName && req.body.address && req.body.phone) {
+    } else if (req.body.billingName && req.body.address && req.body.phone) {
       orderAddress = {
         billingName: req.body.billingName,
         address: req.body.address,
@@ -419,21 +405,41 @@ export const placeOrder = async (req, res) => {
         phone: req.body.phone,
         createdAt: new Date(),
       };
-      console.log("🆕 Using new address:", orderAddress);
-
-      // ✅ Auto-add new address to user profile
       await db
         .collection(collection.USERS_COLLECTION)
         .updateOne({ userId }, { $push: { addresses: orderAddress } });
-      console.log("✅ New address saved to user profile");
-    }
-    // ❌ No address found
-    else {
-      console.log("❌ No address data provided");
+    } else {
       return res.status(400).send("Address details missing");
     }
 
-    // ✅ Create order object
+    // ----- STOCK CHECK -----
+    for (let item of cart) {
+      const product = await db
+        .collection(collection.PRODUCTS_COLLECTION)
+        .findOne({ _id: new ObjectId(item.productId) });
+
+      if (!product) {
+        return res
+          .status(404)
+          .send(`Product ${item.name} not found in database`);
+      }
+
+      if (product.stock === undefined || product.stock < item.quantity) {
+        return res
+          .status(400)
+          .send(`Not enough stock for product: ${item.name}`);
+      }
+    }
+
+    // ----- DEDUCT STOCK -----
+    for (let item of cart) {
+      await db.collection(collection.PRODUCTS_COLLECTION).updateOne(
+        { _id: new ObjectId(item.productId) },
+        { $inc: { stock: -item.quantity } } // decrement stock
+      );
+    }
+
+    // ----- CREATE ORDER -----
     const order = {
       orderId: uuidv7(),
       userId,
@@ -445,29 +451,16 @@ export const placeOrder = async (req, res) => {
       createdAt: new Date(),
     };
 
-    // ✅ Insert order in DB
     const result = await db
       .collection(collection.ORDERS_COLLECTION)
       .insertOne(order);
-    console.log("✅ Order inserted into database");
-
-    // ✅ Get inserted order ID
     const orderId = result.insertedId;
-    console.log("🆔 New Order ID:", orderId);
 
-    // ✅ Add orderId to user's orders array
-    await db
-      .collection(collection.USERS_COLLECTION)
-      .updateOne({ userId }, { $push: { orders: orderId } });
-    console.log("✅ Order ID added to user's orders array");
+    await db.collection(collection.USERS_COLLECTION).updateOne(
+      { userId },
+      { $push: { orders: orderId }, $set: { cart: [] } } // add order and clear cart
+    );
 
-    // ✅ Clear cart after successful order
-    await db
-      .collection(collection.USERS_COLLECTION)
-      .updateOne({ userId }, { $set: { cart: [] } });
-    console.log("🧹 User cart cleared");
-
-    // ✅ Redirect to success page
     res.redirect("/order-success");
   } catch (error) {
     console.error("🔥 Error placing order:", error);
@@ -660,8 +653,3 @@ export const updateAccount = async (req, res) => {
     });
   }
 };
-
-
-
-
-
