@@ -3,26 +3,6 @@
     <div class="container">
       <h2 class="mb-4 text-center fw-bold">Order History</h2>
 
-      <style>
-        /* Add spacing between order cards */
-        .order-history .order-card {
-          margin-bottom: 2.5rem; /* gap between each order */
-          border-radius: 12px;
-          background-color: #fff;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .order-history .order-card:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-        }
-
-        .order-history .order-card:last-child {
-          margin-bottom: 0; /* no gap after last one */
-        }
-      </style>
-
       {{#if orders.length}}
       <div class="order-history">
         {{#each orders}}
@@ -32,19 +12,20 @@
           <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
             <div>
               <h5 class="mb-1 text-dark fw-semibold">
-                Order ID:
-                <span class="text-secondary">{{this._id}}</span>
+                Order ID: <span class="text-secondary">{{this._id}}</span>
               </h5>
               <small class="text-muted">Placed on: {{this.createdAt}}</small>
             </div>
 
             <div>
               <span class="badge 
-                {{#if (eq this.status 'Delivered')}}bg-success
-                {{else if (eq this.status 'Shipped')}}bg-info
-                {{else if (eq this.status 'Pending')}}bg-warning
-                {{else}}bg-secondary{{/if}} 
-                px-3 py-2 rounded-pill">
+                px-3 py-2 rounded-pill
+                {{#if (eq this.status 'Delivered')}}order-status-delivered
+                {{else if (eq this.status 'Shipped')}}order-status-shipped
+                {{else if (eq this.status 'Pending')}}order-status-pending
+                {{else if (eq this.status 'Cancelled')}}order-status-cancelled
+                {{else}}order-status-other
+                {{/if}}">
                 {{this.status}}
               </span>
             </div>
@@ -108,4 +89,13 @@
       {{/if}}
     </div>
   </section>
+
+  <!-- Inline Styles for Status Badges -->
+  <style>
+    .order-status-delivered { background-color: #28a745; color: #fff; }
+    .order-status-shipped   { background-color: #17a2b8; color: #fff; }
+    .order-status-pending   { background-color: #ffc107; color: #212529; }
+    .order-status-cancelled { background-color: #dc3545; color: #fff; }
+    .order-status-other     { background-color: #6c757d; color: #fff; }
+  </style>
 </main>
