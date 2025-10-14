@@ -185,32 +185,24 @@ export const cartPage = async (req, res) => {
 
 //add cart
 export const addToCart = async (req, res) => {
-  console.log("add to cart funcion called>>>>>>>");
-
-  console.log(req.body);
   try {
-    let userId = req.loggedInUser?.id;
-    console.log(">>>>>>user", userId);
-
-    const { productId, name, brand, price, image, shortDescription, quantity } =
-      req.body;
+    const userId = req.loggedInUser?.id;
+    const { productId, name, brand, price, image, quantity } = req.body;
 
     const db = await connectToDatabase(process.env.DATABASE);
-    const user = await db
-      .collection(collection.USERS_COLLECTION)
-      .findOne({ userId });
+    const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
 
-    const existingItem = user.cart.find((item) => item.productId === productId);
+    const existingItem = user.cart.find(item => item.productId === productId);
 
     if (existingItem) {
-      // If item already exists, increase quantity and total
+      // Increase quantity if already in cart
       await db.collection(collection.USERS_COLLECTION).updateOne(
         { userId, "cart.productId": productId },
-        {
-          $inc: {
-            "cart.$.quantity": 1,
-            "cart.$.total": parseFloat(price),
-          },
+        { 
+          $inc: { 
+            "cart.$.quantity": parseInt(quantity), 
+            "cart.$.total": parseFloat(price) * parseInt(quantity) 
+          } 
         }
       );
     } else {
@@ -223,18 +215,28 @@ export const addToCart = async (req, res) => {
         quantity: parseInt(quantity),
         image,
         total: parseFloat(price) * parseInt(quantity),
-        shortDescription,
         addedAt: new Date(),
       };
 
-      await db
-        .collection(collection.USERS_COLLECTION)
-        .updateOne({ userId }, { $push: { cart: newItem } });
+      await db.collection(collection.USERS_COLLECTION).updateOne(
+        { userId },
+        { $push: { cart: newItem } }
+      );
     }
 
+    // ✅ Remove item from wishlist
+    await db.collection(collection.USERS_COLLECTION).updateOne(
+      { userId },
+      { $pull: { wishlist: { productId } } }
+    );
+
     res.redirect("/cart");
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+    res.redirect("/wishlist");
+  }
 };
+
 
 //clear cart
 export const clearCart = async (req, res) => {
@@ -653,3 +655,90 @@ export const updateAccount = async (req, res) => {
     });
   }
 };
+
+
+
+export const addToWishlist = async (req, res) => {
+  try {
+    const userId = req.loggedInUser?.id;
+    const { productId } = req.body; // only productId
+
+    const db = await connectToDatabase(process.env.DATABASE);
+    const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
+
+    const exists = user.wishlist?.find(item => item.productId === productId);
+
+    if (!exists) {
+      await db.collection(collection.USERS_COLLECTION).updateOne(
+        { userId },
+        { $push: { wishlist: { productId, addedAt: new Date() } } }
+      );
+    }
+
+    res.redirect("/wishlist");
+  } catch (err) {
+    console.log(err);
+    res.redirect("/wishlist");
+  }
+};
+
+
+export const removeFromWishlist = async (req, res) => {
+  try {
+    let userId = req.loggedInUser?.id;
+    const { productId } = req.body;
+
+    const db = await connectToDatabase(process.env.DATABASE);
+    await db.collection(collection.USERS_COLLECTION).updateOne(
+      { userId },
+      { $pull: { wishlist: { productId } } }
+    );
+
+    res.redirect("/wishlist");
+  } catch (error) {
+    console.log(error);
+    res.redirect("/wishlist");
+  }
+};
+
+export const getWishlistPage = async (req, res) => {
+  try {
+    const userId = req.loggedInUser?.id;
+    if (!userId) return res.redirect('/login');
+
+    const db = await connectToDatabase(process.env.DATABASE);
+    const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
+
+    const wishlistItems = user?.wishlist || [];
+    if (!wishlistItems.length) return res.render('user/wishlist', { wishlist: [] });
+
+    const productIds = wishlistItems.map(item => new ObjectId(item.productId));
+    const products = await db.collection('products').find({ _id: { $in: productIds } }).toArray();
+
+    const wishlist = wishlistItems.map(item => {
+      const product = products.find(p => p._id.toString() === item.productId);
+      if (!product) return null; // skip if product deleted
+
+      return {
+        productId: item.productId,
+        name: product.name,
+        brand: product.brand,
+        price: product.discountPrice || product.price, // numeric
+        image: product.picturePath?.[0] || '/userAssets/imgs/default-product.png',
+        shortDescription: product.shortDescription || '',
+        inStock: product.stock > 0,
+      };
+    }).filter(Boolean);
+
+    console.log("Wishlist to render:", wishlist);
+    res.render('user/wishlist', { wishlist });
+  } catch (err) {
+    console.error(err);
+    res.redirect('/');
+  }
+};
+
+
+
+
+

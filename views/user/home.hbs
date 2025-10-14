@@ -168,18 +168,23 @@
                       </a>
                     </div>
                     <div class="product-action-1">
-                      <a
-                        aria-label="Quick view"
-                        class="action-btn hover-up"
-                        data-bs-toggle="modal"
-                        data-bs-target="#quickViewModal"
-                      ><i class="fi-rs-eye"></i></a>
-                      <a
-                        aria-label="Add To Wishlist"
-                        class="action-btn hover-up"
-                        href="shop-wishlist.html"
-                      ><i class="fi-rs-heart"></i></a>
-                    </div>
+  <!-- Quick View Button -->
+  <a
+    aria-label="Quick view"
+    class="action-btn hover-up"
+    data-bs-toggle="modal"
+    data-bs-target="#quickViewModal"
+  ><i class="fi-rs-eye"></i></a>
+
+  <!-- Add to Wishlist Button -->
+  <form method="POST" action="/add-to-wishlist" class="d-inline">
+    <input type="hidden" name="productId" value="{{this._id}}">
+    <button type="submit" class="action-btn hover-up" aria-label="Add To Wishlist">
+      <i class="fi-rs-heart"></i>
+    </button>
+  </form>
+</div>
+
                     <div
                       class="product-badges product-badges-position product-badges-mrg"
                     >
@@ -457,15 +462,19 @@
         </div>
 
         <!-- Hover Actions -->
-        <div class="product-action-1">
-          <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal">
-            <i class="fi-rs-eye"></i>
-          </a>
-          <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="/add-to-wishlist?productId={{this._id}}">
-            <i class="fi-rs-heart"></i>
-          </a>
-         
-        </div>
+       <div class="product-action-1">
+  <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+    <i class="fi-rs-eye"></i>
+  </a>
+
+  <form method="POST" action="/add-to-wishlist" class="d-inline">
+    <input type="hidden" name="productId" value="{{this._id}}">
+    <button type="submit" class="action-btn small hover-up" aria-label="Add To Wishlist">
+      <i class="fi-rs-heart"></i>
+    </button>
+  </form>
+</div>
+
 
         <!-- Badge -->
         {{#if this.badge}}

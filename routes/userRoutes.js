@@ -1,18 +1,21 @@
 import express from "express";
 import {
   addToCart,
+  addToWishlist,
   cartPage,
   checkoutPage,
   clearCart,
   createAddress,
   getAccount,
   getOrderHistory,
+  getWishlistPage,
   landingPage,
   loginPage,
   orderSuccess,
   placeOrder,
   productsPage,
   removeFromCart,
+  removeFromWishlist,
   signupPage,
   updateAccount,
 } from "../controllers/userController.js";
@@ -72,11 +75,16 @@ userRoutes.get("/order-success", orderSuccess);
 
 userRoutes.get("/order-history", requireAuth, getOrderHistory);
 
-////
+////account
 
 userRoutes.get("/account-details", requireAuth, getAccount);
 userRoutes.post("/account-details", requireAuth, updateAccount);
+//whishlist
+// GET wishlist page
+userRoutes.get("/wishlist", requireAuth, getWishlistPage);
 
+userRoutes.post("/add-to-wishlist", requireAuth, addToWishlist);
+userRoutes.post("/remove-from-wishlist", requireAuth, removeFromWishlist);
 //private page
 
 // userRoutes.get("/profile", requireAuth, (req, res) => {
