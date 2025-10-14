@@ -4,6 +4,7 @@ import connectToDatabase from "../config/db.js";
 import { bannerData, brandData } from "../data/index.js";
 import { getProductsData } from "./productController.js";
 import { createUser } from "./authController.js";
+import bcrypt from "bcrypt";
 
 export const productsPage = async (req, res) => {
   console.log("productsPage route working 🚀");
@@ -598,3 +599,93 @@ export const getOrderHistory = async (req, res) => {
 
 
 
+
+
+
+
+
+
+// GET account page
+export const getAccount = async (req, res) => {
+  try {
+    const db = await connectToDatabase(process.env.DATABASE);
+    const user = await db
+      .collection(collection.USERS_COLLECTION)
+      .findOne({ userId: req.loggedInUser.id });
+
+    res.render("user/account-details", {
+      title: "Account Details",
+      user, // send user data to prefill form
+    });
+  } catch (err) {
+    console.error(err);
+    res.render("user/account-details", {
+      title: "Account Details",
+      error: "Failed to load account details.",
+    });
+  }
+};
+
+// POST update account
+export const updateAccount = async (req, res) => {
+  try {
+    const { name, phone, dname, email, password, npassword, cpassword } = req.body;
+    const userId = req.loggedInUser.id;
+
+    const db = await connectToDatabase(process.env.DATABASE);
+    const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
+
+    if (!user) {
+      return res.render("user/account-details", {
+        title: "Account Details",
+        error: "User not found.",
+      });
+    }
+
+    // ✅ Verify current password
+    const isCurrentPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isCurrentPasswordValid) {
+      return res.render("user/account-details", {
+        title: "Account Details",
+        error: "Current password is incorrect.",
+        user,
+      });
+    }
+
+    // ✅ Handle new password (optional)
+    let hashedPassword = user.password;
+    if (npassword || cpassword) {
+      if (npassword !== cpassword) {
+        return res.render("user/account-details", {
+          title: "Account Details",
+          error: "New password and confirm password do not match.",
+          user,
+        });
+      }
+      hashedPassword = await bcrypt.hash(npassword, 10);
+    }
+
+    // ✅ Update user details
+    await db.collection(collection.USERS_COLLECTION).updateOne(
+      { userId },
+      {
+        $set: { name, phone, dname, email, password: hashedPassword },
+      }
+    );
+
+    const updatedUser = { ...user, name, phone, dname, email };
+    res.render("user/account-details", {
+      title: "Account Details",
+      success: "Account updated successfully!",
+      user: updatedUser,
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.render("user/account-details", {
+      title: "Account Details",
+      error: "Something went wrong. Please try again later.",
+      user: req.body,
+    });
+  }
+};

@@ -5,6 +5,7 @@ import {
   checkoutPage,
   clearCart,
   createAddress,
+  getAccount,
   getOrderHistory,
   landingPage,
   loginPage,
@@ -13,6 +14,7 @@ import {
   productsPage,
   removeFromCart,
   signupPage,
+  updateAccount,
 } from "../controllers/userController.js";
 import { productDeatilsPage } from "../controllers/productController.js";
 import {
@@ -70,7 +72,12 @@ userRoutes.get("/order-success", orderSuccess);
 
 userRoutes.get("/order-history", requireAuth, getOrderHistory);
 
-//whishlist
+////
+
+
+
+userRoutes.get("/account-details", requireAuth, getAccount);
+userRoutes.post("/account-details", requireAuth, updateAccount);
 
 
 //private page
