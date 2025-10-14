@@ -74,11 +74,8 @@ userRoutes.get("/order-history", requireAuth, getOrderHistory);
 
 ////
 
-
-
 userRoutes.get("/account-details", requireAuth, getAccount);
 userRoutes.post("/account-details", requireAuth, updateAccount);
-
 
 //private page
 

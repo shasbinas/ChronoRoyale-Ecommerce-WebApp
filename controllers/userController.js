@@ -5,6 +5,7 @@ import { bannerData, brandData } from "../data/index.js";
 import { getProductsData } from "./productController.js";
 import { createUser } from "./authController.js";
 import bcrypt from "bcrypt";
+import { v7 as uuidv7 } from "uuid";
 
 export const productsPage = async (req, res) => {
   console.log("productsPage route working 🚀");
@@ -26,36 +27,6 @@ export const productsPage = async (req, res) => {
     res.status(500).send("Error loading products page");
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const blockUnblockUser = async (req, res) => {
   console.log("Block/Unblock User route working 🚀");
@@ -166,7 +137,6 @@ export const landingPage = async (req, res) => {
     res.status(500).send("Error loading home page");
   }
 };
-
 
 export const loginPage = async (req, res) => {
   console.log("Login page route working 🚀");
@@ -416,7 +386,6 @@ export const placeOrder = async (req, res) => {
     }
 
     const db = await connectToDatabase(process.env.DATABASE);
-    console.log("✅ Database connected");
 
     const user = await db
       .collection(collection.USERS_COLLECTION)
@@ -453,10 +422,9 @@ export const placeOrder = async (req, res) => {
       console.log("🆕 Using new address:", orderAddress);
 
       // ✅ Auto-add new address to user profile
-      await db.collection(collection.USERS_COLLECTION).updateOne(
-        { userId },
-        { $push: { addresses: orderAddress } }
-      );
+      await db
+        .collection(collection.USERS_COLLECTION)
+        .updateOne({ userId }, { $push: { addresses: orderAddress } });
       console.log("✅ New address saved to user profile");
     }
     // ❌ No address found
@@ -467,6 +435,7 @@ export const placeOrder = async (req, res) => {
 
     // ✅ Create order object
     const order = {
+      orderId: uuidv7(),
       userId,
       cart,
       address: orderAddress,
@@ -477,7 +446,9 @@ export const placeOrder = async (req, res) => {
     };
 
     // ✅ Insert order in DB
-    const result = await db.collection(collection.ORDERS_COLLECTION).insertOne(order);
+    const result = await db
+      .collection(collection.ORDERS_COLLECTION)
+      .insertOne(order);
     console.log("✅ Order inserted into database");
 
     // ✅ Get inserted order ID
@@ -485,17 +456,15 @@ export const placeOrder = async (req, res) => {
     console.log("🆔 New Order ID:", orderId);
 
     // ✅ Add orderId to user's orders array
-    await db.collection(collection.USERS_COLLECTION).updateOne(
-      { userId },
-      { $push: { orders: orderId } }
-    );
+    await db
+      .collection(collection.USERS_COLLECTION)
+      .updateOne({ userId }, { $push: { orders: orderId } });
     console.log("✅ Order ID added to user's orders array");
 
     // ✅ Clear cart after successful order
-    await db.collection(collection.USERS_COLLECTION).updateOne(
-      { userId },
-      { $set: { cart: [] } }
-    );
+    await db
+      .collection(collection.USERS_COLLECTION)
+      .updateOne({ userId }, { $set: { cart: [] } });
     console.log("🧹 User cart cleared");
 
     // ✅ Redirect to success page
@@ -505,8 +474,6 @@ export const placeOrder = async (req, res) => {
     res.status(500).send("Something went wrong while placing the order.");
   }
 };
-
-
 
 export const orderSuccess = async (req, res) => {
   console.log("Order success page function called >>>>>>>>>>");
@@ -527,13 +494,16 @@ export const orderSuccess = async (req, res) => {
     }
 
     // Ensure each cart item has a total
-    const cartWithTotal = lastOrder.cart.map(item => ({
+    const cartWithTotal = lastOrder.cart.map((item) => ({
       ...item,
       total: item.total || item.price * item.quantity,
     }));
 
     // Calculate total order amount
-    const totalAmount = cartWithTotal.reduce((acc, item) => acc + item.total, 0);
+    const totalAmount = cartWithTotal.reduce(
+      (acc, item) => acc + item.total,
+      0
+    );
 
     res.render("user/orderSuccess", {
       orderId: lastOrder._id,
@@ -547,10 +517,11 @@ export const orderSuccess = async (req, res) => {
     });
   } catch (error) {
     console.error("Error rendering order success page:", error);
-    res.status(500).send("Something went wrong while loading the order success page.");
+    res
+      .status(500)
+      .send("Something went wrong while loading the order success page.");
   }
 };
-
 
 export const getOrderHistory = async (req, res) => {
   console.log("Order history page function called >>>>>>>>>>");
@@ -574,13 +545,16 @@ export const getOrderHistory = async (req, res) => {
     }
 
     // Format orders: add cart totals and full totalAmount per order
-    const formattedOrders = orders.map(order => {
-      const cartWithTotal = order.cart.map(item => ({
+    const formattedOrders = orders.map((order) => {
+      const cartWithTotal = order.cart.map((item) => ({
         ...item,
         total: item.total || item.price * item.quantity,
       }));
 
-      const totalAmount = cartWithTotal.reduce((acc, item) => acc + item.total, 0);
+      const totalAmount = cartWithTotal.reduce(
+        (acc, item) => acc + item.total,
+        0
+      );
 
       return {
         ...order,
@@ -596,14 +570,6 @@ export const getOrderHistory = async (req, res) => {
     res.status(500).send("Something went wrong while loading order history.");
   }
 };
-
-
-
-
-
-
-
-
 
 // GET account page
 export const getAccount = async (req, res) => {
@@ -629,11 +595,14 @@ export const getAccount = async (req, res) => {
 // POST update account
 export const updateAccount = async (req, res) => {
   try {
-    const { name, phone, dname, email, password, npassword, cpassword } = req.body;
+    const { name, phone, dname, email, password, npassword, cpassword } =
+      req.body;
     const userId = req.loggedInUser.id;
 
     const db = await connectToDatabase(process.env.DATABASE);
-    const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
+    const user = await db
+      .collection(collection.USERS_COLLECTION)
+      .findOne({ userId });
 
     if (!user) {
       return res.render("user/account-details", {
@@ -643,7 +612,10 @@ export const updateAccount = async (req, res) => {
     }
 
     // ✅ Verify current password
-    const isCurrentPasswordValid = await bcrypt.compare(password, user.password);
+    const isCurrentPasswordValid = await bcrypt.compare(
+      password,
+      user.password
+    );
     if (!isCurrentPasswordValid) {
       return res.render("user/account-details", {
         title: "Account Details",
@@ -679,7 +651,6 @@ export const updateAccount = async (req, res) => {
       success: "Account updated successfully!",
       user: updatedUser,
     });
-
   } catch (err) {
     console.error(err);
     res.render("user/account-details", {
@@ -689,3 +660,8 @@ export const updateAccount = async (req, res) => {
     });
   }
 };
+
+
+
+
+
