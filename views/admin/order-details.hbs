@@ -1,11 +1,28 @@
 <section class="content-main" style="font-family: var(--bs-font-sans-serif); background-color: var(--bs-gray-dark); padding: 20px; color: var(--bs-white);">
 
   <!-- Header -->
-  <div class="content-header d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h2 class="content-title card-title" style="color: var(--bs-white);">Order Details</h2>
-      <p style="color: var(--bs-white);">Order ID: <strong>{{order._id}}</strong></p>
-    </div>
+<div class="content-header d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2 class="content-title card-title" style="color: var(--bs-white);">Order Details</h2>
+    <p style="color: var(--bs-white);">Order ID: <strong>{{order._id}}</strong></p>
+  </div>
+
+  <!-- Action Dropdown -->
+  <div class="dropdown">
+    <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+      Action
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionDropdown">
+      <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Pending">Pending</a></li>
+      <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Processing">Processing</a></li>
+      <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Shipped">Shipped</a></li>
+      <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Out for Delivery">Out for Delivery</a></li>
+      <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Delivered">Delivered</a></li>
+      <li><a class="dropdown-item text-danger" href="/admin/update-order-status/{{order._id}}/Cancelled">Cancelled</a></li>
+    </ul>
+  </div>
+</div>
+
    
   </div>
 
@@ -17,14 +34,46 @@
     <div class="card-body" style="padding: 15px; color: var(--bs-white);">
       <p><strong>Name:</strong> <span style="color: var(--bs-white);">{{order.address.billingName}}</span></p>
       <p><strong>Email:</strong> <span style="color: var(--bs-white);">{{order.email}}</span></p>
-      <p><strong>Address:</strong> <span style="color: var(--bs-white);">{{order.address.address}}, {{order.address.city}}, {{order.address.state}}</span></p>
-      <p><strong>Status:</strong> 
-        {{#if order.status}}
-          <span style="background-color: var(--bs-success); color: var(--bs-white); font-weight: bold; padding: 2px 6px; border-radius: 4px;">{{order.status}}</span>
-        {{else}}
-          <span style="background-color: var(--bs-danger); color: var(--bs-white); font-weight: bold; padding: 2px 6px; border-radius: 4px;">Pending</span>
-        {{/if}}
-      </p>
+      <p><strong>Address:</strong> <span style="color: var(--bs-white);">{{order.address.address}}, {{order.address.city}}, <p><strong>Status:</strong> 
+
+  {{#if (eq order.status "Pending")}}
+    <span style="background-color: #ffc107; color: #212529; font-weight: bold; padding: 2px 6px; border-radius: 4px;">
+      Pending
+    </span>
+  {{/if}}
+
+  {{#if (eq order.status "Processing")}}
+    <span style="background-color: #0d6efd; color: #ffffff; font-weight: bold; padding: 2px 6px; border-radius: 4px;">
+      Processing
+    </span>
+  {{/if}}
+
+  {{#if (eq order.status "Shipped")}}
+    <span style="background-color: #0dcaf0; color: #212529; font-weight: bold; padding: 2px 6px; border-radius: 4px;">
+      Shipped
+    </span>
+  {{/if}}
+
+  {{#if (eq order.status "Delivered")}}
+    <span style="background-color: #198754; color: #ffffff; font-weight: bold; padding: 2px 6px; border-radius: 4px;">
+      Delivered
+    </span>
+  {{/if}}
+
+  {{#if (eq order.status "Cancelled")}}
+    <span style="background-color: #dc3545; color: #ffffff; font-weight: bold; padding: 2px 6px; border-radius: 4px;">
+      Cancelled
+    </span>
+  {{/if}}
+
+  {{#unless order.status}}
+    <span style="background-color: gray; color: #ffffff; font-weight: bold; padding: 2px 6px; border-radius: 4px;">
+      Unknown
+    </span>
+  {{/unless}}
+
+</p>
+
       <p><strong>Date:</strong> <span style="color: var(--bs-white);">{{order.createdAt}}</span></p>
     </div>
   </div>
@@ -54,8 +103,8 @@
               <td style="color: var(--bs-white);">{{this.brand}}</td>
               <td>
                 {{#if this.stock}}
-                  <span style="background-color: var(--bs-success); color: var(--bs-white); padding: 2px 6px; border-radius: 4px;">
-                    In Stock ({{this.stock}})
+                  <span style=>
+                    Stock ({{this.stock}})
                   </span>
                 {{else}}
                   <span style="background-color: var(--bs-danger); color: var(--bs-white); padding: 2px 6px; border-radius: 4px;">
