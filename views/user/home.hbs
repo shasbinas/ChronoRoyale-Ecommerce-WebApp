@@ -80,15 +80,17 @@
                       </a>
                     </div>
                     <div class="product-action-1">
-                      <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal">
-                        <i class="fi-rs-eye"></i>
-                      </a>
-                      <form method="POST" action="/add-to-wishlist" class="d-inline">
-                        <input type="hidden" name="productId" value="{{this._id}}">
-                        <button type="submit" class="action-btn hover-up" aria-label="Add To Wishlist">
-                          <i class="fi-rs-heart"></i>
-                        </button>
-                      </form>
+                      <a
+                        aria-label="Quick view"
+                        class="action-btn hover-up"
+                        data-bs-toggle="modal"
+                        data-bs-target="#quickViewModal"
+                      ><i class="fi-rs-eye"></i></a>
+                      <a
+                        aria-label="Add To Wishlist"
+                        class="action-btn hover-up"
+                        href="shop-wishlist.html"
+                      ><i class="fi-rs-heart"></i></a>
                     </div>
                     <div class="product-badges product-badges-position product-badges-mrg">
                       <span class="hot">{{this.brand}}</span>
@@ -106,16 +108,12 @@
                       <span>₹{{this.discountPrice}}</span>
                       <span class="old-price">₹{{this.price}}</span>
                     </div>
-                    <div class="product-action-1 show">
-                      <form action="/add-to-cart" method="POST">
-                        <input type="hidden" name="productId" value="{{this._id}}" />
-                        <input type="hidden" name="name" value="{{this.name}}" />
-                        <input type="hidden" name="brand" value="{{this.brand}}" />
-                        <input type="hidden" name="price" value="{{this.discountPrice}}" />
-                        <input type="hidden" name="image" value="{{this.picturePath.[0]}}" />
-                        <input type="hidden" name="quantity" value="1" />
-                        <button type="submit" class="action-btn hover-up"><i class="fi-rs-shopping-bag-add"></i></button>
-                      </form>
+                   <div class="product-action-1 show">
+                      <a
+                        aria-label="Add To Cart"
+                        class="action-btn hover-up"
+                        href="shop-cart.html"
+                      ><i class="fi-rs-shopping-bag-add"></i></a>
                     </div>
                   </div>
                 </div>
@@ -137,11 +135,18 @@
                         <img class="hover-img" src="{{this.picturePath.[1]}}" alt="{{this.name}}" />
                       </a>
                     </div>
-                    <div class="product-action-1">
-                      <form method="POST" action="/add-to-wishlist" class="d-inline">
-                        <input type="hidden" name="productId" value="{{this._id}}">
-                        <button type="submit" class="action-btn hover-up" aria-label="Add To Wishlist"><i class="fi-rs-heart"></i></button>
-                      </form>
+                  <div class="product-action-1">
+                      <a
+                        aria-label="Quick view"
+                        class="action-btn hover-up"
+                        data-bs-toggle="modal"
+                        data-bs-target="#quickViewModal"
+                      ><i class="fi-rs-eye"></i></a>
+                      <a
+                        aria-label="Add To Wishlist"
+                        class="action-btn hover-up"
+                        href="shop-wishlist.html"
+                      ><i class="fi-rs-heart"></i></a>
                     </div>
                     <div class="product-badges product-badges-position product-badges-mrg">
                       <span class="new">{{this.brand}}</span>
@@ -156,15 +161,11 @@
                       <span class="old-price">₹{{this.price}}</span>
                     </div>
                     <div class="product-action-1 show">
-                      <form action="/add-to-cart" method="POST">
-                        <input type="hidden" name="productId" value="{{this._id}}" />
-                        <input type="hidden" name="name" value="{{this.name}}" />
-                        <input type="hidden" name="brand" value="{{this.brand}}" />
-                        <input type="hidden" name="price" value="{{this.discountPrice}}" />
-                        <input type="hidden" name="image" value="{{this.picturePath.[0]}}" />
-                        <input type="hidden" name="quantity" value="1" />
-                        <button type="submit" class="action-btn hover-up"><i class="fi-rs-shopping-bag-add"></i></button>
-                      </form>
+                      <a
+                        aria-label="Add To Cart"
+                        class="action-btn hover-up"
+                        href="shop-cart.html"
+                      ><i class="fi-rs-shopping-bag-add"></i></a>
                     </div>
                   </div>
                 </div>
@@ -186,12 +187,18 @@
                         <img class="hover-img" src="{{this.picturePath.[1]}}" alt="{{this.name}}" />
                       </a>
                     </div>
-                    <div class="product-action-1">
-                      <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
-                      <form method="POST" action="/add-to-wishlist" class="d-inline">
-                        <input type="hidden" name="productId" value="{{this._id}}">
-                        <button type="submit" class="action-btn hover-up" aria-label="Add To Wishlist"><i class="fi-rs-heart"></i></button>
-                      </form>
+                     <div class="product-action-1">
+                      <a
+                        aria-label="Quick view"
+                        class="action-btn hover-up"
+                        data-bs-toggle="modal"
+                        data-bs-target="#quickViewModal"
+                      ><i class="fi-rs-eye"></i></a>
+                      <a
+                        aria-label="Add To Wishlist"
+                        class="action-btn hover-up"
+                        href="shop-wishlist.html"
+                      ><i class="fi-rs-heart"></i></a>
                     </div>
                     <div class="product-badges product-badges-position product-badges-mrg"><span class="best">{{this.brand}}</span></div>
                   </div>
@@ -203,16 +210,12 @@
                       <span>₹{{this.discountPrice}}</span>
                       <span class="old-price">₹{{this.price}}</span>
                     </div>
-                    <div class="product-action-1 show">
-                      <form action="/add-to-cart" method="POST">
-                        <input type="hidden" name="productId" value="{{this._id}}" />
-                        <input type="hidden" name="name" value="{{this.name}}" />
-                        <input type="hidden" name="brand" value="{{this.brand}}" />
-                        <input type="hidden" name="price" value="{{this.discountPrice}}" />
-                        <input type="hidden" name="image" value="{{this.picturePath.[0]}}" />
-                        <input type="hidden" name="quantity" value="1" />
-                        <button type="submit" class="action-btn hover-up"><i class="fi-rs-shopping-bag-add"></i></button>
-                      </form>
+                     <div class="product-action-1 show">
+                      <a
+                        aria-label="Add To Cart"
+                        class="action-btn hover-up"
+                        href="shop-cart.html"
+                      ><i class="fi-rs-shopping-bag-add"></i></a>
                     </div>
                   </div>
                 </div>
