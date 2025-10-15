@@ -33,12 +33,11 @@
                         <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal">
                           <i class="fi-rs-search"></i>
                         </a>
-                        <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/add-to-wishlist?productId={{this._id}}">
-                          <i class="fi-rs-heart"></i>
-                        </a>
-                        <a aria-label="Compare" class="action-btn hover-up" href="#">
-                          <i class="fi-rs-shuffle"></i>
-                        </a>
+                      <form method="POST" action="/add-to-wishlist" class="d-inline">
+                        <input type="hidden" name="productId" value="{{this._id}}">
+                        <button type="submit" class="action-btn hover-up" aria-label="Add To Wishlist"><i class="fi-rs-heart"></i></button>
+                      </form>
+                        
                       </div>
 
                       <!-- Brand Badge -->
@@ -72,9 +71,15 @@
                         {{/if}}
                       </div>
                       <div class="product-action-1 show">
-                        <a aria-label="Add To Cart" class="action-btn hover-up" href="/add-to-cart?productId={{this._id}}">
-                          <i class="fi-rs-shopping-bag-add"></i>
-                        </a>
+                         <form action="/add-to-cart" method="POST">
+                        <input type="hidden" name="productId" value="{{this._id}}" />
+                        <input type="hidden" name="name" value="{{this.name}}" />
+                        <input type="hidden" name="brand" value="{{this.brand}}" />
+                        <input type="hidden" name="price" value="{{this.discountPrice}}" />
+                        <input type="hidden" name="image" value="{{this.picturePath.[0]}}" />
+                        <input type="hidden" name="quantity" value="1" />
+                        <button type="submit" class="action-btn hover-up"><i class="fi-rs-shopping-bag-add"></i></button>
+                      </form>
                       </div>
                     </div>
 
