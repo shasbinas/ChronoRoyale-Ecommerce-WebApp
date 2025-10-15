@@ -11,11 +11,67 @@ export const adminLoginPage = async (req, res) => {
 };
 
 export const adminDashboardPage = async (req, res) => {
-  console.log("Admin dashboard route working 🚀");
-  //   res.status(200).json({ message: "Admin dashboard route working 🚀" });
+  try {
+    const db = await connectToDatabase(process.env.DATABASE);
 
-  res.render("admin/dashboard", { layout: "admin", title: "Admin Dashboard" });
+    // Current month range
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+    const now = new Date();
+
+    // 1️⃣ Total Delivered Orders
+    const deliveredOrdersCount = await db
+      .collection(collection.ORDERS_COLLECTION)
+      .countDocuments({
+        status: "Delivered",
+        createdAt: { $gte: startOfMonth, $lte: now },
+      });
+
+    // 2️⃣ Total Revenue from Delivered Orders
+    const revenueData = await db
+      .collection(collection.ORDERS_COLLECTION)
+      .aggregate([
+        { $match: { status: "Delivered", createdAt: { $gte: startOfMonth, $lte: now } } },
+        { $group: { _id: null, totalRevenue: { $sum: "$total" } } },
+      ])
+      .toArray();
+    const totalRevenue = revenueData[0]?.totalRevenue || 0;
+
+    // 3️⃣ Total Products Sold
+    const productData = await db
+      .collection(collection.ORDERS_COLLECTION)
+      .aggregate([
+        { $match: { status: "Delivered", createdAt: { $gte: startOfMonth, $lte: now } } },
+        { $unwind: "$cart" },
+        { $group: { _id: null, totalProductsSold: { $sum: "$cart.quantity" } } },
+      ])
+      .toArray();
+    const totalProductsSold = productData[0]?.totalProductsSold || 0;
+
+    // 4️⃣ Total Users
+    const usersData = await db
+      .collection(collection.ORDERS_COLLECTION)
+      .distinct("userId", { createdAt: { $gte: startOfMonth, $lte: now } });
+    const totalUsers = usersData.length;
+
+    // Render dashboard
+    res.render("admin/dashboard", {
+      layout: "admin",
+      title: "Admin Dashboard",
+      totalRevenue: totalRevenue.toFixed(2),
+      deliveredOrdersCount,
+      totalProductsSold,
+      totalUsers,
+    });
+  } catch (error) {
+    console.error("Error loading admin dashboard:", error);
+    res.status(500).send("Something went wrong loading the dashboard.");
+  }
 };
+
+
+
 
 export const adminUsersListPage = async (req, res) => {
   // console.log("Admin UserstList route working 🚀");
