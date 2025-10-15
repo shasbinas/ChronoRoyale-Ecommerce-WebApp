@@ -9,18 +9,35 @@
 
   <!-- Action Dropdown -->
   <div class="dropdown">
-    <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-      Action
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionDropdown">
-      <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Pending">Pending</a></li>
-      <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Processing">Processing</a></li>
-      <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Shipped">Shipped</a></li>
-      <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Out for Delivery">Out for Delivery</a></li>
-      <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Delivered">Delivered</a></li>
-      <li><a class="dropdown-item text-danger" href="/admin/update-order-status/{{order._id}}/Cancelled">Cancelled</a></li>
-    </ul>
-  </div>
+  <button class="btn btn-primary btn-sm dropdown-toggle shadow-sm" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 8px; font-weight: 500; transition: 0.3s;">
+    Action
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="actionDropdown" style="border-radius: 8px; border: 1px solid #e0e0e0;">
+    <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Pending">Pending</a></li>
+    <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Processing">Processing</a></li>
+    <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Shipped">Shipped</a></li>
+    <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Out for Delivery">Out for Delivery</a></li>
+    <li><a class="dropdown-item" href="/admin/update-order-status/{{order._id}}/Delivered">Delivered</a></li>
+    <li><a class="dropdown-item text-danger" href="/admin/update-order-status/{{order._id}}/Cancelled">Cancelled</a></li>
+  </ul>
+</div>
+
+<style>
+  .dropdown-item {
+    transition: 0.2s;
+  }
+
+  .dropdown-item:hover {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+
+  .btn-primary:hover {
+    background-color: #1d6edb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
 </div>
 
    
@@ -33,7 +50,7 @@
     </header>
     <div class="card-body" style="padding: 15px; color: var(--bs-white);">
       <p><strong>Name:</strong> <span style="color: var(--bs-white);">{{order.address.billingName}}</span></p>
-      <p><strong>Email:</strong> <span style="color: var(--bs-white);">{{order.email}}</span></p>
+      <p><strong>Paymet Method:</strong> <span style="color: var(--bs-white);">{{order.paymentMethod}}</span></p>
       <p><strong>Address:</strong> <span style="color: var(--bs-white);">{{order.address.address}}, {{order.address.city}}, <p><strong>Status:</strong> 
 
   {{#if (eq order.status "Pending")}}
