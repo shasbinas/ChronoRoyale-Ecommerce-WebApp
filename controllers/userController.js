@@ -680,6 +680,7 @@ export const updateAccount = async (req, res) => {
 
 
 export const addToWishlist = async (req, res) => {
+  console.log(">>>>>>>>>>>>>>>>>>>>add to whislidt>>>>>>>>");
   try {
     const userId = req.loggedInUser?.id;
     const { productId } = req.body; // only productId

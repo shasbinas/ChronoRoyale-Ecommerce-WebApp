@@ -48,7 +48,7 @@
             <tr>
               <th>#ID</th>
               <th>Name</th>
-              <th>Email</th>
+              <th>Paymet Method</th>
               <th>Total</th>
               <th>Status</th>
               <th>Date</th>
@@ -60,7 +60,9 @@
               <tr>
                 <td>{{this._id}}</td>
                 <td><b>{{this.address.billingName}}</b></td>
-                <td>{{this.userEmail}}</td>
+                <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>  
+                  <span class="badge badge-pill badge-soft-warning">{{this.paymentMethod}}</span></td>
+         
                 <td>${{this.totalAmount}}</td>
 
                 <!-- Status Badge -->
