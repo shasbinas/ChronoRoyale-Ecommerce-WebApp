@@ -1,9 +1,8 @@
 <main class="main">
 
-  {{! banner section }}
+  {{!-- Banner Section --}}
   <section class="home-slider position-relative pt-50">
     <div class="hero-slider-1 dot-style-1 dot-style-1-position-1">
-
       {{#each banners}}
         <div class="single-hero-slider single-animation-wrap">
           <div class="container">
@@ -14,139 +13,61 @@
                   <h2 class="animated fw-900">{{titleMain}}</h2>
                   <h1 class="animated fw-900 text-brand">{{highlight}}</h1>
                   <p class="animated">{{description}}</p>
-                  <a class="animated btn btn-brush btn-brush-3" href="{{link}}">
-                    Shop Now
-                  </a>
+                  <a class="animated btn btn-brush btn-brush-3" href="{{link}}">Shop Now</a>
                 </div>
               </div>
               <div class="col-lg-7 col-md-6">
                 <div class="single-slider-img single-slider-img-{{id}}">
-                  <img
-                    class="animated slider-1-1"
-                    src="{{image}}"
-                    alt="{{highlight}}"
-                  />
+                  <img class="animated slider-1-1" src="{{image}}" alt="{{highlight}}" />
                 </div>
               </div>
             </div>
           </div>
         </div>
       {{/each}}
-
     </div>
     <div class="slider-arrow hero-slider-1-arrow"></div>
   </section>
 
-  {{! card }}
+  {{!-- Features Cards --}}
   <section class="featured section-padding position-relative">
     <div class="container">
       <div class="row">
-        <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
-          <div class="banner-features wow fadeIn animated hover-up">
-            <img src="/userAssets/imgs/theme/icons/feature-1.png" alt="" />
-            <h4 class="bg-1">Free Shipping</h4>
+        {{#each features}}
+          <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
+            <div class="banner-features wow fadeIn animated hover-up">
+              <img src="{{this.icon}}" alt="" />
+              <h4 class="bg-{{this.bgClass}}">{{this.text}}</h4>
+            </div>
           </div>
-        </div>
-        <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
-          <div class="banner-features wow fadeIn animated hover-up">
-            <img src="/userAssets/imgs/theme/icons/feature-2.png" alt="" />
-            <h4 class="bg-3">Online Order</h4>
-          </div>
-        </div>
-        <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
-          <div class="banner-features wow fadeIn animated hover-up">
-            <img src="/userAssets/imgs/theme/icons/feature-3.png" alt="" />
-            <h4 class="bg-2">Save Money</h4>
-          </div>
-        </div>
-        <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
-          <div class="banner-features wow fadeIn animated hover-up">
-            <img src="/userAssets/imgs/theme/icons/feature-4.png" alt="" />
-            <h4 class="bg-4">Promotions</h4>
-          </div>
-        </div>
-        <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
-          <div class="banner-features wow fadeIn animated hover-up">
-            <img src="/userAssets/imgs/theme/icons/feature-5.png" alt="" />
-            <h4 class="bg-5">Happy Sell</h4>
-          </div>
-        </div>
-        <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
-          <div class="banner-features wow fadeIn animated hover-up">
-            <img src="/userAssets/imgs/theme/icons/feature-6.png" alt="" />
-            <h4 class="bg-6">24/7 Support</h4>
-          </div>
-        </div>
+        {{/each}}
       </div>
     </div>
   </section>
 
-  {{! product tabs section }}
-  <section
-    class="product-tabs section-padding position-relative wow fadeIn animated"
-  >
+  {{!-- Product Tabs Section --}}
+  <section class="product-tabs section-padding position-relative wow fadeIn animated">
     <div class="bg-square"></div>
     <div class="container">
       <div class="tab-header">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
-            <button
-              class="nav-link active"
-              id="nav-tab-one"
-              data-bs-toggle="tab"
-              data-bs-target="#tab-one"
-              type="button"
-              role="tab"
-              aria-controls="tab-one"
-              aria-selected="true"
-            >
-              Featured
-            </button>
+            <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="nav-tab-two"
-              data-bs-toggle="tab"
-              data-bs-target="#tab-two"
-              type="button"
-              role="tab"
-              aria-controls="tab-two"
-              aria-selected="false"
-            >
-              Men
-            </button>
+            <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Men</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="nav-tab-three"
-              data-bs-toggle="tab"
-              data-bs-target="#tab-three"
-              type="button"
-              role="tab"
-              aria-controls="tab-three"
-              aria-selected="false"
-            >
-              Women
-            </button>
+            <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">Women</button>
           </li>
         </ul>
-        <a href="/products" class="view-more d-none d-md-flex">View More<i
-            class="fi-rs-angle-double-small-right"
-          ></i></a>
+        <a href="/products" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
       </div>
-      <!--End nav-tabs-->
+
       <div class="tab-content wow fadeIn animated" id="myTabContent">
 
-        
-
-        <div
-          class="tab-pane fade show active"
-          id="tab-one"
-          role="tabpanel"
-          aria-labelledby="tab-one"
-        >
+        {{!-- Featured Products --}}
+        <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
           <div class="row product-grid-4">
             {{#each featured}}
               <div class="col-lg-3 col-md-4 col-12 col-sm-6">
@@ -154,40 +75,22 @@
                   <div class="product-img-action-wrap">
                     <div class="product-img product-img-zoom">
                       <a href="/productDetails?id={{this._id}}">
-                      {{!-- <p>{{this._id}}</p> --}}
-                        <img
-                          class="default-img"
-                          src="{{this.picturePath.[0]}}"
-                          alt=""
-                        />
-                        <img
-                          class="hover-img"
-                          src="{{this.picturePath.[1]}}"
-                          alt=""
-                        />
+                        <img class="default-img" src="{{this.picturePath.[0]}}" alt="{{this.name}}" />
+                        <img class="hover-img" src="{{this.picturePath.[1]}}" alt="{{this.name}}" />
                       </a>
                     </div>
                     <div class="product-action-1">
-  <!-- Quick View Button -->
-  <a
-    aria-label="Quick view"
-    class="action-btn hover-up"
-    data-bs-toggle="modal"
-    data-bs-target="#quickViewModal"
-  ><i class="fi-rs-eye"></i></a>
-
-  <!-- Add to Wishlist Button -->
-  <form method="POST" action="/add-to-wishlist" class="d-inline">
-    <input type="hidden" name="productId" value="{{this._id}}">
-    <button type="submit" class="action-btn hover-up" aria-label="Add To Wishlist">
-      <i class="fi-rs-heart"></i>
-    </button>
-  </form>
-</div>
-
-                    <div
-                      class="product-badges product-badges-position product-badges-mrg"
-                    >
+                      <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                        <i class="fi-rs-eye"></i>
+                      </a>
+                      <form method="POST" action="/add-to-wishlist" class="d-inline">
+                        <input type="hidden" name="productId" value="{{this._id}}">
+                        <button type="submit" class="action-btn hover-up" aria-label="Add To Wishlist">
+                          <i class="fi-rs-heart"></i>
+                        </button>
+                      </form>
+                    </div>
+                    <div class="product-badges product-badges-position product-badges-mrg">
                       <span class="hot">{{this.brand}}</span>
                     </div>
                   </div>
@@ -195,220 +98,154 @@
                     <div class="product-category">
                       <a href="shop-grid-right.html">{{this.category}}</a>
                     </div>
-                    <h2>
-                      <a href="shop-product-right.html">{{this.name}}   </a>
-                    </h2>
-                    <div class= title="90%">
-                      <span>
-                        <span>{{stockStatus}}</span>
-                      </span>
+                    <h2><a href="/productDetails?id={{this._id}}">{{this.name}}</a></h2>
+                    <div class="title" title="Stock Status">
+                      <span>{{this.stockStatus}}</span>
                     </div>
                     <div class="product-price">
-                      <span>{{this.discountPrice}}  </span>
-                      <span class="old-price">{{this.price}}  </span>
+                      <span>₹{{this.discountPrice}}</span>
+                      <span class="old-price">₹{{this.price}}</span>
                     </div>
                     <div class="product-action-1 show">
-                      <a
-                        aria-label="Add To Cart"
-                        class="action-btn hover-up"
-                        href="shop-cart.html"
-                      ><i class="fi-rs-shopping-bag-add"></i></a>
+                      <form action="/add-to-cart" method="POST">
+                        <input type="hidden" name="productId" value="{{this._id}}" />
+                        <input type="hidden" name="name" value="{{this.name}}" />
+                        <input type="hidden" name="brand" value="{{this.brand}}" />
+                        <input type="hidden" name="price" value="{{this.discountPrice}}" />
+                        <input type="hidden" name="image" value="{{this.picturePath.[0]}}" />
+                        <input type="hidden" name="quantity" value="1" />
+                        <button type="submit" class="action-btn hover-up"><i class="fi-rs-shopping-bag-add"></i></button>
+                      </form>
                     </div>
                   </div>
                 </div>
               </div>
             {{/each}}
           </div>
-          <!--End product-grid-4-->
         </div>
-        <!--En tab one (Featured)-->
 
-
-        {{!-- men --}}
-
-        <div
-          class="tab-pane fade"
-          id="tab-two"
-          role="tabpanel"
-          aria-labelledby="tab-two"
-        >
+        {{!-- Men Products --}}
+        <div class="tab-pane fade" id="tab-two" role="tabpanel" aria-labelledby="tab-two">
           <div class="row product-grid-4">
             {{#each men}}
               <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                 <div class="product-cart-wrap mb-30">
                   <div class="product-img-action-wrap">
                     <div class="product-img product-img-zoom">
-                      <a href="/productDetails?id={{this._id}}" >
-                        <img
-                          class="default-img"
-                          src="{{this.picturePath.[0]}}"
-                          alt=""
-                        />
-                        <img
-                          class="hover-img"
-                          src="{{this.picturePath.[1]}}"
-                          alt=""
-                        />
+                      <a href="/productDetails?id={{this._id}}">
+                        <img class="default-img" src="{{this.picturePath.[0]}}" alt="{{this.name}}" />
+                        <img class="hover-img" src="{{this.picturePath.[1]}}" alt="{{this.name}}" />
                       </a>
                     </div>
                     <div class="product-action-1">
-
-                      <a
-                        aria-label="Add To Wishlist"
-                        class="action-btn hover-up"
-                        href="shop-wishlist.html"
-                      ><i class="fi-rs-heart"></i></a>
+                      <form method="POST" action="/add-to-wishlist" class="d-inline">
+                        <input type="hidden" name="productId" value="{{this._id}}">
+                        <button type="submit" class="action-btn hover-up" aria-label="Add To Wishlist"><i class="fi-rs-heart"></i></button>
+                      </form>
                     </div>
-                    <div
-                      class="product-badges product-badges-position product-badges-mrg"
-                    >
+                    <div class="product-badges product-badges-position product-badges-mrg">
                       <span class="new">{{this.brand}}</span>
                     </div>
                   </div>
                   <div class="product-content-wrap">
-                    <div class="product-category">
-                      <a href="shop-grid-right.html">{{this.brand}}  </a>
-                    </div>
-                    <h2>
-                      <a href="shop-product-right.html">{{this.name}}  </a>
-                    </h2>
-                    <div class="rating-result" title="90%">
-                      <span>
-                        <span>50%</span>
-                      </span>
-                    </div>
+                    <div class="product-category"><a href="shop-grid-right.html">{{this.category}}</a></div>
+                    <h2><a href="/productDetails?id={{this._id}}">{{this.name}}</a></h2>
+                    <div class= title="50%"><span><span>{{this.stockStatus}}</span></span></div>
                     <div class="product-price">
-                      <span>{{this.discountPrice}}   </span>
-                      <span class="old-price">{{this.price}}  </span>
+                      <span>₹{{this.discountPrice}}</span>
+                      <span class="old-price">₹{{this.price}}</span>
                     </div>
                     <div class="product-action-1 show">
-                      <a
-                        aria-label="Add To Cart"
-                        class="action-btn hover-up"
-                        href="shop-cart.html"
-                      ><i class="fi-rs-shopping-bag-add"></i></a>
+                      <form action="/add-to-cart" method="POST">
+                        <input type="hidden" name="productId" value="{{this._id}}" />
+                        <input type="hidden" name="name" value="{{this.name}}" />
+                        <input type="hidden" name="brand" value="{{this.brand}}" />
+                        <input type="hidden" name="price" value="{{this.discountPrice}}" />
+                        <input type="hidden" name="image" value="{{this.picturePath.[0]}}" />
+                        <input type="hidden" name="quantity" value="1" />
+                        <button type="submit" class="action-btn hover-up"><i class="fi-rs-shopping-bag-add"></i></button>
+                      </form>
                     </div>
                   </div>
                 </div>
               </div>
             {{/each}}
           </div>
-          <!--End product-grid-4-->
         </div>
-        <!--En tab two (Popular)-->
 
-
-       {{!-- women --}}
-        <div
-          class="tab-pane fade"
-          id="tab-three"
-          role="tabpanel"
-          aria-labelledby="tab-three"
-        >
+        {{!-- Women Products --}}
+        <div class="tab-pane fade" id="tab-three" role="tabpanel" aria-labelledby="tab-three">
           <div class="row product-grid-4">
             {{#each women}}
               <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                 <div class="product-cart-wrap mb-30">
                   <div class="product-img-action-wrap">
                     <div class="product-img product-img-zoom">
-                      <a href="/productDetails?id={{this._id}}" >
-                        <img
-                          class="hover-img"
-                          src="{{this.picturePath.[0]}}"
-                          alt=""
-                        />
-                        <img
-                          class="default-img"
-                          src="{{this.picturePath.[1]}}"
-                          alt=""
-                        />
+                      <a href="/productDetails?id={{this._id}}">
+                        <img class="default-img" src="{{this.picturePath.[0]}}" alt="{{this.name}}" />
+                        <img class="hover-img" src="{{this.picturePath.[1]}}" alt="{{this.name}}" />
                       </a>
                     </div>
                     <div class="product-action-1">
-                      <a
-                        aria-label="Quick view"
-                        class="action-btn hover-up"
-                        data-bs-toggle="modal"
-                        data-bs-target="#quickViewModal"
-                      ><i class="fi-rs-eye"></i></a>
-                      <a
-                        aria-label="Add To Wishlist"
-                        class="action-btn hover-up"
-                        href="shop-wishlist.html"
-                      ><i class="fi-rs-heart"></i></a>
+                      <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                      <form method="POST" action="/add-to-wishlist" class="d-inline">
+                        <input type="hidden" name="productId" value="{{this._id}}">
+                        <button type="submit" class="action-btn hover-up" aria-label="Add To Wishlist"><i class="fi-rs-heart"></i></button>
+                      </form>
                     </div>
-                    <div
-                      class="product-badges product-badges-position product-badges-mrg"
-                    >
-                      <span class="best">{{this.brand}}</span>
-                    </div>
+                    <div class="product-badges product-badges-position product-badges-mrg"><span class="best">{{this.brand}}</span></div>
                   </div>
                   <div class="product-content-wrap">
-                    <div class="product-category">
-                      <a href="shop-grid-right.html">{{this.brand}}  </a>
-                    </div>
-                    <h2>
-                      <a href="shop-product-right.html">{{this.name}}</a>
-                    </h2>
-                    <div class="rating-result" title="90%">
-                      <span>
-                        <span>95%</span>
-                      </span>
-                    </div>
+                    <div class="product-category"><a href="shop-grid-right.html">{{this.category}}</a></div>
+                    <h2><a href="/productDetails?id={{this._id}}">{{this.name}}</a></h2>
+                    <div class= title="95%"><span><span>{{this.stockStatus}}</span></span></div>
                     <div class="product-price">
-                      <span>{{this.discountPrice}}  </span>
-                      <span class="old-price">{{this.price}} </span>
+                      <span>₹{{this.discountPrice}}</span>
+                      <span class="old-price">₹{{this.price}}</span>
                     </div>
                     <div class="product-action-1 show">
-                      <a
-                        aria-label="Add To Cart"
-                        class="action-btn hover-up"
-                        href="shop-cart.html"
-                      ><i class="fi-rs-shopping-bag-add"></i></a>
+                      <form action="/add-to-cart" method="POST">
+                        <input type="hidden" name="productId" value="{{this._id}}" />
+                        <input type="hidden" name="name" value="{{this.name}}" />
+                        <input type="hidden" name="brand" value="{{this.brand}}" />
+                        <input type="hidden" name="price" value="{{this.discountPrice}}" />
+                        <input type="hidden" name="image" value="{{this.picturePath.[0]}}" />
+                        <input type="hidden" name="quantity" value="1" />
+                        <button type="submit" class="action-btn hover-up"><i class="fi-rs-shopping-bag-add"></i></button>
+                      </form>
                     </div>
                   </div>
                 </div>
               </div>
             {{/each}}
           </div>
-          <!--End product-grid-4-->
         </div>
-        <!--En tab three (New added)-->
-      </div>
-      <!--End tab-content-->
 
+      </div>
     </div>
   </section>
 
-  {{! small banner }}
+  {{!-- Small Banner --}}
   <section class="banner-2 section-padding pb-0">
     <div class="container">
       <div class="banner-img banner-big wow fadeIn animated f-none">
         <img src="/userAssets/imgs/banner/banner-4.png" alt="" />
         <div class="banner-text d-md-block d-none">
           <h4 class="mb-15 mt-40 text-brand">Repair Services</h4>
-          <h1 class="fw-600 mb-20">
-            We're an Apple
-            <br />Authorised Service Provider
-          </h1>
-          <a href="shop-grid-right.html" class="btn">Learn More
-            <i class="fi-rs-arrow-right"></i></a>
+          <h1 class="fw-600 mb-20">We're an Apple <br />Authorised Service Provider</h1>
+          <a href="shop-grid-right.html" class="btn">Learn More<i class="fi-rs-arrow-right"></i></a>
         </div>
       </div>
     </div>
   </section>
 
-  {{! popular brands }}
+  {{!-- Popular Brands --}}
   <section class="popular-categories section-padding mt-15 mb-25">
     <div class="container wow fadeIn animated">
       <h3 class="section-title mb-20"><span>Popular</span> Brands</h3>
       <div class="carausel-6-columns-cover position-relative">
-        <div
-          class="slider-arrow slider-arrow-2 carausel-6-columns-arrow"
-          id="carausel-6-columns-arrows"
-        ></div>
+        <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-arrows"></div>
         <div class="carausel-6-columns" id="carausel-6-columns">
-
           {{#each brands}}
             <div class="col-lg-2 col-md-3 col-6 mb-4">
               <div class="card-1">
@@ -417,172 +254,92 @@
                     <img src="{{this.image}}" alt="{{this.name}}" />
                   </a>
                 </figure>
-                <h5 class="text-center mt-2">
-                  <a href="{{this.link}}">{{this.name}}</a>
-                </h5>
+                <h5 class="text-center mt-2"><a href="{{this.link}}">{{this.name}}</a></h5>
               </div>
             </div>
           {{/each}}
-
         </div>
       </div>
     </div>
   </section>
 
-  {{! new arrivals }}
+  {{!-- New Arrivals --}}
   <section class="section-padding">
     <div class="container wow fadeIn animated">
       <h3 class="section-title mb-20"><span>New</span> Arrivals</h3>
       <div class="carausel-6-columns-cover position-relative">
-        <div
-          class="slider-arrow slider-arrow-2 carausel-6-columns-arrow"
-          id="carausel-6-columns-2-arrows"
-        ></div>
-        <div
-          class="carausel-6-columns carausel-arrow-center"
-          id="carausel-6-columns-2"
-
-               <div class="row related-products">
- {{#each newProducts}}
-  <div class="col-lg-3 col-md-4 col-sm-6">
-    <div class="product-cart-wrap small hover-up">
-
-      <!-- Product Image -->
-      <div class="product-img-action-wrap">
-        <div class="product-img product-img-zoom">
-          <a href="/productDetails?id={{this._id}}">
-            {{#if this.picturePath}}
-              <img class="default-img" src="{{this.picturePath.[0]}}" alt="{{this.name}}" />
-              <img class="hover-img" src="{{this.picturePath.[0]}}" alt="{{this.name}}" />
-            {{else}}
-              <img class="default-img" src="/userAssets/imgs/default-product.png" alt="No image available" />
-              <img class="hover-img" src="/userAssets/imgs/default-product.png" alt="No image available" />
-            {{/if}}
-          </a>
-        </div>
-
-        <!-- Hover Actions -->
-       <div class="product-action-1">
-  <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal">
-    <i class="fi-rs-eye"></i>
-  </a>
-
-  <form method="POST" action="/add-to-wishlist" class="d-inline">
-    <input type="hidden" name="productId" value="{{this._id}}">
-    <button type="submit" class="action-btn small hover-up" aria-label="Add To Wishlist">
-      <i class="fi-rs-heart"></i>
-    </button>
-  </form>
-</div>
-
-
-        <!-- Badge -->
-        {{#if this.badge}}
-          <div class="product-badges product-badges-position product-badges-mrg">
-            <span class="{{this.badge.type}}">{{this.badge.text}}</span>
-          </div>
-        {{/if}}
-      </div>
-
-      <!-- Product Info -->
-      <div class="product-content-wrap">
-        <h2>
-          <a href="/productDetails?id={{this._id}}">{{this.name}}</a>
-        </h2>
-        <div class="rating-result" title="{{this.rating}}%">
-          <span><span>{{this.rating}}%</span>50%</span>
-        </div>
-        <div class="product-price">
-          <span>₹{{this.price}}</span>
-          {{#if this.oldPrice}}
-            <span class="old-price">₹{{this.oldPrice}}</span>
-          {{/if}}
-        </div>
-      </div>
-
-    </div>
-  </div>
-{{/each}}
-
-</div>
-        >
- 
-
-          <!--End product-cart-wrap-2-->
+        <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-2-arrows"></div>
+        <div class="carausel-6-columns carausel-arrow-center" id="carausel-6-columns-2">
+          {{#each newProducts}}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="product-cart-wrap small hover-up">
+                <div class="product-img-action-wrap">
+                  <div class="product-img product-img-zoom">
+                    <a href="/productDetails?id={{this._id}}">
+                      {{#if this.picturePath}}
+                        <img class="default-img" src="{{this.picturePath.[0]}}" alt="{{this.name}}" />
+                        <img class="hover-img" src="{{this.picturePath.[1]}}" alt="{{this.name}}" />
+                      {{else}}
+                        <img class="default-img" src="/userAssets/imgs/default-product.png" alt="No image available" />
+                        <img class="hover-img" src="/userAssets/imgs/default-product.png" alt="No image available" />
+                      {{/if}}
+                    </a>
+                  </div>
+                  <div class="product-action-1">
+                    <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                    <form method="POST" action="/add-to-wishlist" class="d-inline">
+                      <input type="hidden" name="productId" value="{{this._id}}">
+                      <button type="submit" class="action-btn small hover-up" aria-label="Add To Wishlist"><i class="fi-rs-heart"></i></button>
+                    </form>
+                  </div>
+                  {{#if this.badge}}
+                    <div class="product-badges product-badges-position product-badges-mrg">
+                      <span class="{{this.badge.type}}">{{this.badge.text}}</span>
+                    </div>
+                  {{/if}}
+                </div>
+                <div class="product-content-wrap">
+                  <h2><a href="/productDetails?id={{this._id}}">{{this.name}}</a></h2>
+                  <div class="rating-result" title="{{this.rating}}%"><span><span>{{this.rating}}%</span></span></div>
+                  <div class="product-price">
+                    <span>₹{{this.price}}</span>
+                    {{#if this.oldPrice}}<span class="old-price">₹{{this.oldPrice}}</span>{{/if}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {{/each}}
         </div>
       </div>
     </div>
   </section>
 
-  {{! deal of the day }}
+  {{!-- Deals of the Day --}}
   <section class="deals section-padding">
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 deal-co">
-          <div
-            class="deal wow fadeIn animated mb-md-4 mb-sm-4 mb-lg-0"
-            style="
-                  background-image: url('/userAssets/imgs/banner/menu-banner-7.jpg');
-                "
-          >
-            <div class="deal-top">
-              <h2 class="text-brand">Deal of the Day</h2>
-              <h5>Limited quantities.</h5>
-            </div>
-            <div class="deal-content">
-              <h6 class="product-title">
-                <a href="shop-product-right.html">Summer Collection New Morden
-                  Design</a>
-              </h6>
-              <div class="product-price">
-                <span class="new-price">$139.00</span><span
-                  class="old-price"
-                >$160.99</span>
+        {{#each deals}}
+          <div class="col-lg-6 deal-co">
+            <div class="deal wow fadeIn animated mb-md-4 mb-sm-4 mb-lg-0" style="background-image: url('{{this.image}}');">
+              <div class="deal-top">
+                <h2 class="text-brand">{{this.title}}</h2>
+                <h5>{{this.subtitle}}</h5>
+              </div>
+              <div class="deal-content">
+                <h6 class="product-title"><a href="{{this.link}}">{{this.productName}}</a></h6>
+                <div class="product-price">
+                  <span class="new-price">{{this.newPrice}}</span>
+                  <span class="old-price">{{this.oldPrice}}</span>
+                </div>
+              </div>
+              <div class="deal-bottom">
+                <p>Hurry Up! Offer End In:</p>
+                <div class="deals-countdown" data-countdown="{{this.countdown}}"></div>
+                <a href="{{this.link}}" class="btn hover-up">Shop Now<i class="fi-rs-arrow-right"></i></a>
               </div>
             </div>
-            <div class="deal-bottom">
-              <p>Hurry Up! Offer End In:</p>
-              <div
-                class="deals-countdown"
-                data-countdown="2025/03/25 00:00:00"
-              ></div>
-              <a href="shop-grid-right.html" class="btn hover-up">Shop Now
-                <i class="fi-rs-arrow-right"></i></a>
-            </div>
           </div>
-        </div>
-        <div class="col-lg-6 deal-co">
-          <div
-            class="deal wow fadeIn animated"
-            style="
-                  background-image: url('/userAssets/imgs/banner/menu-banner-8.jpg');
-                "
-          >
-            <div class="deal-top">
-              <h2 class="text-brand">Men Clothing</h2>
-              <h5>Shirt & Bag</h5>
-            </div>
-            <div class="deal-content">
-              <h6 class="product-title">
-                <a href="shop-product-right.html">Try something new on vacation</a>
-              </h6>
-              <div class="product-price">
-                <span class="new-price">$178.00</span><span
-                  class="old-price"
-                >$256.99</span>
-              </div>
-            </div>
-            <div class="deal-bottom">
-              <p>Hurry Up! Offer End In:</p>
-              <div
-                class="deals-countdown"
-                data-countdown="2026/03/25 00:00:00"
-              ></div>
-              <a href="shop-grid-right.html" class="btn hover-up">Shop Now
-                <i class="fi-rs-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
+        {{/each}}
       </div>
     </div>
   </section>

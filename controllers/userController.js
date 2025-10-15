@@ -187,34 +187,51 @@ export const cartPage = async (req, res) => {
 export const addToCart = async (req, res) => {
   try {
     const userId = req.loggedInUser?.id;
-    const { productId, name, brand, price, image, quantity } = req.body;
+    const { productId, name, brand, price, image, quantity, redirect } = req.body;
 
     const db = await connectToDatabase(process.env.DATABASE);
     const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
+    const product = await db.collection(collection.PRODUCTS_COLLECTION)
+      .findOne({ _id: new ObjectId(String(productId)) });
 
+    if (!product) {
+      return res.render("user/productDetails", {
+        product: null,
+        error: "Product not found.",
+      });
+    }
+
+    const qty = parseInt(quantity);
     const existingItem = user.cart.find(item => item.productId === productId);
+    const totalRequested = existingItem ? existingItem.quantity + qty : qty;
 
+    if (totalRequested > product.stock) {
+      return res.render("user/productDetails", {
+        product,
+        error: `Cannot add ${qty} items. Only ${product.stock - (existingItem ? existingItem.quantity : 0)} left in stock.`,
+      });
+    }
+
+    // Add or update cart
     if (existingItem) {
-      // Increase quantity if already in cart
       await db.collection(collection.USERS_COLLECTION).updateOne(
         { userId, "cart.productId": productId },
         { 
           $inc: { 
-            "cart.$.quantity": parseInt(quantity), 
-            "cart.$.total": parseFloat(price) * parseInt(quantity) 
+            "cart.$.quantity": qty, 
+            "cart.$.total": parseFloat(price) * qty 
           } 
         }
       );
     } else {
-      // Add new item to cart
       const newItem = {
         productId,
         name,
         brand,
         price: parseFloat(price),
-        quantity: parseInt(quantity),
+        quantity: qty,
         image,
-        total: parseFloat(price) * parseInt(quantity),
+        total: parseFloat(price) * qty,
         addedAt: new Date(),
       };
 
@@ -224,18 +241,22 @@ export const addToCart = async (req, res) => {
       );
     }
 
-    // ✅ Remove item from wishlist
+    // Remove from wishlist if present
     await db.collection(collection.USERS_COLLECTION).updateOne(
       { userId },
       { $pull: { wishlist: { productId } } }
     );
 
-    res.redirect("/cart");
+    // Redirect to source page or cart by default
+    res.redirect(redirect || "/cart");
+
   } catch (error) {
     console.error(error);
     res.redirect("/wishlist");
   }
 };
+
+
 
 
 //clear cart
