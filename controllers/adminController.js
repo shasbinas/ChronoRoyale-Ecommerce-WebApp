@@ -55,6 +55,19 @@ export const adminDashboardPage = async (req, res) => {
       .distinct("userId", { createdAt: { $gte: startOfMonth, $lte: now } });
     const totalUsers = usersData.length;
 
+    // 5️⃣ Donut Chart Data: Order Status Counts
+    const statusData = await db
+      .collection(collection.ORDERS_COLLECTION)
+      .aggregate([
+        { $match: { createdAt: { $gte: startOfMonth, $lte: now } } },
+        { $group: { _id: "$status", count: { $sum: 1 } } },
+      ])
+      .toArray();
+
+    // Transform to arrays for Chart.js
+    const donutLabels = statusData.map(item => item._id); // ["Delivered", "Pending", ...]
+    const donutData = statusData.map(item => item.count); // [5, 2, ...]
+
     // Render dashboard
     res.render("admin/dashboard", {
       layout: "admin",
@@ -63,12 +76,15 @@ export const adminDashboardPage = async (req, res) => {
       deliveredOrdersCount,
       totalProductsSold,
       totalUsers,
+      donutLabels: JSON.stringify(donutLabels),
+      donutData: JSON.stringify(donutData)
     });
   } catch (error) {
     console.error("Error loading admin dashboard:", error);
     res.status(500).send("Something went wrong loading the dashboard.");
   }
 };
+
 
 
 

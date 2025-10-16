@@ -47,5 +47,9 @@ adminRoutes.get("/update-order-status/:id/:status", updateOrderStatus);
 
 adminRoutes.get("/orders/:id", adminOrderDetailsPage);
 
+// adminRoutes.get("/orders/:id", adminOrderDetailsPage);
+
+
+
 
 export default adminRoutes;
