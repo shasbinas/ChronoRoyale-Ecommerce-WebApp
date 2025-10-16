@@ -205,7 +205,7 @@ export const cartPage = async (req, res) => {
 export const addToCart = async (req, res) => {
   try {
     const userId = req.loggedInUser?.id;
-    const { productId, name, brand, price, image, quantity, redirect } = req.body;
+    const { productId, quantity, redirect } = req.body;
 
     const db = await connectToDatabase(process.env.DATABASE);
     const user = await db.collection(collection.USERS_COLLECTION).findOne({ userId });
@@ -220,7 +220,7 @@ export const addToCart = async (req, res) => {
     }
 
     const qty = parseInt(quantity);
-    const existingItem = user.cart.find(item => item.productId === productId);
+    const existingItem = user.cart?.find(item => item.productId === productId);
     const totalRequested = existingItem ? existingItem.quantity + qty : qty;
 
     if (totalRequested > product.stock) {
@@ -230,26 +230,30 @@ export const addToCart = async (req, res) => {
       });
     }
 
-    // Add or update cart
+    // Calculate price & discount
+    const price = product.discountPrice || product.price; // Use discounted price if exists
+    const itemTotal = price * qty;
+
     if (existingItem) {
       await db.collection(collection.USERS_COLLECTION).updateOne(
         { userId, "cart.productId": productId },
         { 
           $inc: { 
-            "cart.$.quantity": qty, 
-            "cart.$.total": parseFloat(price) * qty 
+            "cart.$.quantity": qty,
+            "cart.$.total": itemTotal 
           } 
         }
       );
     } else {
       const newItem = {
         productId,
-        name,
-        brand,
-        price: parseFloat(price),
+        name: product.name,
+        brand: product.brand,
+        price, // discounted price
         quantity: qty,
-        image,
-        total: parseFloat(price) * qty,
+        image: product.picturePath?.[0] || "/userAssets/imgs/default-product.png",
+        picturePath: product.picturePath || [],
+        total: itemTotal,
         addedAt: new Date(),
       };
 
@@ -265,7 +269,6 @@ export const addToCart = async (req, res) => {
       { $pull: { wishlist: { productId } } }
     );
 
-    // Redirect to source page or cart by default
     res.redirect(redirect || "/cart");
 
   } catch (error) {
@@ -273,6 +276,9 @@ export const addToCart = async (req, res) => {
     res.redirect("/wishlist");
   }
 };
+
+
+
 
 
 
