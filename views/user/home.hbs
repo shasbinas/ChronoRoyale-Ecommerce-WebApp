@@ -373,11 +373,11 @@
             <div class="col-lg-2 col-md-3 col-6 mb-4">
               <div class="card-1">
                 <figure class="img-hover-scale overflow-hidden">
-                  <a href="{{this.link}}">
+                  <a href=>
                     <img src="{{this.image}}" alt="{{this.name}}" />
                   </a>
                 </figure>
-                <h5 class="text-center mt-2"><a href="{{this.link}}">{{this.name}}</a></h5>
+                <h5 class="text-center mt-2"><a >{{this.name}}</a></h5>
               </div>
             </div>
           {{/each}}
@@ -444,7 +444,7 @@
                 </div>
                 <div class="product-content-wrap">
                   <h2><a href="/productDetails?id={{this._id}}">{{this.name}}</a></h2>
-                  <div class="rating-result" title="{{this.rating}}%"><span><span>{{this.rating}}%</span></span></div>
+                  <div class= title="{{this.rating}}%"><span><span>{{this.stockStatus}}</span></span></div>
                   <div class="product-price">
                     <span>₹{{this.price}}</span>
                     {{#if this.oldPrice}}<span class="old-price">₹{{this.oldPrice}}</span>{{/if}}
@@ -506,7 +506,7 @@
       <div class="carausel-6-columns text-center" id="carausel-6-columns-3">
         {{#each brands}}
           <div class="brand-logo">
-            <a href="{{this.link}}">
+            <a >
               <img src="{{this.image}}" alt="{{this.name}}" />
             </a>
           </div>

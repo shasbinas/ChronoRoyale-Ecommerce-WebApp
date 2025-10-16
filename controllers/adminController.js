@@ -20,7 +20,7 @@ export const adminDashboardPage = async (req, res) => {
     startOfMonth.setHours(0, 0, 0, 0);
     const now = new Date();
 
-    // 1️⃣ Total Delivered Orders
+    // 1️⃣ Total Delivered Orders (This Month)
     const deliveredOrdersCount = await db
       .collection(collection.ORDERS_COLLECTION)
       .countDocuments({
@@ -28,34 +28,51 @@ export const adminDashboardPage = async (req, res) => {
         createdAt: { $gte: startOfMonth, $lte: now },
       });
 
-    // 2️⃣ Total Revenue from Delivered Orders
+    // 2️⃣ Total Revenue from Delivered Orders (This Month)
     const revenueData = await db
       .collection(collection.ORDERS_COLLECTION)
       .aggregate([
-        { $match: { status: "Delivered", createdAt: { $gte: startOfMonth, $lte: now } } },
+        {
+          $match: {
+            status: "Delivered",
+            createdAt: { $gte: startOfMonth, $lte: now },
+          },
+        },
         { $group: { _id: null, totalRevenue: { $sum: "$total" } } },
       ])
       .toArray();
     const totalRevenue = revenueData[0]?.totalRevenue || 0;
 
-    // 3️⃣ Total Products Sold
+    // 3️⃣ Total Products Sold (This Month)
     const productData = await db
       .collection(collection.ORDERS_COLLECTION)
       .aggregate([
-        { $match: { status: "Delivered", createdAt: { $gte: startOfMonth, $lte: now } } },
+        {
+          $match: {
+            status: "Delivered",
+            createdAt: { $gte: startOfMonth, $lte: now },
+          },
+        },
         { $unwind: "$cart" },
-        { $group: { _id: null, totalProductsSold: { $sum: "$cart.quantity" } } },
+        {
+          $group: { _id: null, totalProductsSold: { $sum: "$cart.quantity" } },
+        },
       ])
       .toArray();
     const totalProductsSold = productData[0]?.totalProductsSold || 0;
 
-    // 4️⃣ Total Users
-    const usersData = await db
-      .collection(collection.ORDERS_COLLECTION)
-      .distinct("userId", { createdAt: { $gte: startOfMonth, $lte: now } });
-    const totalUsers = usersData.length;
+    // ✅ 4️⃣ Total Registered Users (All-Time)
+    const totalUsers = await db
+      .collection(collection.USERS_COLLECTION) // make sure this is your actual users collection name
+      .countDocuments();
 
-    // 5️⃣ Donut Chart Data: Order Status Counts
+    // ✅ 5️⃣ Users Who Placed Orders (All-Time)
+    const activeUsersData = await db
+      .collection(collection.ORDERS_COLLECTION)
+      .distinct("userId");
+    const usersWhoOrdered = activeUsersData.length;
+
+    // 6️⃣ Donut Chart Data: Order Status Counts (This Month)
     const statusData = await db
       .collection(collection.ORDERS_COLLECTION)
       .aggregate([
@@ -64,30 +81,25 @@ export const adminDashboardPage = async (req, res) => {
       ])
       .toArray();
 
-    // Transform to arrays for Chart.js
-    const donutLabels = statusData.map(item => item._id); // ["Delivered", "Pending", ...]
-    const donutData = statusData.map(item => item.count); // [5, 2, ...]
+    const donutLabels = statusData.map((item) => item._id);
+    const donutData = statusData.map((item) => item.count);
 
-    // Render dashboard
     res.render("admin/dashboard", {
       layout: "admin",
       title: "Admin Dashboard",
       totalRevenue: totalRevenue.toFixed(2),
       deliveredOrdersCount,
       totalProductsSold,
-      totalUsers,
+      totalUsers, // ✅ All registered users
+      usersWhoOrdered, // ✅ Optional metric: customers who actually ordered
       donutLabels: JSON.stringify(donutLabels),
-      donutData: JSON.stringify(donutData)
+      donutData: JSON.stringify(donutData),
     });
   } catch (error) {
     console.error("Error loading admin dashboard:", error);
     res.status(500).send("Something went wrong loading the dashboard.");
   }
 };
-
-
-
-
 
 export const adminUsersListPage = async (req, res) => {
   // console.log("Admin UserstList route working 🚀");
@@ -134,13 +146,6 @@ export const adminAddProductPage = async (req, res) => {
   });
 };
 
-
-
-
-
-
-
-
 export const adminOrdersListPage = async (req, res) => {
   console.log("Admin OrdersList route working 🚀");
   try {
@@ -150,24 +155,32 @@ export const adminOrdersListPage = async (req, res) => {
     const usersCollection = db.collection(collection.USERS_COLLECTION);
 
     // Fetch all orders sorted by newest
-    const orders = await ordersCollection.find({}).sort({ createdAt: -1 }).toArray();
+    const orders = await ordersCollection
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
 
     // Map orders to include totals and user email
     const ordersWithTotals = await Promise.all(
       orders.map(async (order) => {
         // Calculate totals for cart items
-        const cartWithTotal = order.cart.map(item => ({
+        const cartWithTotal = order.cart.map((item) => ({
           ...item,
           total: item.total || item.price * item.quantity,
         }));
-        const totalAmount = cartWithTotal.reduce((acc, item) => acc + item.total, 0);
+        const totalAmount = cartWithTotal.reduce(
+          (acc, item) => acc + item.total,
+          0
+        );
 
         // Fetch email from users collection using string UUID
         let userEmail = "N/A";
         if (order.userId) {
           try {
             // Make sure this matches the field storing UUID in your users collection
-            const user = await usersCollection.findOne({ userId: order.userId });
+            const user = await usersCollection.findOne({
+              userId: order.userId,
+            });
             if (user && user.email) userEmail = user.email;
           } catch (err) {
             console.log("Error fetching user email for order:", order._id, err);
@@ -191,24 +204,11 @@ export const adminOrdersListPage = async (req, res) => {
     });
   } catch (error) {
     console.error("Error loading admin orders list:", error);
-    res.status(500).send("Something went wrong while loading orders for admin.");
+    res
+      .status(500)
+      .send("Something went wrong while loading orders for admin.");
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const adminLogout = (req, res) => {
   try {
@@ -289,10 +289,7 @@ export const adminProductsListPage = async (req, res) => {
   }
 };
 
-
-
-
-
+/*** */
 export const updateOrderStatus = async (req, res) => {
   try {
     const db = await connectToDatabase(process.env.DATABASE);
@@ -317,7 +314,6 @@ export const updateOrderStatus = async (req, res) => {
   }
 };
 
-
 export const adminOrderDetailsPage = async (req, res) => {
   console.log("Admin Order Details route working 🚀");
   try {
@@ -328,13 +324,17 @@ export const adminOrderDetailsPage = async (req, res) => {
     const productsCollection = db.collection(collection.PRODUCTS_COLLECTION); // ✅ corrected key
 
     // Fetch the order by ID
-    const order = await ordersCollection.findOne({ _id: new ObjectId(orderId) });
+    const order = await ordersCollection.findOne({
+      _id: new ObjectId(orderId),
+    });
     if (!order) return res.status(404).send("Order not found");
 
     // Attach product details for each cart item
     const cartWithProductDetails = await Promise.all(
       order.cart.map(async (item) => {
-        const product = await productsCollection.findOne({ _id: new ObjectId(item.productId) });
+        const product = await productsCollection.findOne({
+          _id: new ObjectId(item.productId),
+        });
         return {
           ...item,
           name: product?.name || "Unknown Product",
