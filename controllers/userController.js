@@ -17,16 +17,34 @@ export const productsPage = async (req, res) => {
       limit: 20,
     });
 
+    // Add stock status to each product
+    const productsWithStock = products.map((product) => ({
+      ...product,
+      stockStatus: getStockStatus(product),
+    }));
+
     // Render the products page
     res.render("user/products", {
       title: "Product's List - ChronoRoyale",
-      products, // send the data to HBS template
+      products: productsWithStock, // send data with stock status
     });
   } catch (error) {
     console.error("❌ Error loading products page:", error);
     res.status(500).send("Error loading products page");
   }
 };
+
+// Stock status helper function
+const getStockStatus = (product) => {
+  if (product.stock > 20) {
+    return `🟢 Available (${product.stock})`;
+  } else if (product.stock > 0 && product.stock <= 20) {
+    return `🟠 Hurry up! Only ${product.stock} left`;
+  } else {
+    return `🔴 Currently unavailable`;
+  }
+};
+
 
 export const blockUnblockUser = async (req, res) => {
   console.log("Block/Unblock User route working 🚀");
