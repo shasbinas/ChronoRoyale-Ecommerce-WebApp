@@ -81,14 +81,21 @@
 
 <div class="row">
   <!-- Sale Statistics (Line Chart) -->
-  <div class="col-xl-8 col-lg-12">
-    <div class="card mb-4">
-      <article class="card-body">
-        <h5 class="card-title">Sale Statistics</h5>
-        <canvas id="myChart" height="120"></canvas>
-      </article>
-    </div>
+<!-- Sale Statistics (Line Chart) -->
+<div class="col-xl-8 col-lg-12">
+  <div class="card mb-4">
+    <article class="card-body">
+      <h5 class="card-title">Men & Women Category Stats</h5>
+      <canvas
+        id="myChart"
+        height="120"
+        data-labels='{{{lineLabels}}}'
+        data-men='{{{menData}}}'
+        data-women='{{{womenData}}}'>
+      </canvas>
+    </article>
   </div>
+</div>
 
   <!-- Order Status Donut Chart -->
   <div class="col-xl-4 col-lg-12">

@@ -14,11 +14,10 @@ export const adminDashboardPage = async (req, res) => {
   try {
     const db = await connectToDatabase(process.env.DATABASE);
 
-    // Current month range
+    const now = new Date();
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     startOfMonth.setHours(0, 0, 0, 0);
-    const now = new Date();
 
     // 1️⃣ Total Delivered Orders (This Month)
     const deliveredOrdersCount = await db
@@ -63,7 +62,7 @@ export const adminDashboardPage = async (req, res) => {
 
     // ✅ 4️⃣ Total Registered Users (All-Time)
     const totalUsers = await db
-      .collection(collection.USERS_COLLECTION) // make sure this is your actual users collection name
+      .collection(collection.USERS_COLLECTION)
       .countDocuments();
 
     // ✅ 5️⃣ Users Who Placed Orders (All-Time)
@@ -84,16 +83,109 @@ export const adminDashboardPage = async (req, res) => {
     const donutLabels = statusData.map((item) => item._id);
     const donutData = statusData.map((item) => item.count);
 
+    // 7️⃣ Daily Men vs Women Orders (Last 30 Days, any status)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 29);
+    thirtyDaysAgo.setHours(0, 0, 0, 0); // start of day
+
+    // Generate last 30 days labels
+    const last30Days = [];
+    for (let i = 0; i < 30; i++) {
+      const d = new Date(thirtyDaysAgo);
+      d.setDate(d.getDate() + i);
+      const day = String(d.getDate()).padStart(2, "0");
+      const month = d.toLocaleString("default", { month: "short" });
+      last30Days.push(`${day}/${month}`);
+    }
+
+    // Aggregation
+    const dailyOrders = await db
+      .collection(collection.ORDERS_COLLECTION)
+      .aggregate([
+        { $match: { createdAt: { $gte: thirtyDaysAgo, $lte: now } } },
+        { $unwind: "$cart" },
+        {
+          $addFields: {
+            productObjId: {
+              $cond: {
+                if: { $eq: [{ $type: "$cart.productId" }, "string"] },
+                then: { $toObjectId: "$cart.productId" },
+                else: "$cart.productId",
+              },
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: collection.PRODUCTS_COLLECTION,
+            localField: "productObjId",
+            foreignField: "_id",
+            as: "productDetails",
+          },
+        },
+        { $unwind: "$productDetails" },
+        {
+          $group: {
+            _id: {
+              orderId: "$_id",
+              date: {
+                $dateToString: {
+                  format: "%d/%b",
+                  date: "$createdAt",
+                  timezone: "Asia/Kolkata",
+                },
+              },
+            },
+            categories: { $addToSet: "$productDetails.category" },
+          },
+        },
+        { $unwind: "$categories" },
+        {
+          $group: {
+            _id: {
+              date: "$_id.date",
+              category: "$categories",
+            },
+            orderCount: { $sum: 1 },
+          },
+        },
+        { $sort: { "_id.date": 1 } },
+      ])
+      .toArray();
+
+    // Map aggregation to last 30 days
+    const menData = last30Days.map((day) => {
+      const dayData = dailyOrders.find(
+        (d) => d._id.date === day && d._id.category.toLowerCase() === "men"
+      );
+      return dayData ? dayData.orderCount : 0;
+    });
+
+    const womenData = last30Days.map((day) => {
+      const dayData = dailyOrders.find(
+        (d) => d._id.date === day && d._id.category.toLowerCase() === "women"
+      );
+      return dayData ? dayData.orderCount : 0;
+    });
+
+    // console.log("wormnesData>>>>",womenData);
+    // console.log("mnesData>>>>", menData);
+    // console.log("LabesData>>>>",last30Days);
+
+    // Render dashboard
     res.render("admin/dashboard", {
       layout: "admin",
       title: "Admin Dashboard",
       totalRevenue: totalRevenue.toFixed(2),
       deliveredOrdersCount,
       totalProductsSold,
-      totalUsers, // ✅ All registered users
-      usersWhoOrdered, // ✅ Optional metric: customers who actually ordered
+      totalUsers,
+      usersWhoOrdered,
       donutLabels: JSON.stringify(donutLabels),
       donutData: JSON.stringify(donutData),
+      lineLabels: JSON.stringify(last30Days),
+      menData: JSON.stringify(menData),
+      womenData: JSON.stringify(womenData),
     });
   } catch (error) {
     console.error("Error loading admin dashboard:", error);
@@ -311,8 +403,6 @@ export const adminProductEditPage = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
-
 
 /*** */
 export const updateOrderStatus = async (req, res) => {
