@@ -289,6 +289,31 @@ export const adminProductsListPage = async (req, res) => {
   }
 };
 
+export const adminProductEditPage = async (req, res) => {
+  console.log("delete prodcuct pagr render>>>>>>>>>>>>>>>>>");
+  try {
+    const productId = req.params.id;
+    console.log(productId);
+    const db = await connectToDatabase(process.env.DATABASE);
+    const productArray = await db
+      .collection(collection.PRODUCTS_COLLECTION)
+      .find({ _id: new ObjectId(String(productId)) })
+      .toArray();
+    // console.log("product Data >>>>>>", product);
+    const [product] = productArray;
+    res.render("admin/product-edit", {
+      layout: "admin",
+      title: "Admin - Edit Product",
+      product,
+    });
+  } catch (error) {
+    console.error("❌ Error fetching products:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+
+
 /*** */
 export const updateOrderStatus = async (req, res) => {
   try {

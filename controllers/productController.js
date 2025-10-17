@@ -235,3 +235,44 @@ export const deleteProduct = async (req, res) => {
     res.status(500).send("Something went wrong while deleting the product.");
   }
 };
+
+
+export const editProductDetails = async (req, res) => {   
+  console.log("edit Product details function triggered >>>>");
+  console.log(req.body);
+  console.log(req.params.id);
+
+  try {
+    const productId = req.params.id;
+    const updatedData = {
+      name: req.body.name,
+      brand: req.body.brand,
+      category: req.body.category,
+      status: req.body.status,
+      price: Number(req.body.price),
+      discountPrice: Number(req.body.discountPrice),
+      stock: Number(req.body.stock),
+      shortDesc: req.body.shortDesc,
+      description: req.body.description,
+      updatedAt: new Date()
+    };
+
+    const db = await connectToDatabase(process.env.DATABASE);
+
+    const result = await db
+      .collection(collection.PRODUCTS_COLLECTION)
+      .updateOne(
+        { _id: new ObjectId(productId) },
+        { $set: updatedData } // ✅ Only update given fields, images untouched
+      );
+
+    console.log("Update result:", result);
+
+    res.redirect("/admin/products-list");  // or respond with JSON
+
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+

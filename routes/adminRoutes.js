@@ -2,7 +2,7 @@ import express from "express";
 import { adminLogin } from "../controllers/adminAuth.js";
 import { blockUnblockUser } from "../controllers/userController.js";
 
-import { createProduct, deleteProduct } from "../controllers/productController.js";
+import { createProduct, deleteProduct, editProductDetails } from "../controllers/productController.js";
 import {
   adminAddProductPage,
   adminDashboardPage,
@@ -10,6 +10,7 @@ import {
   adminLogout,
   adminOrderDetailsPage,
   adminOrdersListPage,
+  adminProductEditPage,
   adminProductsListPage,
   adminUsersListPage,
   updateOrderStatus,
@@ -30,6 +31,12 @@ adminRoutes.get("/dashboard", adminDashboardPage);
 adminRoutes.get("/users-list", adminUsersListPage);
 
 adminRoutes.get("/products-list", adminProductsListPage);
+
+adminRoutes.get("/products/edit/:id", adminProductEditPage);
+
+adminRoutes.post("/edit-product/:id", editProductDetails);
+
+
 
 adminRoutes.post(
   "/add-product",
