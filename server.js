@@ -12,7 +12,6 @@ import productRoutes from "./routes/productRoutes.js";
 import cookieParser from "cookie-parser";
 import { verifyUser } from "./middleware/verifyUser.js";
 
-
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,13 +43,12 @@ app.use(
   express.static(path.join(__dirname, "public/userAssets"))
 );
 
-
 // Apply user verification before user routes
 app.use((req, res, next) => {
   // Skip for admin routes
   if (req.originalUrl.startsWith("/admin")) return next();
 
-verifyUser(req, res, () => {
+  verifyUser(req, res, () => {
     // Make logged-in user available globally in all HBS views
     res.locals.loggedInUser = req.loggedInUser;
     next();
@@ -81,7 +79,7 @@ app.engine(
       upper: (str) => str.toUpperCase(),
       json: (context) => JSON.stringify(context),
       eq: (a, b) => a === b,
-        or: (a, b) => a || b,
+      or: (a, b) => a || b,
       formatDate: (timestamp) => {
         return new Date(timestamp).toLocaleDateString("en-GB"); // dd/mm/yyyy
       },
