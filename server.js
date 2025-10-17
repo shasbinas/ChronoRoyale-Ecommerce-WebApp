@@ -8,7 +8,7 @@ import multer from "multer";
 import { engine } from "express-handlebars";
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
-import productRoutes from "./routes/productRoutes.js";
+
 import cookieParser from "cookie-parser";
 import { verifyUser } from "./middleware/verifyUser.js";
 
@@ -58,7 +58,6 @@ app.use((req, res, next) => {
 /* ROUTES */
 app.use("/admin", adminRoutes);
 app.use("/", userRoutes);
-app.use("/products", productRoutes);
 
 app.listen(PORT, () => {
   console.log(
