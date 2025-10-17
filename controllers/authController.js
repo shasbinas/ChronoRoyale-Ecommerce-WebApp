@@ -62,7 +62,7 @@ export const createUser =  async (req, res) => {
 };
 
 
-export const loginUser =  async (req, res) => {
+export const loginUser = async (req, res) => {
   console.log("login>>>>>>>>>", req.body);
   try {
     const { email, password } = req.body;
@@ -87,6 +87,14 @@ export const loginUser =  async (req, res) => {
       });
     }
 
+    // 🚫 Blocked user check with visible message
+    if (user.isBlocked) {
+      return res.render("user/login", {
+        title: "Login - ChronoRoyale",
+        error: "Your account has been blocked. Please contact support.",
+      });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.render("user/login", {
@@ -101,7 +109,7 @@ export const loginUser =  async (req, res) => {
     const token = jwt.sign(
       { id: user.userId, name: user.name, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "2d" } // keep user logged in for 2 days
+      { expiresIn: "2d" }
     );
 
     // store token in a cookie for session
@@ -120,6 +128,8 @@ export const loginUser =  async (req, res) => {
     });
   }
 };
+
+
 
 export const logout = (req, res) => {
   res.clearCookie("token");
