@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import collection from "../config/collection.js";
 import connectToDatabase from "../config/db.js";
 import { v7 as uuidv7 } from "uuid";
+import { error } from "console";
 
 /* Create a new product */
 export const createProduct = async (req, res) => {
@@ -200,5 +201,37 @@ export const productDeatilsPage = async (req, res) => {
   } catch (error) {
     console.error("❌ Error in productDetailsPage:", error);
     res.status(500).send("Server Error");
+  }
+};
+
+export const deleteProduct = async (req, res) => {
+  console.log("delete product route called>>>>>>>>>");
+
+  try {
+    const productId = req.params.id; // fixed typo
+    console.log("Product ID:", productId);
+
+    const db = await connectToDatabase(process.env.DATABASE);
+    const product = await db
+      .collection(collection.PRODUCTS_COLLECTION)
+      .findOne({ _id: new ObjectId(productId) }); // findOne + ObjectId
+
+    if (!product) {
+      return res.render("admin/products-list", {
+        title: "Admin - Product List",
+        error: "Product not found.",
+      });
+    }
+
+    // Soft delete: set isDelete = true
+    await db.collection(collection.PRODUCTS_COLLECTION).updateOne(
+      { _id: new ObjectId(String(productId)) },
+      { $set: { isDelete: true } } 
+    );
+
+    res.redirect("/admin/products-list");
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).send("Something went wrong while deleting the product.");
   }
 };

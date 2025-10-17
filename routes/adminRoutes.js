@@ -2,7 +2,7 @@ import express from "express";
 import { adminLogin } from "../controllers/adminAuth.js";
 import { blockUnblockUser } from "../controllers/userController.js";
 
-import { createProduct } from "../controllers/productController.js";
+import { createProduct, deleteProduct } from "../controllers/productController.js";
 import {
   adminAddProductPage,
   adminDashboardPage,
@@ -36,6 +36,8 @@ adminRoutes.post(
   uploadFiles("userAssets/pictures", "multiple", "productImages", 4),
   createProduct
 );
+
+adminRoutes.post("/products/delete/:id", deleteProduct);
 
 adminRoutes.post("/block-user/:id", blockUnblockUser);
 
