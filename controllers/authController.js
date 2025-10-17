@@ -5,7 +5,7 @@ import connectToDatabase from "../config/db.js";
 import { v7 as uuidv7 } from "uuid";
 
 /* user signup */
-export const createUser =  async (req, res) => {
+export const createUser = async (req, res) => {
   console.log("signup>>>>>>>>>", req.body);
   try {
     const { name, email, password } = req.body;
@@ -60,7 +60,6 @@ export const createUser =  async (req, res) => {
     });
   }
 };
-
 
 export const loginUser = async (req, res) => {
   console.log("login>>>>>>>>>", req.body);
@@ -128,8 +127,6 @@ export const loginUser = async (req, res) => {
     });
   }
 };
-
-
 
 export const logout = (req, res) => {
   res.clearCookie("token");

@@ -215,13 +215,13 @@
                       <span class="old-price">₹{{this.price}}</span>
                     </div>
                 <div class="product-action-1 show">
-  <form action="/add-to-cart" method="post">
-    <input type="hidden" name="productId" value="{{this._id}}">
-    <input type="hidden" name="name" value="{{this.name}}">
-    <input type="hidden" name="brand" value="{{this.brand}}">
-    <input type="hidden" name="price" value="{{this.price}}">
-    <input type="hidden" name="image" value="{{this.picturePath.[0]}}">
-    <input type="hidden" name="quantity" value="1">
+                <form action="/add-to-cart" method="post">
+               <input type="hidden" name="productId" value="{{this._id}}">
+               <input type="hidden" name="name" value="{{this.name}}">
+               <input type="hidden" name="brand" value="{{this.brand}}">
+              <input type="hidden" name="price" value="{{this.price}}">
+             <input type="hidden" name="image" value="{{this.picturePath.[0]}}">
+             <input type="hidden" name="quantity" value="1">
 
     <button
       type="submit"

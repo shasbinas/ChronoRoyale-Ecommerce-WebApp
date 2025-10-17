@@ -144,7 +144,6 @@ export const productViewPage = async (req, res) => {
   }
 };
 
-
 export const productDeatilsPage = async (req, res) => {
   console.log("product Deatils function called");
   try {
@@ -180,7 +179,7 @@ export const productDeatilsPage = async (req, res) => {
     if (product.stock > 20) {
       stockStatus = `🟢 Available only ${product.stock}`;
     } else if (product.stock > 0 && product.stock <= 20) {
-      stockStatus = `🟠Hurry up! Only ${ product.stock} left`;
+      stockStatus = `🟠Hurry up! Only ${product.stock} left`;
     } else {
       stockStatus = " 🔴Currently unavailable";
     }

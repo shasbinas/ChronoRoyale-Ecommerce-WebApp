@@ -1,7 +1,7 @@
 import express from "express";
 import { adminLogin } from "../controllers/adminAuth.js";
 import { blockUnblockUser } from "../controllers/userController.js";
-import {} from "../controllers/orderController.js";
+
 import { createProduct } from "../controllers/productController.js";
 import {
   adminAddProductPage,
@@ -48,10 +48,5 @@ adminRoutes.get("/update-order-status/:id/:status", updateOrderStatus);
 adminRoutes.get("/orders/:id", adminOrderDetailsPage);
 
 // adminRoutes.get("/orders/:id", adminOrderDetailsPage);
-
-
-
-
-
 
 export default adminRoutes;
