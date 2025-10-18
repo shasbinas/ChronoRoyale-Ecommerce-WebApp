@@ -55,21 +55,21 @@ export const brandData = [
   //   image: "/userAssets/imgs/Logos/rolex logo.jpg",
   //   link: "/shop-grid-right.html",
   // },
-  // {
-  //   name: "Omega",
-  //   image: "/userAssets/imgs/Logos/Omega logo.png",
-  //   link: "/shop-grid-right.html",
-  // },
+  {
+    name: "Omega",
+    image: "/userAssets/imgs/Logos/Omega logo.png",
+    link: "/shop-grid-right.html",
+  },
   {
     name: "Tag Heuer",
     image: "/userAssets/imgs/Logos/Tag Heuer logo.png",
     link: "/shop-grid-right.html",
   },
-  // {
-  //   name: "Patek Philippe",
-  //   image: "/userAssets/imgs/logos/Patek Philippe logo.png",
-  //   link: "/shop-grid-right.html",
-  // },
+  {
+    name: "Patek Philippe",
+    image: "/userAssets/imgs/logos/Patek Philippe logo.png",
+    link: "/shop-grid-right.html",
+  },
   {
     name: "Audemars Piguet",
     image: "/userAssets/imgs/Logos/Audemars Piguet logo.jpg",
