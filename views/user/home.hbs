@@ -130,39 +130,35 @@
                         />
                       </a>
                     </div>
-                    <div class="product-action-1">
-                      <form action="/add-to-wishlist" method="post">
-                        <input
-                          type="hidden"
-                          name="productId"
-                          value="{{this._id}}"
-                        />
-                        <button
-                          type="submit"
-                          aria-label="Add To Wishlist"
-                          style="
-      all: unset;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: #f0f0f0;
-      cursor: pointer;
-      transition: background-color 0.3s, color 0.3s;
-    "
-                          onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
-                          onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
-                        >
-                          <i
-                            class="fi-rs-heart"
-                            style="color: #333; font-size: 18px;"
-                          ></i>
-                        </button>
-                      </form>
+                    
+                   {{#if ../user}}
+  <div class="product-action-1">
+    <form action="/add-to-wishlist" method="post">
+      <input type="hidden" name="productId" value="{{this._id}}" />
+      <button
+        type="submit"
+        aria-label="Add To Wishlist"
+        style="
+          all: unset;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #f0f0f0;
+          cursor: pointer;
+          transition: background-color 0.3s, color 0.3s;
+        "
+        onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
+        onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
+      >
+        <i class="fi-rs-heart" style="color: #333; font-size: 18px;"></i>
+      </button>
+    </form>
+  </div>
+{{/if}}
 
-                    </div>
                     <div
                       class="product-badges product-badges-position product-badges-mrg"
                     >
@@ -185,58 +181,44 @@
                     </div>
                     {{#unless (eq this.stockStatus "  ")}}
                     <div class="product-action-1 show">
-                      <form action="/add-to-cart" method="post">
-                        <input
-                          type="hidden"
-                          name="productId"
-                          value="{{this._id}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="name"
-                          value="{{this.name}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="brand"
-                          value="{{this.brand}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="price"
-                          value="{{this.price}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="image"
-                          value="{{this.picturePath.[0]}}"
-                        />
-                        <input type="hidden" name="quantity" value="1" />
+                         {{#if ../user}}
+      {{#unless (eq this.stockStatus "🔴 Currently unavailable")}}
+        <div class="product-action-1 show">
+          <form action="/add-to-cart" method="post">
+            <input type="hidden" name="productId" value="{{this._id}}" />
+            <input type="hidden" name="name" value="{{this.name}}" />
+            <input type="hidden" name="brand" value="{{this.brand}}" />
+            <input type="hidden" name="price" value="{{this.price}}" />
+            <input type="hidden" name="image" value="{{this.picturePath.[0]}}" />
+            <input type="hidden" name="quantity" value="1" />
 
-                        <button
-                          type="submit"
-                          aria-label="Add To Cart"
-                          style="
-        all: unset;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: #f0f0f0;
-        cursor: pointer;
-        transition: background-color 0.3s, color 0.3s;
-      "
-                          onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
-                          onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
-                        >
-                          <i
-                            class="fi-rs-shopping-bag-add"
-                            style="color: #333; font-size: 18px;"
-                          ></i>
-                        </button>
-                      </form>
+            <button
+              type="submit"
+              aria-label="Add To Cart"
+              style="
+                all: unset;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: #f0f0f0;
+                cursor: pointer;
+                transition: background-color 0.3s, color 0.3s;
+              "
+              onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
+              onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
+            >
+              <i
+                class="fi-rs-shopping-bag-add"
+                style="color: #333; font-size: 18px;"
+              ></i>
+            </button>
+          </form>
+        </div>
+      {{/unless}}
+    {{/if}}
                     </div>
                     {{/unless}}
                   </div>
@@ -272,39 +254,33 @@
                         />
                       </a>
                     </div>
-                    <div class="product-action-1">
-                      <form action="/add-to-wishlist" method="post">
-                        <input
-                          type="hidden"
-                          name="productId"
-                          value="{{this._id}}"
-                        />
-                        <button
-                          type="submit"
-                          aria-label="Add To Wishlist"
-                          style="
-      all: unset;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: #f0f0f0;
-      cursor: pointer;
-      transition: background-color 0.3s, color 0.3s;
-    "
-                          onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
-                          onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
-                        >
-                          <i
-                            class="fi-rs-heart"
-                            style="color: #333; font-size: 18px;"
-                          ></i>
-                        </button>
-                      </form>
-
-                    </div>
+                                     {{#if ../user}}
+  <div class="product-action-1">
+    <form action="/add-to-wishlist" method="post">
+      <input type="hidden" name="productId" value="{{this._id}}" />
+      <button
+        type="submit"
+        aria-label="Add To Wishlist"
+        style="
+          all: unset;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #f0f0f0;
+          cursor: pointer;
+          transition: background-color 0.3s, color 0.3s;
+        "
+        onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
+        onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
+      >
+        <i class="fi-rs-heart" style="color: #333; font-size: 18px;"></i>
+      </button>
+    </form>
+  </div>
+{{/if}}
                     <div
                       class="product-badges product-badges-position product-badges-mrg"
                     >
@@ -324,60 +300,44 @@
                       <span>₹{{this.discountPrice}}</span>
                       <span class="old-price">₹{{this.price}}</span>
                     </div>
-                    <div class="product-action-1 show">
-                      <form action="/add-to-cart" method="post">
-                        <input
-                          type="hidden"
-                          name="productId"
-                          value="{{this._id}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="name"
-                          value="{{this.name}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="brand"
-                          value="{{this.brand}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="price"
-                          value="{{this.price}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="image"
-                          value="{{this.picturePath.[0]}}"
-                        />
-                        <input type="hidden" name="quantity" value="1" />
+                        {{#if ../user}}
+      {{#unless (eq this.stockStatus "🔴 Currently unavailable")}}
+        <div class="product-action-1 show">
+          <form action="/add-to-cart" method="post">
+            <input type="hidden" name="productId" value="{{this._id}}" />
+            <input type="hidden" name="name" value="{{this.name}}" />
+            <input type="hidden" name="brand" value="{{this.brand}}" />
+            <input type="hidden" name="price" value="{{this.price}}" />
+            <input type="hidden" name="image" value="{{this.picturePath.[0]}}" />
+            <input type="hidden" name="quantity" value="1" />
 
-                        <button
-                          type="submit"
-                          aria-label="Add To Cart"
-                          style="
-        all: unset;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: #f0f0f0;
-        cursor: pointer;
-        transition: background-color 0.3s, color 0.3s;
-      "
-                          onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
-                          onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
-                        >
-                          <i
-                            class="fi-rs-shopping-bag-add"
-                            style="color: #333; font-size: 18px;"
-                          ></i>
-                        </button>
-                      </form>
-                    </div>
+            <button
+              type="submit"
+              aria-label="Add To Cart"
+              style="
+                all: unset;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: #f0f0f0;
+                cursor: pointer;
+                transition: background-color 0.3s, color 0.3s;
+              "
+              onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
+              onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
+            >
+              <i
+                class="fi-rs-shopping-bag-add"
+                style="color: #333; font-size: 18px;"
+              ></i>
+            </button>
+          </form>
+        </div>
+      {{/unless}}
+    {{/if}}
                   </div>
                 </div>
               </div>
@@ -411,39 +371,33 @@
                         />
                       </a>
                     </div>
-                    <div class="product-action-1">
-                      <form action="/add-to-wishlist" method="post">
-                        <input
-                          type="hidden"
-                          name="productId"
-                          value="{{this._id}}"
-                        />
-                        <button
-                          type="submit"
-                          aria-label="Add To Wishlist"
-                          style="
-      all: unset;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: #f0f0f0;
-      cursor: pointer;
-      transition: background-color 0.3s, color 0.3s;
-    "
-                          onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
-                          onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
-                        >
-                          <i
-                            class="fi-rs-heart"
-                            style="color: #333; font-size: 18px;"
-                          ></i>
-                        </button>
-                      </form>
-
-                    </div>
+                                       {{#if ../user}}
+  <div class="product-action-1">
+    <form action="/add-to-wishlist" method="post">
+      <input type="hidden" name="productId" value="{{this._id}}" />
+      <button
+        type="submit"
+        aria-label="Add To Wishlist"
+        style="
+          all: unset;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #f0f0f0;
+          cursor: pointer;
+          transition: background-color 0.3s, color 0.3s;
+        "
+        onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
+        onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
+      >
+        <i class="fi-rs-heart" style="color: #333; font-size: 18px;"></i>
+      </button>
+    </form>
+  </div>
+{{/if}}
                     <div
                       class="product-badges product-badges-position product-badges-mrg"
                     ><span class="best">{{this.brand}}</span></div>
@@ -461,60 +415,50 @@
                       <span>₹{{this.discountPrice}}</span>
                       <span class="old-price">₹{{this.price}}</span>
                     </div>
-                    <div class="product-action-1 show">
-                      <form action="/add-to-cart" method="post">
-                        <input
-                          type="hidden"
-                          name="productId"
-                          value="{{this._id}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="name"
-                          value="{{this.name}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="brand"
-                          value="{{this.brand}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="price"
-                          value="{{this.price}}"
-                        />
-                        <input
-                          type="hidden"
-                          name="image"
-                          value="{{this.picturePath.[0]}}"
-                        />
-                        <input type="hidden" name="quantity" value="1" />
+                    {{!-- Register eq helper in your app.js --}}
+{{!-- hbs.registerHelper("eq", (a, b) => a === b) --}}
 
-                        <button
-                          type="submit"
-                          aria-label="Add To Cart"
-                          style="
-        all: unset;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: #f0f0f0;
-        cursor: pointer;
-        transition: background-color 0.3s, color 0.3s;
-      "
-                          onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
-                          onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
-                        >
-                          <i
-                            class="fi-rs-shopping-bag-add"
-                            style="color: #333; font-size: 18px;"
-                          ></i>
-                        </button>
-                      </form>
-                    </div>
+
+
+    {{#if ../user}}
+      {{#unless (eq this.stockStatus "🔴 Currently unavailable")}}
+        <div class="product-action-1 show">
+          <form action="/add-to-cart" method="post">
+            <input type="hidden" name="productId" value="{{this._id}}" />
+            <input type="hidden" name="name" value="{{this.name}}" />
+            <input type="hidden" name="brand" value="{{this.brand}}" />
+            <input type="hidden" name="price" value="{{this.price}}" />
+            <input type="hidden" name="image" value="{{this.picturePath.[0]}}" />
+            <input type="hidden" name="quantity" value="1" />
+
+            <button
+              type="submit"
+              aria-label="Add To Cart"
+              style="
+                all: unset;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: #f0f0f0;
+                cursor: pointer;
+                transition: background-color 0.3s, color 0.3s;
+              "
+              onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
+              onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
+            >
+              <i
+                class="fi-rs-shopping-bag-add"
+                style="color: #333; font-size: 18px;"
+              ></i>
+            </button>
+          </form>
+        </div>
+      {{/unless}}
+    {{/if}}
+
 
                   </div>
                 </div>
@@ -617,38 +561,33 @@
                   </div>
 
                   <!-- Wishlist Button -->
-                  <div class="product-action-1">
-                    <form action="/add-to-wishlist" method="post">
-                      <input
-                        type="hidden"
-                        name="productId"
-                        value="{{this._id}}"
-                      />
-                      <button
-                        type="submit"
-                        aria-label="Add To Wishlist"
-                        style="
-                        all: unset;
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                        width: 40px;
-                        height: 40px;
-                        border-radius: 50%;
-                        background-color: #f0f0f0;
-                        cursor: pointer;
-                        transition: background-color 0.3s, color 0.3s;
-                      "
-                        onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
-                        onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
-                      >
-                        <i
-                          class="fi-rs-heart"
-                          style="color: #333; font-size: 18px;"
-                        ></i>
-                      </button>
-                    </form>
-                  </div>
+                                     {{#if ../user}}
+  <div class="product-action-1">
+    <form action="/add-to-wishlist" method="post">
+      <input type="hidden" name="productId" value="{{this._id}}" />
+      <button
+        type="submit"
+        aria-label="Add To Wishlist"
+        style="
+          all: unset;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #f0f0f0;
+          cursor: pointer;
+          transition: background-color 0.3s, color 0.3s;
+        "
+        onmouseover="this.style.backgroundColor='#4caf50'; this.querySelector('i').style.color='#fff';"
+        onmouseout="this.style.backgroundColor='#f0f0f0'; this.querySelector('i').style.color='#333';"
+      >
+        <i class="fi-rs-heart" style="color: #333; font-size: 18px;"></i>
+      </button>
+    </form>
+  </div>
+{{/if}}
 
                   <!-- Product Badge -->
                   <div

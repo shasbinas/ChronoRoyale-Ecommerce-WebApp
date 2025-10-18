@@ -6,10 +6,21 @@ import { getProductsData } from "./productController.js";
 import { createUser } from "./authController.js";
 import bcrypt from "bcrypt";
 import { v7 as uuidv7 } from "uuid";
+import jwt from "jsonwebtoken";
 
 export const productsPage = async (req, res) => {
- 
   try {
+    // ✅ Get logged-in user from JWT cookie
+    let user = null;
+    const token = req.cookies?.token;
+    if (token) {
+      try {
+        user = jwt.verify(token, process.env.JWT_SECRET);
+      } catch (err) {
+        user = null; // Invalid token, treat as guest
+      }
+    }
+
     // Fetch 20 latest products
     const products = await getProductsData({
       sort: "latest",
@@ -26,6 +37,7 @@ export const productsPage = async (req, res) => {
     res.render("user/products", {
       title: "Product's List - ChronoRoyale",
       products: productsWithStock, // send data with stock status
+      user, // ✅ Pass user to HBS
     });
   } catch (error) {
     console.error("❌ Error loading products page:", error);
@@ -120,7 +132,17 @@ export const landingPage = async (req, res) => {
         return `🔴 Currently unavailable`;
       }
     };
-
+     let user = null;
+const token = req.cookies?.token;
+if (token) {
+  try {
+    user = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    console.log("Invalid JWT:", err.message);
+    user = null;
+  }
+}
+console.log("Logged-in user:", user);
     // Add stock status to all product lists
     const addStockStatus = (products) =>
       products.map((product) => ({
@@ -142,6 +164,7 @@ export const landingPage = async (req, res) => {
       men: menWithStock,
       women: womenWithStock,
       newProducts: newArrivalsWithStock,
+       user,
     });
   } catch (error) {
     // console.error("❌ Landing page error:", error);
