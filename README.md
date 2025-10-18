@@ -1,6 +1,20 @@
 # ⌚ ChronoRoyale - Full Stack E-commerce WebApp
 
-ChronoRoyale is a modern full-stack e-commerce platform designed for luxury watch sales. It provides a seamless shopping experience with secure authentication, cart and wishlist system, order management, and a powerful admin dashboard for analytics and inventory control.
+> ChronoRoyale is a modern full-stack e-commerce platform designed for luxury watch sales. It provides a seamless shopping experience with secure authentication, cart and wishlist system, order management, and a powerful admin dashboard for analytics and inventory control.
+
+<div>
+  <img src="https://img.shields.io/badge/-HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
+  <img src="https://img.shields.io/badge/-CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
+  <img src="https://img.shields.io/badge/-JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
+  <img src="https://img.shields.io/badge/-Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/-Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" />
+  <img src="https://img.shields.io/badge/-MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+  <img src="https://img.shields.io/badge/-JWT-000000?style=for-the-badge&logo=JSONwebtokens&logoColor=white" alt="JWT" />
+  <img src="https://img.shields.io/badge/-Handlebars-FFB703?style=for-the-badge&logo=handlebarsdotjs&logoColor=black" alt="Handlebars" />
+  <img src="https://img.shields.io/badge/-Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap 5" />
+  <img src="https://img.shields.io/badge/-Chart.js-FF6384?style=for-the-badge&logo=chart.js&logoColor=white" alt="Chart.js" />
+  <img src="https://img.shields.io/badge/-Render-5A3E36?style=for-the-badge&logo=render&logoColor=white" alt="Render" />
+</div>
 
 ---
 
@@ -13,9 +27,6 @@ ChronoRoyale is a modern full-stack e-commerce platform designed for luxury watc
 - [📸 Preview](#-preview)
 - [📦 Quick Start](#-quick-start)
 - [📡 API Documentation](#-api-documentation)
-- [🧑‍💻 Author](#-author)
-- [⭐ Contribute](#-contribute)
-- [📜 License](#-license)
 
 ---
 
@@ -27,14 +38,13 @@ ChronoRoyale is built to deliver a modern e-commerce experience specifically for
 
 ## ⚙ Tech Stack
 
-| Layer     | Technologies Used |
-|-----------|------------------|
-| Frontend  | HTML, CSS, JavaScript, Handlebars |
-| Backend   | Node.js, Express.js |
-| Database  | MongoDB |
-| Auth      | JWT / Sessions |
-| Payment   | Razorpay |
-| Deployment| Render / AWS / DigitalOcean / Heroku |
+| Layer      | Technologies Used |
+|----------- |-----------------|
+| Frontend   | HTML, CSS, JavaScript, Handlebars, Bootstrap 5, Chart.js |
+| Backend    | Node.js, Express.js, MVC Architecture, Multer |
+| Database   | MongoDB Atlas |
+| Authentication | JWT, Session Cookies |
+| Deployment | Render, GitHub |
 
 ---
 
@@ -42,30 +52,39 @@ ChronoRoyale is built to deliver a modern e-commerce experience specifically for
 
 ### 🛒 User Side
 - User Authentication (Login / Signup)
-- Browse Watches with Filters & Search
 - Product Details Page with Image Gallery
 - Add to Cart / Wishlist
-- Checkout with Address & Payment Integration
+- Checkout with Address & Cash On Delivery
 - Order Tracking & History
 - Profile Management
+- Image Zoom on Product Page
 
 ### 🛠️ Admin Dashboard
 - Manage Products (Add / Edit / Delete)
-- Order Management
-- User Management
+- Order Management & Status Updates
+- User Management (View, Block/Unblock)
 - Real-Time Analytics & Reports
+- Light & Dark Mode
+- Soft Delete for Products
 
 ---
 
 ## 🌐 Deployment
 
-> You can deploy the app on platforms like Render, AWS, DigitalOcean, or Heroku. Make sure your environment variables are set correctly for production.
+The project is hosted on **Render**.
+
+### 🔗 Live Links
+- **User Panel:** [ChronoRoyale User](https://chronoroyale-ecommerce-webapp.onrender.com)  
+- **Admin Panel:** [ChronoRoyale Admin](https://chronoroyale-ecommerce-webapp.onrender.com/admin)  
+
+**Admin Credentials:**  
+- Username: `admin`  
+- Password: `123`  
 
 ---
 
-## 📸 Preview
 
-> *(Add images here when available — e.g., `/public/screenshots/` folder)*
+## 📸 Preview
 
 | Home Page | Product Page | Cart | Admin Dashboard |
 |-----------|--------------|------|----------------|
@@ -97,8 +116,6 @@ MONGO_DB_URI="your_mongodb_connection_string"
 JWT_SECRET=your_secret_key
 ADMIN_EMAIL=admin
 ADMIN_PASSWORD=123
-RAZORPAY_KEY=your_key      # optional
-RAZORPAY_SECRET=your_secret # optional
 ```
 
 ### 4️⃣ Start the server
@@ -179,29 +196,7 @@ Visit → **http://localhost:9002**
 | GET    | `/admin/orders-list` | List all orders |
 
 > **Note:** Protected routes require authentication headers:
-```
-Authorization: Bearer <token>
-```
+
 
 ---
-
-## 🧑‍💻 Author
-
-**Shasbin/ ChronoRoyale**  
-GitHub: https://github.com/shasbinas
-
----
-
-## ⭐ Contribute
-
-Pull requests are welcome! For major changes, please open an issue first.
-
----
-
-## 📜 License
-
-This project is licensed under **MIT License** — free to use and modify.
-
----
-
 If you like this project, **please ⭐ star the repo!**
