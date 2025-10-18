@@ -36,7 +36,7 @@ export const adminLogin = async (req, res) => {
     // redirect to dashboard with success message in query
     return res.redirect("/admin/dashboard");
   } catch (err) {
-    console.error("Login Error:", err.message);
+    // console.error("Login Error:", err.message);
     res.render("admin/adminLogin", {
       layout: "admin",
       title: "Admin Login",

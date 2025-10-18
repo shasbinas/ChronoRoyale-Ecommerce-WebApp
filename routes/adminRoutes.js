@@ -15,7 +15,6 @@ import {
   adminUsersListPage,
   updateOrderStatus,
 } from "../controllers/adminController.js";
-import connectToDatabase from "../config/db.js";
 import { uploadFiles } from "../middleware/uploadMiddleware.js";
 
 const adminRoutes = express.Router({ mergeParams: true });
@@ -56,6 +55,6 @@ adminRoutes.get("/update-order-status/:id/:status", updateOrderStatus);
 
 adminRoutes.get("/orders/:id", adminOrderDetailsPage);
 
-// adminRoutes.get("/orders/:id", adminOrderDetailsPage);
+
 
 export default adminRoutes;

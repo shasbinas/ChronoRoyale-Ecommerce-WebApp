@@ -6,7 +6,7 @@ import { v7 as uuidv7 } from "uuid";
 
 /* user signup */
 export const createUser = async (req, res) => {
-  console.log("signup>>>>>>>>>", req.body);
+  // console.log("signup>>>>>>>>>", req.body);
   try {
     const { name, email, password } = req.body;
 
@@ -53,7 +53,7 @@ export const createUser = async (req, res) => {
     // ✅ Redirect on success
     res.redirect("/login");
   } catch (err) {
-    console.error("Signup Error:", err.message);
+    // console.error("Signup Error:", err.message);
     res.render("user/signup", {
       title: "Signup - ChronoRoyale",
       error: "Something went wrong. Please try again later.",
@@ -62,7 +62,7 @@ export const createUser = async (req, res) => {
 };
 
 export const loginUser = async (req, res) => {
-  console.log("login>>>>>>>>>", req.body);
+  // console.log("login>>>>>>>>>", req.body);
   try {
     const { email, password } = req.body;
 
@@ -120,7 +120,7 @@ export const loginUser = async (req, res) => {
 
     res.redirect("/");
   } catch (err) {
-    console.error("Login Error:", err.message);
+    // console.error("Login Error:", err.message);
     res.render("user/login", {
       title: "Login - ChronoRoyale",
       error: "Something went wrong. Please try again later.",

@@ -183,6 +183,7 @@
                       <span>₹{{this.discountPrice}}</span>
                       <span class="old-price">₹{{this.price}}</span>
                     </div>
+                    {{#unless (eq this.stockStatus "  ")}}
                     <div class="product-action-1 show">
                       <form action="/add-to-cart" method="post">
                         <input
@@ -237,6 +238,7 @@
                         </button>
                       </form>
                     </div>
+                    {{/unless}}
                   </div>
                 </div>
               </div>

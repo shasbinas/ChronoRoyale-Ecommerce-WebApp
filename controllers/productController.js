@@ -6,16 +6,16 @@ import { error } from "console";
 
 /* Create a new product */
 export const createProduct = async (req, res) => {
-  console.log("crete produt route working>>>>>>>>");
+  // console.log("crete produt route working>>>>>>>>");
   try {
     const data = req.body;
-    console.log(data);
+    // console.log(data);
 
     console.log(req.files); // array of files
     const pictures = req.files.map(
       (file) => `/userAssets/pictures/${file.filename}`
     );
-    console.log(pictures);
+    // console.log(pictures);
 
     const productData = {
       name: data.name,
@@ -35,17 +35,17 @@ export const createProduct = async (req, res) => {
       isDelete: false,
     };
 
-    console.log(productData);
+    // console.log(productData);
 
     const db = await connectToDatabase(process.env.DATABASE);
     const result = await db
       .collection(collection.PRODUCTS_COLLECTION)
       .insertOne(productData);
-    console.log(result);
+    // console.log(result);
 
     return res.redirect("/admin/products-list");
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };
 
@@ -97,29 +97,29 @@ export const getProductsData = async (options = {}) => {
 
     return products; // always returns a Promise
   } catch (error) {
-    console.error("❌ Error in getProducts:", error);
+    // console.error("❌ Error in getProducts:", error);
     throw error;
   }
 };
 
 export const productViewPage = async (req, res) => {
-  console.log("✅ Product view route hit");
+  // console.log("✅ Product view route hit");
 
   try {
     const db = await connectToDatabase(process.env.DATABASE);
 
     // Step 1: Check if ID is received in URL
     const productId = req.query.id;
-    console.log("🆔 Product ID from URL:", productId);
+    // console.log("🆔 Product ID from URL:", productId);
 
     if (!productId) {
-      console.log("❌ No product ID provided in URL");
+      // console.log("❌ No product ID provided in URL");
       return res.status(400).send("Product ID is required");
     }
 
     // Step 2: Validate ObjectId
     if (!ObjectId.isValid(productId)) {
-      console.log("❌ Invalid ObjectId:", productId);
+      // console.log("❌ Invalid ObjectId:", productId);
       return res.status(400).send("Invalid product ID");
     }
 
@@ -131,7 +131,7 @@ export const productViewPage = async (req, res) => {
     // console.log(">>>>>>>>Product Data",product);
 
     if (!product) {
-      console.log("❌ Product not found in database");
+      // console.log("❌ Product not found in database");
       return res.status(404).send("Product not found");
     }
 
@@ -140,28 +140,28 @@ export const productViewPage = async (req, res) => {
       title: `Product`,
     });
   } catch (error) {
-    console.error("❌ Error in productViewPage:", error);
+    // console.error("❌ Error in productViewPage:", error);
     res.status(500).send("Server error");
   }
 };
 
 export const productDeatilsPage = async (req, res) => {
-  console.log("product Deatils function called");
+  // console.log("product Deatils function called");
   try {
     const db = await connectToDatabase(process.env.DATABASE);
 
     // Step 1: Check if ID is received in URL
     const productId = req.query.id;
-    console.log("🆔 Product ID from URL:", productId);
+    // console.log("🆔 Product ID from URL:", productId);
 
     if (!productId) {
-      console.log("❌ No product ID provided in URL");
+      // console.log("❌ No product ID provided in URL");
       return res.status(400).send("Product ID is required");
     }
 
     // Step 2: Validate ObjectId
     if (!ObjectId.isValid(productId)) {
-      console.log("❌ Invalid ObjectId:", productId);
+      // console.log("❌ Invalid ObjectId:", productId);
       return res.status(400).send("Invalid product ID");
     }
 
@@ -171,7 +171,7 @@ export const productDeatilsPage = async (req, res) => {
       .findOne({ _id: new ObjectId(String(productId)) });
 
     if (!product) {
-      console.log("❌ Product not found in database");
+      // console.log("❌ Product not found in database");
       return res.status(404).send("Product not found");
     }
 
@@ -199,17 +199,17 @@ export const productDeatilsPage = async (req, res) => {
       stockStatus, // send to template
     });
   } catch (error) {
-    console.error("❌ Error in productDetailsPage:", error);
+    // console.error("❌ Error in productDetailsPage:", error);
     res.status(500).send("Server Error");
   }
 };
 
 export const deleteProduct = async (req, res) => {
-  console.log("delete product route called>>>>>>>>>");
+  // console.log("delete product route called>>>>>>>>>");
 
   try {
     const productId = req.params.id; // fixed typo
-    console.log("Product ID:", productId);
+    // console.log("Product ID:", productId);
 
     const db = await connectToDatabase(process.env.DATABASE);
     const product = await db
@@ -231,16 +231,16 @@ export const deleteProduct = async (req, res) => {
 
     res.redirect("/admin/products-list");
   } catch (error) {
-    console.error("Error deleting product:", error);
+    // console.error("Error deleting product:", error);
     res.status(500).send("Something went wrong while deleting the product.");
   }
 };
 
 
 export const editProductDetails = async (req, res) => {   
-  console.log("edit Product details function triggered >>>>");
-  console.log(req.body);
-  console.log(req.params.id);
+  // console.log("edit Product details function triggered >>>>");
+  // console.log(req.body);
+  // console.log(req.params.id);
 
   try {
     const productId = req.params.id;
@@ -266,12 +266,12 @@ export const editProductDetails = async (req, res) => {
         { $set: updatedData } // ✅ Only update given fields, images untouched
       );
 
-    console.log("Update result:", result);
+    // console.log("Update result:", result);
 
     res.redirect("/admin/products-list");  // or respond with JSON
 
   } catch (error) {
-    console.error("Error updating product:", error);
+    // console.error("Error updating product:", error);
     res.status(500).send("Internal Server Error");
   }
 };

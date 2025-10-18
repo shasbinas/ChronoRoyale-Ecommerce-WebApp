@@ -8,8 +8,7 @@ import bcrypt from "bcrypt";
 import { v7 as uuidv7 } from "uuid";
 
 export const productsPage = async (req, res) => {
-  console.log("productsPage route working 🚀");
-
+ 
   try {
     // Fetch 20 latest products
     const products = await getProductsData({
@@ -46,10 +45,7 @@ const getStockStatus = (product) => {
 };
 
 export const blockUnblockUser = async (req, res) => {
-  console.log("Block/Unblock User route working 🚀");
 
-  console.log(req.params.id);
-  console.log(req.query.status);
   try {
     const db = await connectToDatabase(process.env.DATABASE);
     const userId = req.params.id; // user id from params
@@ -88,10 +84,8 @@ export const blockUnblockUser = async (req, res) => {
 };
 
 export const landingPage = async (req, res) => {
-  console.log("User Landing route working 🚀");
 
   try {
-    console.log("res.locals.user>>>>", res.locals);
 
     // Fetch different product sets
     const featuredProducts = await getProductsData({
@@ -150,28 +144,27 @@ export const landingPage = async (req, res) => {
       newProducts: newArrivalsWithStock,
     });
   } catch (error) {
-    console.error("❌ Landing page error:", error);
+    // console.error("❌ Landing page error:", error);
     res.status(500).send("Error loading home page");
   }
 };
 
 export const loginPage = async (req, res) => {
-  console.log("Login page route working 🚀");
+  // console.log("Login page route working 🚀");
   try {
     res.render("user/login", { title: "Login - ChronoRoyale" });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };
 
 export const signupPage = async (req, res) => {
-  console.log("Signup page route working 🚀");
-
+ 
   try {
     createUser;
     res.render("user/signup", { title: "Signup - ChronoRoyale" });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };
 
@@ -195,7 +188,7 @@ export const cartPage = async (req, res) => {
       subtotal,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.send("Something went wrong");
   }
 };
@@ -276,7 +269,7 @@ export const addToCart = async (req, res) => {
 
     res.redirect(redirect || "/cart");
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.redirect("/wishlist");
   }
 };
@@ -298,7 +291,7 @@ export const clearCart = async (req, res) => {
 
     res.redirect("/"); // redirect back to landing page
   } catch (error) {
-    console.log("Error clearing cart:", error);
+    // console.log("Error clearing cart:", error);
     res.status(500).send("Something went wrong while clearing the cart");
   }
 };
@@ -323,7 +316,7 @@ export const removeFromCart = async (req, res) => {
 
     res.redirect("/cart"); // Redirect back to landing page
   } catch (error) {
-    console.log("Error removing item from cart:", error);
+    // console.log("Error removing item from cart:", error);
     res.status(500).send("Something went wrong");
   }
 };
@@ -355,35 +348,30 @@ export const checkoutPage = async (req, res) => {
       addresses, // ✅ Pass to HBS
     });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.send("Something went wrong");
   }
 };
 
 /// checkout page addresss
 export const createAddress = async (req, res) => {
-  console.log(">>>>>> createAddress() called");
-
+  
   try {
-    console.log("Form Data:", req.body);
     const userId = req.loggedInUser?.id;
-    console.log("Logged In User ID:", userId);
-
+    
     if (!userId) {
-      console.log("❌ No userId found -> redirecting to /login");
       return res.redirect("/login");
     }
 
     const { billingName, address, landmark, phone } = req.body;
-    console.log("Extracted Fields:", { billingName, address, landmark, phone });
 
     if (!billingName || !address || !phone) {
-      console.log("❌ Required fields missing");
+      // console.log("❌ Required fields missing");
       return res.status(400).send("All required fields must be filled");
     }
 
     const db = await connectToDatabase(process.env.DATABASE);
-    console.log("✅ Database connected");
+    // console.log("✅ Database connected");
 
     // ✅ IMPORTANT: Match using userId instead of _id
     const result = await db.collection(collection.USERS_COLLECTION).updateOne(
@@ -401,28 +389,26 @@ export const createAddress = async (req, res) => {
       }
     );
 
-    console.log("Update Result:", {
-      matched: result.matchedCount,
-      modified: result.modifiedCount,
-    });
+    // console.log("Update Result:", {
+    //   matched: result.matchedCount,
+    //   modified: result.modifiedCount,
+    // });
 
     if (result.modifiedCount === 0) {
-      console.log("⚠️ Address not added. Possible wrong userId match.");
+      // console.log("⚠️ Address not added. Possible wrong userId match.");
       return res.status(500).send("Failed to add address");
     }
 
-    console.log("✅ Address added successfully. Redirecting...");
+    // console.log("✅ Address added successfully. Redirecting...");
     res.redirect("/checkout");
   } catch (error) {
-    console.error("🔥 Error creating address:", error);
+    // console.error("🔥 Error creating address:", error);
     res.status(500).send("Internal Server Error");
   }
 };
 
 export const placeOrder = async (req, res) => {
-  console.log(">>>>>>>> placeOrder() triggered");
-  console.log("Form Data:", req.body);
-
+  
   try {
     const userId = req.loggedInUser?.id;
     if (!userId) return res.redirect("/login");
@@ -508,13 +494,13 @@ export const placeOrder = async (req, res) => {
 
     res.redirect("/order-success");
   } catch (error) {
-    console.error("🔥 Error placing order:", error);
+    // console.error("🔥 Error placing order:", error);
     res.status(500).send("Something went wrong while placing the order.");
   }
 };
 
 export const orderSuccess = async (req, res) => {
-  console.log("Order success page function called >>>>>>>>>>");
+
   try {
     const userId = req.loggedInUser?.id;
     if (!userId) return res.redirect("/login");
@@ -527,7 +513,7 @@ export const orderSuccess = async (req, res) => {
       .findOne({ userId }, { sort: { createdAt: -1 } });
 
     if (!lastOrder) {
-      console.log("No order found for this user.");
+      // console.log("No order found for this user.");
       return res.redirect("/");
     }
 
@@ -554,7 +540,7 @@ export const orderSuccess = async (req, res) => {
       total: totalAmount,
     });
   } catch (error) {
-    console.error("Error rendering order success page:", error);
+    // console.error("Error rendering order success page:", error);
     res
       .status(500)
       .send("Something went wrong while loading the order success page.");
@@ -562,7 +548,7 @@ export const orderSuccess = async (req, res) => {
 };
 
 export const getOrderHistory = async (req, res) => {
-  console.log("Order history page function called >>>>>>>>>>");
+
   try {
     const userId = req.loggedInUser?.id;
     if (!userId) return res.redirect("/login");
@@ -578,7 +564,7 @@ export const getOrderHistory = async (req, res) => {
       .toArray();
 
     if (!orders || orders.length === 0) {
-      console.log("No orders found for this user.");
+      // console.log("No orders found for this user.");
       return res.render("user/order-history", { orders: [] });
     }
 
@@ -604,7 +590,7 @@ export const getOrderHistory = async (req, res) => {
     // ✅ Render the correct view inside "views/user/order-history.hbs"
     res.render("user/order-history", { orders: formattedOrders });
   } catch (error) {
-    console.error("Error loading order history page:", error);
+    // console.error("Error loading order history page:", error);
     res.status(500).send("Something went wrong while loading order history.");
   }
 };
@@ -622,7 +608,7 @@ export const getAccount = async (req, res) => {
       user, // send user data to prefill form
     });
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     res.render("user/account-details", {
       title: "Account Details",
       error: "Failed to load account details.",
@@ -690,7 +676,7 @@ export const updateAccount = async (req, res) => {
       user: updatedUser,
     });
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     res.render("user/account-details", {
       title: "Account Details",
       error: "Something went wrong. Please try again later.",
@@ -700,7 +686,7 @@ export const updateAccount = async (req, res) => {
 };
 
 export const addToWishlist = async (req, res) => {
-  console.log(">>>>>>>>>>>>>>>>>>>>add to whislidt>>>>>>>>");
+ 
   try {
     const userId = req.loggedInUser?.id;
     const { productId } = req.body; // only productId
@@ -723,7 +709,7 @@ export const addToWishlist = async (req, res) => {
 
     res.redirect("/wishlist");
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     res.redirect("/wishlist");
   }
 };
@@ -787,10 +773,10 @@ export const getWishlistPage = async (req, res) => {
       })
       .filter(Boolean);
 
-    console.log("Wishlist to render:", wishlist);
+    // console.log("Wishlist to render:", wishlist);
     res.render("user/wishlist", { wishlist });
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     res.redirect("/");
   }
 };
