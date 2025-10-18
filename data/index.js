@@ -50,14 +50,14 @@ export const bannerData = [
 
 
 export const brandData = [
-  // {
-  //   name: "Rolex",
-  //   image: "/userAssets/imgs/Logos/rolex logo.jpg",
-  //   link: "/shop-grid-right.html",
-  // },
   {
-    name: "Omega",
-    image: "/userAssets/imgs/Logos/Omega logo.png",
+    name: "Rolex",
+    image: "/userAssets/imgs/Logos/rolex logo.jpg",
+    link: "/shop-grid-right.html",
+  },
+  {
+    name: "Fossil",
+    image: "/userAssets/imgs/Logos/fossil.jpg",
     link: "/shop-grid-right.html",
   },
   {
@@ -85,16 +85,16 @@ export const brandData = [
     image: "/userAssets/imgs/Logos/Breitling logo.png",
     link: "/shop-grid-right.html",
   },
-  // {
-  //   name: "Hublot",
-  //   image: "/userAssets/imgs/Logos/Hublot logo.png",
-  //   link: "/shop-grid-right.html",
-  // },
-  // {
-  //   name: "Longines",
-  //   image: "/userAssets/imgs/Logos/Longines logo.png",
-  //   link: "/shop-grid-right.html",
-  // },
+  {
+    name: "Titan",
+    image: "/userAssets/imgs/Logos/titan.jpg",
+    link: "/shop-grid-right.html",
+  },
+  {
+    name: "Casio",
+    image: "/userAssets/imgs/Logos/casio.jpg",
+    link: "/shop-grid-right.html",
+  },
   {
     name: "IWC Schaffhausen",
     image: "/userAssets/imgs/Logos/IWC Schaffhausen logo.png",
