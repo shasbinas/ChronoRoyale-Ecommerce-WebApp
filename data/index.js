@@ -16,7 +16,7 @@ export const bannerData = [
     description:
       "Own a masterpiece of precision and luxury. Limited pieces only.",
     link: "/shop",
-    image: "/userAssets/imgs/slider/slider-1.jpg",
+    image: "/userAssets/imgs/slider/slider-2.jpg",
   },
   {
     id: 3,
@@ -25,7 +25,7 @@ export const bannerData = [
     highlight: "Luxury Watches",
     description: "Save big on selected premium watches. Limited time only.",
     link: "/shop",
-    image: "/userAssets/imgs/slider/slider-1.jpg",
+    image: "/userAssets/imgs/slider/slider-3.jpg",
   },
   {
     id: 4,
@@ -34,7 +34,7 @@ export const bannerData = [
     highlight: "Luxury & Style",
     description: "Experience the latest in modern luxury watch designs.",
     link: "/shop",
-    image: "/userAssets/imgs/slider/slider-1.jpg",
+    image: "/userAssets/imgs/slider/slider-4.jpg",
   },
   {
     id: 5,
@@ -43,9 +43,11 @@ export const bannerData = [
     highlight: "For Gentlemen & Ladies",
     description: "Perfect blend of tradition and modern craftsmanship.",
     link: "/shop",
-    image: "/userAssets/imgs/slider/slider-1.jpg",
+    image: "/userAssets/imgs/slider/slider-5.jpg",
   },
 ];
+
+
 
 export const brandData = [
   // {

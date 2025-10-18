@@ -83,12 +83,11 @@ The project is hosted on **Render**.
 
 ---
 
-
 ## 📸 Preview
 
 | Home Page | Product Page | Cart | Admin Dashboard |
 |-----------|--------------|------|----------------|
-| `Image` | `Image` | `Image` | `Image` |
+| ![Home Page](public/screenshot/home.jpg) | ![Product Page](public/screenshot/products.jpg) | ![Cart](public/screenshot/cart.jpg) | ![Admin Dashboard](public/screenshot/admin%20dashboard.jpg) |
 
 ---
 
@@ -133,8 +132,8 @@ Visit → **http://localhost:9002**
 
 ### 🔐 Authentication
 
-| Method | Endpoint        | Description         | Body / Params |
-|--------|----------------|--------------------|---------------|
+| Method | Endpoint | Description | Body / Params |
+|--------|---------|------------|---------------|
 | POST   | `/auth/register` | Register a new user | `{ name, email, password }` |
 | POST   | `/auth/login`    | Login user & return token/session | `{ email, password }` |
 | GET    | `/auth/logout`   | Logout user | - |
@@ -144,8 +143,8 @@ Visit → **http://localhost:9002**
 
 ### ⌚ Products
 
-| Method | Endpoint        | Description         | Body / Params |
-|--------|----------------|--------------------|---------------|
+| Method | Endpoint | Description | Body / Params |
+|--------|---------|------------|---------------|
 | GET    | `/products`        | Get all products | Optional: `?search=&category=&sort=` |
 | GET    | `/products/:id`    | Get single product details | Path: `id` |
 | POST   | `/admin/add-product` *(Admin)* | Create new product | `{ name, brand, price, description, images[] }` |
@@ -156,45 +155,54 @@ Visit → **http://localhost:9002**
 
 ### 🛒 Cart
 
-| Method | Endpoint        | Description         | Body / Params |
-|--------|----------------|--------------------|---------------|
+| Method | Endpoint | Description | Body / Params |
+|--------|---------|------------|---------------|
 | POST   | `/add-to-cart`       | Add item to cart | `{ productId, quantity }` |
-| GET    | `/cart`       | Get user cart | - |
-| POST   | `/cart/remove/:itemId` | Remove item from cart | Path: `itemId` |
-| POST   | `/cart/clear` | Clear all items in cart | - |
+| GET    | `/cart`             | Get user cart | - |
+| GET    | `/cart/clear`       | Clear all items in cart | - |
+| GET    | `/cart/remove/:productId` | Remove selected item from cart | Path: `productId` |
 
 ---
 
 ### ❤️ Wishlist
 
-| Method | Endpoint        | Description         | Body / Params |
-|--------|----------------|--------------------|---------------|
-| POST   | `/add-to-wishlist` | Add to wishlist | `{ productId }` |
-| GET    | `/wishlist` | Get wishlist items | - |
-| POST   | `/remove-from-wishlist/:itemId` | Remove from wishlist | Path: `itemId` |
+| Method | Endpoint | Description | Body / Params |
+|--------|---------|------------|---------------|
+| POST   | `/add-to-wishlist`           | Add item to wishlist | `{ productId }` |
+| GET    | `/wishlist`                  | Get wishlist items | - |
+| POST   | `/remove-from-wishlist`      | Remove from wishlist | `{ productId }` |
 
 ---
 
 ### 📦 Orders
 
-| Method | Endpoint        | Description         | Body / Params |
-|--------|----------------|--------------------|---------------|
-| POST   | `/place-order` | Place new order | `{ cartItems[], address, paymentMethod }` |
-| GET    | `/order-history` | Get logged-in user orders | - |
-| GET    | `/orders/:id` | Get order details | Path: `id` |
+| Method | Endpoint | Description | Body / Params |
+|--------|---------|------------|---------------|
+| POST   | `/place-order`               | Place new order | `{ cartItems[], address, paymentMethod }` |
+| GET    | `/order-history`             | Get logged-in user orders | - |
+| GET    | `/orders/:id`                | Get order details | Path: `id` |
+| GET    | `/order-success`             | Order success page | - |
+| POST   | `/create-address`            | Add new address | `{ addressFields }` |
+| GET    | `/checkout`                  | Checkout page | - |
 | POST   | `/update-order-status/:id/:status` *(Admin)* | Update order status | Path: `id`, `status` |
 
 ---
 
 ### 🛠 Admin
 
-| Method | Endpoint        | Description         |
-|--------|----------------|--------------------|
-| GET    | `/admin/dashboard` | Admin dashboard overview |
-| GET    | `/admin/users-list` | List all users |
-| GET    | `/admin/products-list` | List all products |
-| GET    | `/admin/orders-list` | List all orders |
-
+| Method | Endpoint | Description | Body / Params |
+|--------|---------|------------|---------------|
+| GET    | `/admin/dashboard`           | Admin dashboard overview | - |
+| GET    | `/admin/users-list`          | List all users | - |
+| POST   | `/admin/block-user/:id`      | Block/Unblock user | Path: `id` |
+| GET    | `/admin/products-list`       | List all products | - |
+| GET    | `/admin/products/edit/:id`   | Edit product page | Path: `id` |
+| POST   | `/admin/edit-product/:id`    | Edit product details | Same as product creation body |
+| POST   | `/admin/add-product`         | Add new product | `{ name, brand, price, description, images[] }` |
+| POST   | `/admin/products/delete/:id` | Delete product | Path: `id` |
+| GET    | `/admin/orders-list`         | List all orders | - |
+| GET    | `/admin/orders/:id`          | Order details page | Path: `id` |
+| GET    | `/admin/add-product`         | Add product page | - |
 > **Note:** Protected routes require authentication headers:
 
 
